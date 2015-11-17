@@ -1,0 +1,32 @@
+# vim: ft=conf
+###############################################################################
+#                         _       _    __ _ _                                 #
+#                      __| | ___ | |_ / _(_) | ___  ___                       #
+#                     / _` |/ _ \| __| |_| | |/ _ \/ __|                      #
+#                    | (_| | (_) | |_|  _| | |  __/\__ \                      #
+#                     \__,_|\___/ \__|_| |_|_|\___||___/                      #
+#                                                                             #
+###############################################################################
+# This file is local config file for dot.
+# You can comment out by adding "#" at the beginning of the line.
+# And an empty line is ignored by dot.
+#
+# Format:
+# <dotfile>,<linkto>
+#
+# the script automatically add directory information to the file path.
+# So, you should write like below:
+#     .vimrc,.vimrc
+#
+# Don't do like this:
+# x   ~/.dotfiles/.vimrc,~/home/username/.vimrc
+#
+# You can easily copy the existing file to the dotfiles repository
+# and add new link list by
+#     dot add [-m "some comment"] original_file dotfiles_path
+# or, just
+#     dot add original_file
+# In the second example, the script automatically completes the second
+# arguments and confirm whether or not to execute that command.
+#
+#------------------------------------------------------------------------------
