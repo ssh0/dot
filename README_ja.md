@@ -12,8 +12,8 @@
 
 ## 使い方
 
-ユーザーの設定ファイルは'[dotrc](./dotrc)'。
-シンボリックリンクの対応表は'[dotlink](./dotlink)'に書きます。
+ユーザーの設定ファイルは'[dotrc](./config/dotrc)'。
+シンボリックリンクの対応表は'[dotlink](./config/dotlink)'に書きます。
 
 * dotfiesをpullしてくる(by git).  
 ```bash

@@ -12,8 +12,8 @@ You can use it for multi-machines usage, setup for new machine, daily watering t
 
 ## Usage
 
-Configuration file is in '[dotrc](./dotrc)'.
-Link relation table is in '[dotlink](./dotlink)'.
+Configuration file is in '[dotrc](./config/dotrc)'.
+Link relation table is in '[dotlink](./config/dotlink)'.
 
 * Pull remote dotfile repository (by git).  
 ```bash
