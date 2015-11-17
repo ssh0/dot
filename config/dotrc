@@ -1,0 +1,62 @@
+#!/bin/bash
+# This is config file for dot.
+# If you want to know all the description, see README.
+
+# You can change the dotfiles to clone
+# clone_repository='https://github.com/ssh0/dotfiles.git'
+
+# Set the directory that the script regard as dotfiles directory.
+# dotdir="$HOME/.dotfiles"
+# dotdir_pattern="s/\/home\/$USER\/\.dotfiles\///p"
+
+# Set the path to your dotlink which describes the correspondence relation.
+# dotlink="$dotdir/dotlink"
+# linkfiles=("${dotlink}")
+
+# If you want to load additional local setting, add its path to $linkfiles.
+# (But it doesn't affect to `dot edit` and `dot add` command, so you should
+# edit these files manually.)
+# dotlinklocal="$HOME/.config/dot/dotlink.local"
+# linkfiles=("${dotlink}" "${dotlinklocal}")
+
+# You don't have to change this line unless you want config for other user.
+# It is better in such a case that run the command `export USER=username`
+# before executing `dot`.
+# home_pattern="s/\/home\/$USER\///p"
+
+# Options
+
+# You can choose the action interactively if the file to link is already exist.
+# If you set it false, just show message but do nothing (provided option -i).
+# dotset_interactive=true
+
+# Toggle the verbosity for output of `dot set` (option -v).
+# dotset_verbose=false
+
+# You can choose diff command as you want.
+# diffcmd="colordiff -u"
+
+# Command to edit two files with diff highlights.
+# edit2filecmd='vimdiff'
+
+# Set your favorite editor.
+# (setting priority: this option > $EDITOR (default) > xdg-open)
+# dot_edit_default_editor='vim +'
+
+# Color settings
+
+# You can change the colors as you want.
+# (black, red, green, yellow, blue, purple, cyan, white) can be used.
+
+# color for normal messages (just showing information).
+# color_message=${blue}
+
+# color for messages attract attention.
+# color_notice=${yellow}
+
+# color for error messages.
+# color_error=${red}
+
+# If you want load a machine specific configuration, source that file here.
+# `dotbundle file` source the file if it exists.
+dotbundle "$HOME/.config/dot/dotrc.local"

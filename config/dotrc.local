@@ -1,0 +1,3 @@
+#!/bin/bash
+dotlinklocal="$HOME/.config/dot/dotlink.local"
+linkfiles=("${dotlink}" "${dotlinklocal}")
