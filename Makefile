@@ -43,7 +43,7 @@ install:
 	install dot $(INSTALLDIR)/bin/dot
 
 uninstall:
-	rm -rf $(INSTALLDIR)/bin/dot $(INSTALLDIR)/share/luakit $(MANPREFIX)/man1/dot.1 $(DOCDIR)
+	rm -rf $(INSTALLDIR)/bin/dot $(INSTALLDIR)/share/dot $(MANPREFIX)/man1/dot.1 $(DOCDIR)
 
 man:
 	pod2man --stderr -center='dot manual' --date='$(NAME)-$(VERSION)' \
