@@ -1,4 +1,4 @@
-# dot
+# dot v1.0
 
 bash based dotfiles management framework
 
@@ -108,23 +108,26 @@ Other things you should do is `git commit` and `git push` to your repository.
 ```
 git clone https://github.com/ssh0/dot ~/.git/dot
 ```
-* make a symbolic link to your PATH directory:  
+
+* make:
 ```
-sudo ln -s ~/.git/dot/dot /usr/local/bin/dot
-```
-* copy sample configuratoin files to your repository:  
-```
-cp ~/.git/dot/config/dotrc ~/.dotfiles/dotrc
-cp ~/.git/dot/config/dotlink ~/.dotfiles/dotlink
-```
-* copy local settings if you want:  
-```
-mkdir -p ~/.config/dot
-cp ~/.git/dot/config/dotrc.local ~/.config/dot/dotrc.
-cp ~/.git/dot/config/dotlink.local ~/.config/dot/dotlink.local
+sudo make install
 ```
 
-done.
+**done.**
+
+* [optional]copy sample configuratoin files to your repository:  
+```
+cp ~/.git/dot/examples/dotrc ~/.dotfiles/dotrc
+cp ~/.git/dot/examples/dotlink ~/.dotfiles/dotlink
+```
+
+* [optional]copy local settings if you want:  
+```
+mkdir -p ~/.config/dot
+cp ~/.git/dot/examples/dotrc.local ~/.config/dot/dotrc.
+cp ~/.git/dot/examples/dotlink.local ~/.config/dot/dotlink.local
+```
 
 In order to add link-relation-table already exists, just
 
@@ -134,7 +137,6 @@ dot add <link1> <link2> <link2> <link3> ...
 
 ## TODO
 
-* more easy installation
 * test in other OS (I use some Ubuntu 14.04 machines and only tested in there)
 
 ## LICENSE

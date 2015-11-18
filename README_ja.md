@@ -1,4 +1,4 @@
-# dot
+# dot v1.0
 
 `dot`はbash製のdotfiles管理フレームワークです。
 
@@ -115,23 +115,28 @@ Continue? [y/N]'
 ```
 git clone https://github.com/ssh0/dot ~/.git/dot
 ```
-* PATHの通ったディレクトリに`dot`のシンボリックリンクを貼ります:  
+
+* `make install`を実行してください:
 ```
-sudo ln -s ~/.git/dot/dot /usr/local/bin/dot
+sudo make install
 ```
-* 設定ファイルのサンプルを自分のdotfilesに追加してください:  
+
+`/usr/local/bin/`に`dot`がインストールされます。
+
+おしまい。
+
+* [オプション]設定ファイルのサンプルを自分のdotfilesに追加してください:  
 ```
-cp ~/.git/dot/config/dotrc ~/.dotfiles/dotrc
-cp ~/.git/dot/config/dotlink ~/.dotfiles/dotlink
+cp ~/.git/dot/examples/dotrc ~/.dotfiles/dotrc
+cp ~/.git/dot/examples/dotlink ~/.dotfiles/dotlink
 ```
+
 * マシン固有の設定をする場合には，`dotrc.local`，`dotlink.local`なども必要に応じてコピーします:  
 ```
 mkdir -p ~/.config/dot
-cp ~/.git/dot/config/dotrc.local ~/.config/dot/dotrc.
-cp ~/.git/dot/config/dotlink.local ~/.config/dot/dotlink.local
+cp ~/.git/dot/examples/dotrc.local ~/.config/dot/dotrc.
+cp ~/.git/dot/examples/dotlink.local ~/.config/dot/dotlink.local
 ```
-
-これでおしまいです。
 
 既にdotfilesからリンクが貼られているものをリンク対応表に追記するには，
 
@@ -143,7 +148,6 @@ dot add <link1> <link2> <link2> <link3> ...
 
 ## TODO
 
-* インストールをより簡単に(Makefile?)
 * 他OSでのテスト (いくつかのUbuntu 14.04搭載マシンでテストしただけなので...)
 
 ## ライセンス
