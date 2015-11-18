@@ -1,0 +1,120 @@
+=head1 NAME
+
+dot - manages symbolic links for dotfiles
+
+
+
+
+=head1 SYNOPSIS
+
+B<dot> [B<-h>|B<--help>] I<command> [I<args>]
+
+
+
+
+=head1 DESCRIPTION
+
+This script makes it easy to manage your dotfiles.
+
+Script is written in bash, and very configurable.
+
+
+
+
+=head1 COMMANDS
+
+=over 10
+
+=item B<clone>
+
+Clone ssh0's dotfile repository on your computer.
+
+=item B<pull>
+
+Pull remote dotfile repository (by git).
+
+=item B<set>
+
+Make symbolic link interactively. This command sets symbolic links configured in F<~/.config/dot/dotlink>.
+
+=item B<add>
+
+Move the file to the dotfile dir and make an symbolic link.
+
+=item B<edit>
+
+Edit dotlink file F<~/.config/dot/dotlink>.
+
+=item B<unlink>
+
+Unlink the selected symbolic link and copy its original file from the dotfile repository.
+
+=item B<clear>
+
+Remove the all symbolic link in the config file F<~/.config/dot/dotlink>.
+
+=item B<config>
+
+Edit rcfile F<~/.config/dot/dotrc>.
+
+=back
+
+
+=head1 OPTION
+
+=over 10
+
+=item B<-h>, B<--help>
+
+Show this help message.
+
+=back
+
+
+=head1 COMMAND OPTIONS
+
+=over 4
+
+=item B<clone> [I<dir>]
+
+Clone I<clone_repository> onto the specified direction. (default: I<~/.dotfiles>)
+
+=item B<set>
+
+=over 6
+
+=item B<-i>
+
+No interaction mode (skip all conflicts and do nothing).
+
+=item B<-v>
+
+Print verbose messages.
+
+=back
+
+=item B<add> [B<-m> I<message>] I<original_file> [I<dotfile_direction>]
+
+=over 12
+
+=item B<-m> I<message>
+
+Add your message for dotlink file.
+
+=back
+
+=back
+
+
+=head1 AUTHOR
+
+ssh0 (Shotaro Fujimoto L<https://github.com/ssh0>)
+
+Report bugs here: L<https://github.com/ssh0/dot/issues>
+
+
+=head1 LICENSE
+
+This is free software; you may redistribute it and/or modify it under the MIT Lisence.
+
+
