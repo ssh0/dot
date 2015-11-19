@@ -123,20 +123,33 @@ sudo make install
 
 `/usr/local/bin/`に`dot`がインストールされます。
 
-おしまい。
+* 設定ファイルのサンプルを自分のdotfilesに追加してください:  
+```
+make copy-config 
+```
 
-* [オプション]設定ファイルのサンプルを自分のdotfilesに追加してください:  
+で, `examples/dotrc`と`examples/dotlink`が`~/.dotfiles`にコピーされます。
+
+違う場所にコピーしたいときは,
+
 ```
-cp ~/.git/dot/examples/dotrc ~/.dotfiles/dotrc
-cp ~/.git/dot/examples/dotlink ~/.dotfiles/dotlink
+make copy-config DOTDIR=-$HOME/dotfiles
 ```
+
+のようにしてください。
 
 * マシン固有の設定をする場合には，`dotrc.local`，`dotlink.local`なども必要に応じてコピーします:  
 ```
-mkdir -p ~/.config/dot
-cp ~/.git/dot/examples/dotrc.local ~/.config/dot/dotrc.
-cp ~/.git/dot/examples/dotlink.local ~/.config/dot/dotlink.local
+make copy-local-config
 ```
+
+コピs-する場所を指定するには(規定値: `$HOME/.config/dot/`)
+
+```
+make copy-local-config USERCONFDIR=-$HOME/.dot
+```
+
+としてください。
 
 既にdotfilesからリンクが貼られているものをリンク対応表に追記するには，
 

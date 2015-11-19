@@ -114,19 +114,30 @@ git clone https://github.com/ssh0/dot ~/.git/dot
 sudo make install
 ```
 
+* copy sample configuratoin files to your repository:  
+```
+make copy-config 
+```
+
+will copy `examples/dotrc` and `examples/dotlink` to `~/.dotfiles`.
+
+You can modify where to copy:
+
+```
+make copy-config DOTDIR=-$HOME/dotfiles
+```
+
 **done.**
 
-* [optional]copy sample configuratoin files to your repository:  
+* [optional] copy local settings if you want:  
 ```
-cp ~/.git/dot/examples/dotrc ~/.dotfiles/dotrc
-cp ~/.git/dot/examples/dotlink ~/.dotfiles/dotlink
+make copy-local-config
 ```
 
-* [optional]copy local settings if you want:  
+You can modify where to copy (default: `$HOME/.config/dot/`)
+
 ```
-mkdir -p ~/.config/dot
-cp ~/.git/dot/examples/dotrc.local ~/.config/dot/dotrc.
-cp ~/.git/dot/examples/dotlink.local ~/.config/dot/dotlink.local
+make copy-local-config USERCONFDIR=-$HOME/.dot
 ```
 
 In order to add link-relation-table already exists, just
