@@ -1,27 +1,32 @@
 # Makefile
-NAME = dot
-VERSION = $(shell grep -m 1 -o '[0-9][0-9.]\+' README.md)
+NAME        := dot
+VERSION     := $(shell grep -m 1 -o '[0-9][0-9.]\+' README.md)
 
 # Paths
-PREFIX     ?= /usr/local
-MANPREFIX  ?= $(PREFIX)/share/man
-DOCDIR     ?= $(PREFIX)/share/doc/dot
+PREFIX      ?= /usr/local
+MANPREFIX   ?= $(PREFIX)/share/man
+DOCDIR      ?= $(PREFIX)/share/doc/dot
 
-INSTALLDIR := $(DESTDIR)$(PREFIX)
-MANPREFIX  := $(DESTDIR)$(MANPREFIX)
-DOCDIR     := $(DESTDIR)$(DOCDIR)
+INSTALLDIR  := $(DESTDIR)$(PREFIX)
+MANPREFIX   := $(DESTDIR)$(MANPREFIX)
+DOCDIR      := $(DESTDIR)$(DOCDIR)
+
+DOTDIR      := $(HOME)/.dotfiles
+USERCONFDIR := $(HOME)/.config/dot
 
 # Operatios
 default: help
 
 help:
 	@echo 'Help message'
-	@echo
-	@echo 'make:            Do nothing and show help message.'
-	@echo 'make options:    Show some options for installation.'
-	@echo 'make install:    Install $(NAME).'
-	@echo 'make uninstall:  Uninstall $(NAME).'
-	@echo 'make man:        Compile the manpage with "pod2man".'
+	@echo ''
+	@echo 'make:                   Do nothing and show help message.'
+	@echo 'make options:           Show some options for installation.'
+	@echo 'make install:           Install $(NAME).'
+	@echo 'make copy-config:       Copy default configuration to $(DOTDIR).'
+	@echo 'make copy-local-config: Copy local configuration template to $(USERCONFDIR).'
+	@echo 'make uninstall:         Uninstall $(NAME).'
+	@echo 'make man:               Compile the manpage with "pod2man".'
 
 options:
 	@echo 'Options'
@@ -29,6 +34,8 @@ options:
 	@echo 'INSTALLDIR = $(INSTALLDIR)'
 	@echo 'MANPREFIX = $(MANPREFIX)'
 	@echo 'DOCDIR = $(DOCDIR)'
+	@echo 'DOTDIR = $(DOTDIR)'
+	@echo 'USERCONFDIR = $(USERCONFDIR)'
 
 install:
 	@echo 'Install $(NAME) ...'
@@ -42,6 +49,18 @@ install:
 	install -d $(INSTALLDIR)/bin
 	install dot $(INSTALLDIR)/bin/dot
 
+copy-config:
+	@echo 'Copy the default configuration files to user dotfiles directory.'
+	@echo
+	install -d $(DOTDIR)
+	cp -i examples/dotrc examples/dotlink --target-directory=$(DOTDIR)
+
+copy-local-config:
+	@echo 'Copy the default local configuration files to user config directory.'
+	@echo
+	install -d $(USERCONFDIR)
+	cp -i examples/dotrc.local examples/dotlink.local --target-directory=$(USERCONFDIR)
+
 uninstall:
 	rm -rf $(INSTALLDIR)/bin/dot $(INSTALLDIR)/share/dot $(MANPREFIX)/man1/dot.1 $(DOCDIR)
 
@@ -49,4 +68,4 @@ man:
 	pod2man --stderr -center='dot manual' --date='$(NAME)-$(VERSION)' \
 	    --release=$(shell date +%x) doc/dot.pod doc/dot.1
 
-.PHONY: default help options install uninstall man
+.PHONY: default help options install copy-config copy-local-config uninstall man
