@@ -17,13 +17,13 @@ dotdir_pattern="s/\/home\/$USER\/\.dotfiles\///p"
 dotset_interactive=true
 dotset_verbose=false
 
-if $(hash colordiff); then
+if hash colordiff; then
   diffcmd="colordiff -u"
 else
   diffcmd='diff -u'
 fi
 
-if $(hash vimdiff); then
+if hash vimdiff; then
   edit2filecmd='vimdiff'
 else
   edit2filecmd=${diffcmd}
@@ -51,8 +51,8 @@ color_notice=${yellow}
 
 
 dotbundle() {
-  if [ -e $1 ]; then
-    source $1
+  if [ -e "$1" ]; then
+    source "$1"
   fi
 }
 
@@ -114,13 +114,13 @@ EOF
 cecho() {
   color=$1
   shift
-  echo -e "\033[${color}m$@\033[00m"
+  echo -e "\033[${color}m"$@"\033[00m"
 }
 
 
 makeline() {
   columns=$(tput cols)
-  if [ $columns -gt 70 ]; then
+  if [[ $columns -gt 70 ]]; then
     columns=70
   fi
   line=$(printf '%*s\n' "$columns" '' | tr ' ' -)
@@ -129,17 +129,17 @@ makeline() {
 
 
 get_fullpath() {
-  echo "$(cd $(dirname $1); pwd)"/"$(basename $1)"
+  echo "$(cd "$(dirname "$1")" || exit; pwd)"/"$(basename "$1")"
 }
 
 
 path_without_home() {
-  echo "$(echo "$(get_fullpath $1)" | sed -ne "${home_pattern}")"
+  get_fullpath "$1" | sed -ne "${home_pattern}"
 }
 
 
 path_without_dotdir() {
-  echo "$(echo "$(get_fullpath $1)" | sed -ne "${dotdir_pattern}")"
+  get_fullpath "$1" | sed -ne "${dotdir_pattern}"
 }
 
 
@@ -147,7 +147,7 @@ dot_clone() {
   cloneto="${1:-"${dotdir}"}"
   cecho ${color_message} "\ngit clone ${clone_repository} ${cloneto}"
   makeline
-  read -p "Continue? [y/N]" confirm
+  read -rp "Continue? [y/N]" confirm
   if [ "$confirm" != "y" ]; then
     echo "Aborted."
     exit 1
@@ -160,7 +160,7 @@ dot_pull() {
   # git pull
   cecho ${color_message} "\ncd ${dotdir} && git pull"
   makeline
-  cd ${dotdir} && git pull
+  cd "${dotdir}" && git pull
 }
 
 
@@ -207,7 +207,7 @@ dot_set() {
         cecho ${color_error} "'${origdir}' doesn't exist."
         if ${dotset_interactive}; then
           echo "[message] mkdir '${origdir}'? (y/n):"
-          while echo -n ">>> "; read yn; do
+          while echo -n ">>> "; read -r yn; do
             case $yn in
               [Yy] ) mkdir -p "${origdir}"; break ;;
               [Nn] ) break ;;
@@ -221,7 +221,7 @@ dot_set() {
       if [ -e "${orig}" ]; then
         # if it is a symboliclink
         if [ -L "${orig}" ]; then
-          linkto="$(readlink ${orig})"
+          linkto="$(readlink "${orig}")"
           info "${orig}" "${dotfile}"
           # if the link already be set: do nothing
           if [ "${linkto}" = "${dotfile}" ]; then
@@ -233,7 +233,7 @@ dot_set() {
             cecho ${color_error} "'${orig}' is link of '${linkto}'."
             if ${dotset_interactive}; then
               echo "[message] unlink and re-link for '${orig}'? (y/n):"
-              while echo -n ">>> "; read yn; do
+              while echo -n ">>> "; read -r yn; do
                 case $yn in
                   [Yy] ) unlink "${orig}"
                         $mklink "${dotfile}" "${orig}"
@@ -253,7 +253,7 @@ dot_set() {
               cecho ${color_notice} "'${orig}' already exists."
               echo "(d):show diff, (e):edit files, (f):overwrite, (b):make backup, (n):do nothing"
               echo -n ">>> "
-              read line
+              read -r line
               case $line in
                 [Dd] ) echo "${diffcmd} '${dotfile}' '${orig}'"
                       ${diffcmd} "${dotfile}" "${orig}"
@@ -288,8 +288,8 @@ dot_set() {
     done
     }
 
-  for linkfile in ${linkfiles[@]}; do
-    _dot_set ${linkfile}
+  for linkfile in "${linkfiles[@]}"; do
+    _dot_set "${linkfile}"
   done
 }
 
@@ -316,16 +316,16 @@ dot_add() {
 
 
   orig_to_dot() {
-    if [ "$(path_without_dotdir $2)" = "" ]; then
+    if [ "$(path_without_dotdir "$2")" = "" ]; then
       cecho ${color_error} "Target path is not in the dotdir (${dotdir})."
       echo "Aborted."
       exit 1
     fi
 
     # mv from original path to dotdir
-    orig="$(get_fullpath $1)"
-    dot="$(get_fullpath $2)"
-    targetdir="$(dirname ${dot})"
+    orig="$(get_fullpath "$1")"
+    dot="$(get_fullpath "$2")"
+    targetdir="$(dirname "${dot}")"
     if [ ! -d "${targetdir}" ]; then
       mkdir -p "${targetdir}"
     fi
@@ -342,22 +342,22 @@ dot_add() {
       echo "# ${message}" >> "${dotlink}"
     fi
 
-    echo "$(path_without_dotdir $2),$(path_without_home $1)" >> "${dotlink}"
+    echo "$(path_without_dotdir "$2"),$(path_without_home "$1")" >> "${dotlink}"
   }
 
   # if the first arugument is not a symbolic link
-  if [ ! -L $1 ]; then
+  if [ ! -L "$1" ]; then
     # if the second arugument isn't provided
     if [ $# = 1 ]; then
       cecho ${color_message} "Suggestion:"
-      echo "dot add -m '${message}' $1 ${dotdir}/$(path_without_home $1)"
+      echo "dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
       echo ""
-      read -p "Continue? [y/N]" confirm
+      read -rp "Continue? [y/N]" confirm
       if [ "$confirm" != "y" ]; then
         echo "Aborted."
         exit 1
       fi
-      dot_add -m "${message}" "$1" "${dotdir}/$(path_without_home $1)"
+      dot_add -m "${message}" "$1" "${dotdir}/$(path_without_home "$1")"
     # if the second arguments is provided (default action)
     elif [ $# = 2 ]; then
       orig_to_dot "$1" "$2"
@@ -372,13 +372,13 @@ dot_add() {
   # if the first arugument is not a symbolic link
   else
     # write to dotlink
-    for f in $@; do
-      if [ ! -L $f ]; then
+    for f in "$@"; do
+      if [ ! -L "$f" ]; then
         echo "'$f' is not symbolic link."
       else
         # get the absolute path
-        abspath="$(readlink $f)"
-        if [ "$(path_without_dotdir ${abspath})" = "" ]; then
+        abspath="$(readlink "$f")"
+        if [ "$(path_without_dotdir "${abspath}")" = "" ]; then
           cecho ${color_error} "Target path (${abspath}) is not in the dotdir (${dotdir})."
           echo "Aborted."
           exit 1
@@ -395,7 +395,7 @@ dot_edit() {
   # open dotlink file
   if [ ! "${dot_edit_default_editor}" = "" ];then
     ${dot_edit_default_editor} "${dotlink}"
-  elif $(hash "$EDITOR"); then
+  elif hash "$EDITOR"; then
     $EDITOR "${dotlink}"
   else
     xdg-open "${dotlink}"
@@ -404,15 +404,15 @@ dot_edit() {
 
 
 dot_unlink() {
-  for f in $@; do
-    if [ ! -L $f ]; then
+  for f in "$@"; do
+    if [ ! -L "$f" ]; then
       echo "'$f' is not symbolic link."
     else
       # get the file's path
-      currentpath="$(get_fullpath $f)"
+      currentpath="$(get_fullpath "$f")"
 
       # get the absolute path
-      abspath="$(readlink $f)"
+      abspath="$(readlink "$f")"
 
       # unlink the file
       unlink "$currentpath"
@@ -429,15 +429,15 @@ dot_clear() {
   _dot_clear() {
     for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
       orig="$HOME/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
-      if [ -L ${orig} ]; then
+      if [ -L "${orig}" ]; then
         echo "unlink ${orig}"
-        unlink ${orig}
+        unlink "${orig}"
       fi
     done
   }
 
-  for linkfile in ${linkfiles[@]}; do
-    _dot_clear ${linkfile}
+  for linkfile in "${linkfiles[@]}"; do
+    _dot_clear "${linkfile}"
   done
 }
 
@@ -446,7 +446,7 @@ dot_config() {
   # open dotrc file
   if [ ! "${dot_edit_default_editor}" = "" ];then
     ${dot_edit_default_editor} "${dotrc}"
-  elif $(hash "$EDITOR"); then
+  elif hash "$EDITOR"; then
     $EDITOR "${dotrc}"
   else
     xdg-open "${dotrc}"
@@ -456,22 +456,22 @@ dot_config() {
 # main command handling
 case "$1" in
   "clone")
-    shift 1; dot_clone $@
+    shift 1; dot_clone "$@"
     ;;
   "pull")
     shift 1; dot_pull
     ;;
   "set")
-    shift 1; dot_set $@
+    shift 1; dot_set "$@"
     ;;
   "add")
-    shift 1; dot_add $@
+    shift 1; dot_add "$@"
     ;;
   "edit")
     shift 1; dot_edit
     ;;
   "unlink")
-    shift 1; dot_unlink $@
+    shift 1; dot_unlink "$@"
     ;;
   "clear")
     shift 1; dot_clear
