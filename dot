@@ -316,12 +316,6 @@ dot_add() {
 
 
   orig_to_dot() {
-    if [ "$(path_without_dotdir "$2")" = "" ]; then
-      cecho ${color_error} "Target path is not in the dotdir (${dotdir})."
-      echo "Aborted."
-      exit 1
-    fi
-
     # mv from original path to dotdir
     orig="$(get_fullpath "$1")"
     dot="$(get_fullpath "$2")"
