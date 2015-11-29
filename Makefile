@@ -47,7 +47,7 @@ install:
 	install -d $(MANPREFIX)/man1/
 	install -m644 doc/dot.1 $(MANPREFIX)/man1/
 	install -d $(INSTALLDIR)/bin
-	install dot $(INSTALLDIR)/bin/dot
+	ln -sf $(CURDIR)/dot $(INSTALLDIR)/bin/dot
 
 copy-config:
 	@echo 'Copy the default configuration files to user dotfiles directory.'
