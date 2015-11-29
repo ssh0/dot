@@ -62,6 +62,8 @@ dotbundle "${dotrc}"
 
 # --------------------------------------------------------------------------}}}
 
+# get the path to this script
+dotscriptpath="$(dirname "$(readlink "$0")")"
 
 usage() {
   cat << EOF
@@ -157,10 +159,14 @@ dot_clone() {
 
 
 dot_pull() {
-  # git pull
-  cecho ${color_message} "\ncd ${dotdir} && git pull"
-  makeline
-  cd "${dotdir}" && git pull
+  if [ "$1" = "--self" ]; then
+    cd "${dotscriptpath}" && git pull
+  else
+    # git pull
+    cecho ${color_message} "\ncd ${dotdir} && git pull"
+    makeline
+    cd "${dotdir}" && git pull
+  fi
 }
 
 
@@ -453,7 +459,7 @@ case "$1" in
     shift 1; dot_clone "$@"
     ;;
   "pull")
-    shift 1; dot_pull
+    shift 1; dot_pull "$@"
     ;;
   "set")
     shift 1; dot_set "$@"
