@@ -1,12 +1,12 @@
-# dot v1.0
+[English](./README.md)
+
+# dot v1.1
 
 `dot`はbash製のdotfiles管理フレームワークです。
 
 ## 説明
 
 このスクリプトを使うとdotfilesの管理が簡単になります。
-
-スクリプトはbashで書かれており，移植性に優れ，設定が容易にできます。
 
 日常的に複数マシンを使う人，新しいPCのセットアップするとき，毎日dotfilesでcontributionに草を生やし続けている人におすすめです。
 
@@ -15,40 +15,80 @@
 ユーザーの設定ファイルは'[dotrc](./examples/dotrc)'。
 シンボリックリンクの対応表は'[dotlink](./examples/dotlink)'に書きます。
 
-* dotfiesをpullしてくる(by git).  
+### dot pull
+
+dotfiesをpullしてくる(by git).  
 ```bash
 dot pull
 ```
 
-* シンボリックリンクを対話的に作成  
-  このコマンドは，`dotlink`に書かれたシンボリックリンクを貼っていきます
-  (もし既にファイルが存在する場合には，1.差分表示，2.2ファイルを編集，3.既存ファイルに上書き，4.バックアップを作成して上書き，5.何もしない，の操作を選ぶことができます。)。
-  オプション`-i`をつけると非対話的になり，もし競合が起こった際は何もしません。
-  `-v`オプションをつけると，より冗長なメッセージを表示します。
-```bash
+### dot set
+
+このコマンドは，`dotlink`に書かれたシンボリックリンクを貼っていきます。
+
+もし既にファイルが存在する場合には,
+
+1. 差分表示
+2. 2ファイルを編集
+3. 既存ファイルに上書き
+4. バックアップを作成して上書き
+5. 何もしない
+
+の操作を選ぶことができます。
+
+オプション`-i`をつけると非対話的になり，もし競合が起こった際は何もしません。 `-v`オプションをつけると，より冗長なメッセージを表示します。
+
+```
 dot set [-i][-v]
 ```
 
-* 新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記  
-```bash
+### dot add
+
+新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記
+
+```
 dot add some_file [~/.dotfiles/path/to/the/file]
 ```
 
-* 選択したシンボリックリンクをunlinkし，dotfilesから元ファイルのコピーを持ってくる  
-```bash
+### dot edit
+
+'dotlink'を手動で編集する。
+
+```
+dot edit
+```
+
+### dot config
+
+設定ファイル'dotrc'を編集する。
+
+```
+dot config
+```
+
+### dot unlink
+
+選択したシンボリックリンクをunlinkし，dotfilesから元ファイルのコピーを持ってくる。
+
+```
 dot unlink <link> [<link> <link> ... ]
 ```
 
-* `$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlinkする  
-```bash
+### dot clear
+
+`$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlinkする
+
+```
 dot clear
 ```
 
-* (私の)dotfilesを自分のPCにクローンするなら  
-```bash
+### dot clone
+
+gitコマンドを使ってdotfilesを自分のPCにクローンする
+
+```
 dot clone [<dir_to_clone>]
 ```
-
 
 ## ユースケース
 
@@ -68,7 +108,6 @@ dotfilesをGitHubなどで管理していて， `dot`を既に使っていれば
 * dotfilesをクローン
 * `dotrc`を以下のように編集:  
 ```
-# You can change the dotfiles to clone
 clone_repository='https://github.com/yourusername/dotfiles.git'
 ```
 * 以下のコマンドを実行:  
@@ -102,55 +141,6 @@ Continue? [y/N]'
 あとは`git commit`して`git push`するだけです。
 (もしDropboxなどを使っていれば，この操作もいりません。)
 
-## インストール
-
-### 必要なもの
-
-* bash
-* git
-
-### 手順
-
-* このリポジトリを自分のPCにforkかcloneしてください:  
-```
-git clone https://github.com/ssh0/dot ~/.git/dot
-```
-
-* `make install`を実行してください:
-```
-sudo make install
-```
-
-`/usr/local/bin/`に`dot`がインストールされます。
-
-* 設定ファイルのサンプルを自分のdotfilesに追加してください:  
-```
-make copy-config 
-```
-
-で, `examples/dotrc`と`examples/dotlink`が`~/.dotfiles`にコピーされます。
-
-違う場所にコピーしたいときは,
-
-```
-make copy-config DOTDIR=-$HOME/dotfiles
-```
-
-のようにしてください。
-
-* マシン固有の設定をする場合には，`dotrc.local`，`dotlink.local`なども必要に応じてコピーします:  
-```
-make copy-local-config
-```
-
-コピs-する場所を指定するには(規定値: `$HOME/.config/dot/`)
-
-```
-make copy-local-config USERCONFDIR=-$HOME/.dot
-```
-
-としてください。
-
 既にdotfilesからリンクが貼られているものをリンク対応表に追記するには，
 
 ```
@@ -158,6 +148,64 @@ dot add <link1> <link2> <link2> <link3> ...
 ```
 
 とするだけで良いです。
+
+
+## インストール
+
+### 必要なもの
+
+* bash
+* git
+
+### マニュアルインストール
+
+このリポジトリを自分のPCにforkかcloneし,`bashrc`や`zshrc`から`source`してください。
+
+```
+git clone https://github.com/ssh0/dot $HOME/.zsh/dot
+echo "source $HOME/.zsh/dot" >> ~/.zshrc
+```
+
+### プラグインマネージャを利用する場合
+
+zshを利用していて,プラグインマネージャを利用している場合(ex. antigen, zgen, zplug, etc.)には,`zshrc`でプラグインとして読み込んでください。
+
+```
+antigen bundle ssh0/dot
+```
+
+
+## 設定
+
+まず,`dot`で管理するdotfilesのリポジトリと,ローカルにおけるディレクトリ名を設定します。
+
+`~/.zshrc`に以下のように書いてください:
+
+```
+export DOT_REPO="https://github.com/yourusername/dotfiles.git"
+export DOT_DIR="$HOME/.dotfiles"
+```
+
+### 設定ファイルの編集
+
+設定ファイルは
+
+```
+dot config
+```
+
+で編集することができ,また設定ファイルが存在しなければ,デフォルトの設定ファイルが`$DOT_DIR/dotrc`にコピーされます。
+
+### マシン固有の設定ファイル
+
+
+マシン固有の設定をする場合には，`dotrc.local`，`dotlink.local`なども必要に応じてコピーします。
+
+```
+cp ~/.zsh/dot/examples/dotrc ~/.config/dot/dotrc.local
+```
+
+`dotrc`内で忘れずにsourceしてください。
 
 ## TODO
 
