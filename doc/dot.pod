@@ -55,7 +55,7 @@ Remove the all symbolic link in the config file F<~/.config/dot/dotlink>.
 
 =item B<config>
 
-Edit rcfile F<~/.config/dot/dotrc>.
+Edit (or create) rcfile F<~/.config/dot/dotrc>.
 
 =back
 
@@ -105,6 +105,28 @@ Add your message for dotlink file.
 
 =back
 
+
+=head1 ENVIRONMENT VARIABLE
+
+=over 10
+
+=item B<DOT_REPO>
+
+Dotfiles repository to manage with this program. You may should change this environment variable. (default: I<https://github.com/ssh0/dotfiles.git>)
+
+=item B<DOT_DIR>
+
+Directory for dotfiles (default: I<$HOME/.dotfiles>)
+
+=item B<DOT_LINK>
+
+Text file to save symbolic links information (default: I<DOT_DIR/dotlink>)
+
+=back
+
+=head1 CONFIGURATION
+
+Configuration file is B<DOT_DIR/dotrc> and symbolic information is in B<DOT_DIR/dotlink>.
 
 =head1 AUTHOR
 
