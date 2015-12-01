@@ -588,5 +588,5 @@ _dot() {
 }
 
 
-compdef _dot $DOT_COMMAND
+compdef _dot dot_main
 
