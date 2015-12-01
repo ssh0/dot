@@ -22,10 +22,8 @@ help:
 	@echo ''
 	@echo 'make:                   Do nothing and show help message.'
 	@echo 'make options:           Show some options for installation.'
-	@echo 'make install:           Install $(NAME).'
 	@echo 'make copy-config:       Copy default configuration to $(DOTDIR).'
 	@echo 'make copy-local-config: Copy local configuration template to $(USERCONFDIR).'
-	@echo 'make uninstall:         Uninstall $(NAME).'
 	@echo 'make man:               Compile the manpage with "pod2man".'
 
 options:
@@ -36,18 +34,6 @@ options:
 	@echo 'DOCDIR = $(DOCDIR)'
 	@echo 'DOTDIR = $(DOTDIR)'
 	@echo 'USERCONFDIR = $(USERCONFDIR)'
-
-install:
-	@echo 'Install $(NAME) ...'
-	@echo
-	install -d $(INSTALLDIR)/share/dot/
-	install -d $(DOCDIR)
-	install -m644 README.md README_ja.md LICENSE $(DOCDIR)
-	cp -r examples $(INSTALLDIR)/share/dot/
-	install -d $(MANPREFIX)/man1/
-	install -m644 doc/dot.1 $(MANPREFIX)/man1/
-	install -d $(INSTALLDIR)/bin
-	ln -sf $(CURDIR)/dot $(INSTALLDIR)/bin/dot
 
 copy-config:
 	@echo 'Copy the default configuration files to user dotfiles directory.'
@@ -61,11 +47,8 @@ copy-local-config:
 	install -d $(USERCONFDIR)
 	cp -i examples/dotrc.local examples/dotlink.local --target-directory=$(USERCONFDIR)
 
-uninstall:
-	rm -rf $(INSTALLDIR)/bin/dot $(INSTALLDIR)/share/dot $(MANPREFIX)/man1/dot.1 $(DOCDIR)
-
 man:
 	pod2man --stderr -center='dot manual' --date='$(NAME)-$(VERSION)' \
 	    --release=$(shell date +%x) doc/dot.pod doc/dot.1
 
-.PHONY: default help options install copy-config copy-local-config uninstall man
+.PHONY: default help options copy-config copy-local-config man
