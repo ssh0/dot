@@ -98,7 +98,7 @@ COMMAND
 
       clear     Remove the all symbolic link in the config file '$dotlink'.
 
-      config    Edit rcfile '$dotrc'.
+      config    Edit (or create) rcfile '$dotrc'.
 
 OPTION
       -h,--help:    Show this help message.
@@ -475,6 +475,21 @@ EOF
 
 
   dot_config() {
+    # init
+    if [ ! -e "${dotrc}" ]; then
+      cecho ${color_error} "'${dotrc}' doesn't exist."
+      echo "[message] make configuration file ? (Y/n)"
+      echo "cp ${dotscriptpath}/examples/dotrc ${dotrc}"
+      makeline
+      echo -n ">>> "; read confirm
+      if [ "${confirm}" != "n" ]; then
+        cp "${dotscriptpath}/examples/dotrc" "${dotrc}"
+      else
+        echo "Aborted."
+        return 1
+      fi
+    fi
+
     # open dotrc file
     if [ ! "${dot_edit_default_editor}" = "" ];then
       ${dot_edit_default_editor} "${dotrc}"
@@ -522,6 +537,56 @@ EOF
 
 }
 
+
 eval "alias ${DOT_COMMAND:="dot"}=dot_main"
 export DOT_COMMAND
+
+
+_dot() {
+  local context curcontext="$curcontext" state line
+  _arguments -C \
+    '1: :->cmds' \
+    '-h[Show this help message.]' \
+    '*::arg:->args' \
+    && ret=0
+
+  case $state in
+    cmds)
+      _values "dot commands"\
+        "clone[Clone ssh0's dotfile repository on your computer.]" \
+        "pull[Pull remote dotfile repository (by git).]" \
+        "set[Make symbolic link interactively.]" \
+        "add[Move the file to the dotfile dir, make the link, and edit \$dotlink.]" \
+        "edit[Edit \$dotlink.]" \
+        "unlink[Unlink the selected symbolic link and copy its original file from the dotfile repository.]" \
+        "clear[Remove the all symbolic link in the config file \$dotlink.]" \
+        "config[Edit rcfile \$dotrc.]" \
+      && ret=0
+      ;;
+    args)
+      local subcmd=$line[1]
+      case $subcmd in
+        "clone"|"unlink")
+          _path_files && ret=0
+          ;;
+        "add")
+          _arguments \
+            '*: :_path_files' \
+            && ret=0
+          ;;
+        "set")
+          _values "options"\
+            '-i[No interaction mode(skip all conflicts).]' \
+            '-v[Print verbose messages.]' \
+            && ret=0
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+
+compdef _dot $DOT_COMMAND
 
