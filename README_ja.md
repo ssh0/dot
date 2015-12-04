@@ -2,7 +2,7 @@
 
 # dot v1.1
 
-`dot`はbash製のdotfiles管理フレームワークです。
+`dot`はシェルスクリプトで書かれたdotfiles管理フレームワークです。
 
 ## 説明
 
@@ -14,6 +14,19 @@
 
 ユーザーの設定ファイルは'[dotrc](./examples/dotrc)'。
 シンボリックリンクの対応表は'[dotlink](./examples/dotlink)'に書きます。
+
+**サブコマンド**
+
+|サブコマンド名|説明|オプション or 引数|
+|---       |---    |---        |
+| pull     |dotfiesをpullしてくる(by git). ||
+|set       |`dotlink`に書かれたシンボリックリンクを貼る|`[-i][-v]`|                                                 |
+| add      |新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
+|edit      |'dotlink'を手動で編集||
+|config    |設定ファイル'dotrc'を編集||
+|unlink    |選択したシンボリックリンクをunlinkし，dotfilesから元ファイルをコピー|`link1 [link2 [link3 [...] ] ]`|
+|clear     |`$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlink||
+|clone     |gitコマンドを使ってdotfilesを自分のPCにクローン|`[/directory/to/clone/]`|
 
 ### dot pull
 
@@ -154,7 +167,7 @@ dot add <link1> <link2> <link2> <link3> ...
 
 ### 必要なもの
 
-* bash
+* bash(or zsh)
 * git
 
 ### マニュアルインストール
@@ -163,17 +176,27 @@ dot add <link1> <link2> <link2> <link3> ...
 
 ```
 git clone https://github.com/ssh0/dot $HOME/.zsh/dot
-echo "source $HOME/.zsh/dot" >> ~/.zshrc
+```
+
+```
+source $HOME/.zsh/dot/dot.sh
 ```
 
 ### プラグインマネージャを利用する場合
 
-zshを利用していて,プラグインマネージャを利用している場合(ex. antigen, zgen, zplug, etc.)には,`zshrc`でプラグインとして読み込んでください。
+zshを利用していて,プラグインマネージャを利用している場合(ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), [antigen](https://github.com/zsh-users/antigen), etc.)には,`zshrc`でプラグインとして読み込んでください。
+
+```
+zplug "ssh0/dot"
+```
+
+```
+zgen load ssh0/dot
+```
 
 ```
 antigen bundle ssh0/dot
 ```
-
 
 ## 設定
 

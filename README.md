@@ -2,13 +2,13 @@
 
 # dot v1.1
 
-bash based dotfiles management framework
+dotfiles management framework with shell (bash, zsh)
 
 ## Description
 
 This script makes it easy to manage your dotfiles.
 
-Script is written in bash, and very configurable.
+Script is written in shell script, and very configurable.
 
 You can use it for multi-machines usage, setup for new machine, daily watering to your dotfiles repository, etc...
 
@@ -17,9 +17,22 @@ You can use it for multi-machines usage, setup for new machine, daily watering t
 Configuration file is in '[dotrc](./examples/dotrc)'.
 Link relation table is in '[dotlink](./examples/dotlink)'.
 
+**subcommand**
+
+|subcommand|description|option or arguments|
+|---       |---    |---        |
+| pull     |Pull from dotfile repository (by git)||
+|set       |Set symbolic links configured in 'dotlink'.|`[-i][-v]`|                                                 |
+| add      |Move the new file to the dotfile dir, make the link, and add the link information to 'dotlink' automatically.|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
+|edit      | Edit 'dotlink'||
+|config    | Edit configuration file 'dotrc'||
+|unlink    | Unlink the selected symbolic links and copy its original files from the dotfile directory.|`link1 [link2 [link3 [...] ] ]`|
+|clear     | Remove the *all* symbolic link written in the dotlink file `$dotlink`.||
+|clone     |Clone dotfile repository on your computer with git.|`[/directory/to/clone/]`|
+
 ### dot pull
 
-Pull remote dotfile repository (by git)
+Pull from remote dotfile repository (by git)
 
 ```
 dot pull
@@ -40,7 +53,7 @@ dot set [-i][-v]
 
 ### dot add
 
-Move the new file to the dotfile dir, make the link, and edit 'dotlink'.
+Move the new file to the dotfile dir, make the link, and add the link information to 'dotlink' automatically.
 
 ```
 dot add some_file [~/.dotfiles/path/to/the/file]
@@ -152,12 +165,23 @@ Clone this repository on your computer and source from your `bashrc` or `zshrc`.
 
 ```
 git clone https://github.com/ssh0/dot $HOME/.zsh/dot
-echo "source $HOME/.zsh/dot" >> ~/.zshrc
+```
+
+```
+source $HOME/.zsh/dot/dot.sh
 ```
 
 ### With plugin manager
 
-If you use some zsh plugin manager (ex. antigen, zgen, zplug, etc.), load from `zshrc` like:
+If you use some zsh plugin manager (ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), [antigen](https://github.com/zsh-users/antigen), etc.), load from `zshrc` like:
+
+```
+zplug "ssh0/dot"
+```
+
+```
+zgen load ssh0/dot
+```
 
 ```
 antigen bundle ssh0/dot
