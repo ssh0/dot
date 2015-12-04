@@ -198,6 +198,22 @@ export DOT_REPO="https://github.com/yourusername/dotfiles.git"
 export DOT_DIR="$HOME/.dotfiles"
 ```
 
+### Change the command name
+
+The name "dot" is too common and may be used in other script or application.
+
+Or, you may want to change it more short name.
+
+You can set the alias for `dot` of cource, but you can also disable the name `dot` for this script and give a different name you want by writting like below in your `bashrc` or `zshrc`:
+
+```
+export DOT_COMMAND=DOOOOOOOOOOOOT
+```
+
+then the command `dot` is no longer the name of this script.
+
+(You can call the main function by `dot_main` of cource.)
+
 ### Edit or copy your configuratoin file
 
 ```
