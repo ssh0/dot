@@ -70,7 +70,7 @@ dot_main() {
   # ------------------------------------------------------------------------}}}
 
   # get the path to this script
-  dotscriptpath="$(dirname "$(readlink "$0")")"
+  dotscriptpath="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")"; pwd)"
 
   usage() {
     cat << EOF
