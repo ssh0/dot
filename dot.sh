@@ -8,6 +8,13 @@
 
 dot_main() {
 
+  # Local variables
+  local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
+  local dotset_interactive dotset_verbose diffcmd edit2filecmd
+  local dot_edit_default_editor
+  local black red green yellow blue purple cyan white
+  local color_message color_error color_notice
+
   # ---------------------------------------------------------------------------
   # Default settings                                                        {{{
   # ---------------------------------------------------------------------------
@@ -64,13 +71,13 @@ dot_main() {
   }
 
   # path to the config file
-  dotrc="$dotdir/dotrc"
+  local dotrc="$dotdir/dotrc"
   dotbundle "${dotrc}"
 
   # ------------------------------------------------------------------------}}}
 
   # get the path to this script
-  dotscriptpath="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")"; pwd)"
+  local dotscriptpath="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")"; pwd)"
 
   usage() {
     cat << EOF
@@ -121,13 +128,14 @@ EOF
 
 
   cecho() {
-    color=$1
+    local color=$1
     shift
     echo -e "\033[${color}m"$@"\033[00m"
   }
 
 
   makeline() {
+    local columns line
     columns=$(tput cols)
     if [[ $columns -gt 70 ]]; then
       columns=70
@@ -153,11 +161,12 @@ EOF
 
 
   dot_clone() {
+    local cloneto confirm
     cloneto="${1:-"${dotdir}"}"
     cecho ${color_message} "\ngit clone ${clone_repository} ${cloneto}"
     makeline
     echo "Continue? [y/N]"
-    read confirm
+    local confirm; read confirm
     if [ "$confirm" != "y" ]; then
       echo "Aborted."
       echo ""
@@ -213,6 +222,7 @@ EOF
 
 
     _dot_set() {
+      local l
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
         dotfile="${dotdir}/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
         orig="$HOME/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
@@ -229,7 +239,7 @@ EOF
           cecho ${color_error} "'${origdir}' doesn't exist."
           if ${dotset_interactive}; then
             echo "[message] mkdir '${origdir}'? (Y/n):"
-            echo -n ">>> "; read confirm
+            echo -n ">>> "; local confirm; read confirm
             if [ "$confirm" != "n" ]; then
               mkdir -p "${origdir}"
             else
@@ -274,8 +284,7 @@ EOF
               while true; do
                 cecho ${color_notice} "'${orig}' already exists."
                 echo "(d):show diff, (e):edit files, (f):overwrite, (b):make backup, (n):do nothing"
-                echo -n ">>> "
-                read line
+                echo -n ">>> "; local line; read line
                 case $line in
                   [Dd] ) echo "${diffcmd} '${dotfile}' '${orig}'"
                         ${diffcmd} "${dotfile}" "${orig}"
@@ -310,6 +319,7 @@ EOF
       done
       }
 
+    local linkfile
     for linkfile in "${linkfiles[@]}"; do
       _dot_set "${linkfile}"
     done
@@ -318,7 +328,7 @@ EOF
 
   dot_add() {
     # default message
-    message=""
+    local message=""
 
     # option handling
     while getopts m:h OPT
@@ -339,6 +349,7 @@ EOF
 
     orig_to_dot() {
       # mv from original path to dotdir
+      local orig dot
       orig="$(get_fullpath "$1")"
       dot="$(get_fullpath "$2")"
 
@@ -366,6 +377,7 @@ EOF
         echo "dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
         echo ""
         echo "Continue? [y/N]"
+        local confirm
         read confirm
         if [ "$confirm" != "y" ]; then
           echo "Aborted."
@@ -379,6 +391,7 @@ EOF
             targetdir="${dot%/*}"
             cecho ${color_error} "'${2%/*}' doesn't exist."
             echo "[message] mkdir '${2%/*}'? (y/n):"
+            local yn
             while echo -n ">>> "; read yn; do
               case $yn in
                 [Yy] ) mkdir -p "${2%/*}"; break ;;
@@ -404,12 +417,13 @@ EOF
     # if the first arugument is not a symbolic link
     else
       # write to dotlink
+      local f
       for f in "$@"; do
         if [ ! -L "$f" ]; then
           echo "'$f' is not symbolic link."
         else
           # get the absolute path
-          abspath="$(readlink "$f")"
+          local abspath="$(readlink "$f")"
           if [ "$(path_without_dotdir "${abspath}")" = "" ]; then
             cecho ${color_error} "Target path (${abspath}) is not in the dotdir (${dotdir})."
             echo "Aborted."
@@ -436,15 +450,16 @@ EOF
 
 
   dot_unlink() {
+    local f
     for f in "$@"; do
       if [ ! -L "$f" ]; then
         echo "'$f' is not symbolic link."
       else
         # get the file's path
-        currentpath="$(get_fullpath "$f")"
+        local currentpath="$(get_fullpath "$f")"
 
         # get the absolute path
-        abspath="$(readlink "$f")"
+        local abspath="$(readlink "$f")"
 
         # unlink the file
         unlink "$currentpath"
@@ -459,8 +474,9 @@ EOF
   dot_clear() {
 
     _dot_clear() {
+      local l
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        orig="$HOME/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+        local orig="$HOME/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
         if [ -L "${orig}" ]; then
           echo "unlink ${orig}"
           unlink "${orig}"
@@ -468,6 +484,7 @@ EOF
       done
     }
 
+    local linkfile
     for linkfile in "${linkfiles[@]}"; do
       _dot_clear "${linkfile}"
     done
@@ -481,6 +498,7 @@ EOF
       echo "[message] make configuration file ? (Y/n)"
       echo "cp ${dotscriptpath}/examples/dotrc ${dotrc}"
       makeline
+      local confirm
       echo -n ">>> "; read confirm
       if [ "${confirm}" != "n" ]; then
         cp "${dotscriptpath}/examples/dotrc" "${dotrc}"
