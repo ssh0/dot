@@ -123,7 +123,6 @@ COMMAND OPTIONS
           -m <message>: Add your message for dotlink file.
 
 EOF
-    return 1
   }
 
 
