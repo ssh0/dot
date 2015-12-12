@@ -89,7 +89,7 @@ USAGE
       dot [-h|--help] <command> [<args>]
 
 COMMAND
-      clone     Clone ssh0's dotfile repository on your computer.
+      clone     Clone dotfile repository on your computer with git.
 
       pull      Pull remote dotfile repository (by git).
 
