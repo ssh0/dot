@@ -1,7 +1,7 @@
 # vim: ft=sh
-# dot - bash based dotfiles management framework
+# dot - dotfiles management framework
 
-# Version:    1.0
+# Version:    1.1
 # Repository: https://github.com/ssh0/dotfiles.git
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
