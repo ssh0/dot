@@ -388,7 +388,6 @@ EOF
       elif [ $# = 2 ]; then
         if [ -e "$1" ]; then
           if [ ! -d "${2%/*}" ]; then
-            targetdir="${dot%/*}"
             cecho ${color_error} "'${2%/*}' doesn't exist."
             echo "[message] mkdir '${2%/*}'? (y/n):"
             local yn
