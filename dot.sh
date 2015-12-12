@@ -1,4 +1,4 @@
-# vim: ft=sh
+# vim: ft=zsh
 # dot - dotfiles management framework
 
 # Version:    1.1
