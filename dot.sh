@@ -324,6 +324,9 @@ EOF
     for linkfile in "${linkfiles[@]}"; do
       _dot_set "${linkfile}"
     done
+
+    unset -f _dot_set info
+    unset dotfile linkto orig origdir
   }
 
 
@@ -434,6 +437,7 @@ EOF
         fi
       done
     fi
+     unset -f orig_to_dot add_to_dotlink
   }
 
 
@@ -488,6 +492,8 @@ EOF
     for linkfile in "${linkfiles[@]}"; do
       _dot_clear "${linkfile}"
     done
+
+    unset -f _dot_clear
   }
 
 
@@ -553,6 +559,11 @@ EOF
       ;;
   esac
 
+  # Clean up namespace
+  unset -f dotbundle usage cecho makeline
+  unset -f get_fullpath path_without_home path_without_dotdir
+  unset -f dot_clone dot_pull dot_set dot_add
+  unset -f dot_edit dot_unlink dot_clear dot_config
 }
 
 
