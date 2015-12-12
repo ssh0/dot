@@ -214,6 +214,7 @@ EOF
       fi
     }
 
+    local mklink
     if ${dotset_verbose}; then
       mklink="ln -sv"
     else
@@ -265,6 +266,7 @@ EOF
               cecho ${color_error} "'${orig}' is link of '${linkto}'."
               if ${dotset_interactive}; then
                 echo "[message] unlink and re-link for '${orig}'? (y/n):"
+                local yn
                 while echo -n ">>> "; read yn; do
                   case $yn in
                     [Yy] ) unlink "${orig}"
