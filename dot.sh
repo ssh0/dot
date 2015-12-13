@@ -223,8 +223,15 @@ EOF
     _dot_set() {
       local l
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        dotfile="${dotdir}/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
-        orig="$HOME/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+        dotfile="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
+        orig="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+        if [ "$(echo $dotfile | cut -c 1)" != "/" ]; then
+          dotfile="${dotdir}/$dotfile"
+        fi
+        if [ "$(echo $orig | cut -c 1)" != "/" ]; then
+          orig="$HOME/$orig"
+        fi
+
         if [ ! -e "${dotfile}" ]; then
           echo ""
           cecho ${color_error} "dotfile '${dotfile}' doesn't exist."
@@ -480,7 +487,10 @@ EOF
     _dot_clear() {
       local l
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        local orig="$HOME/$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+        local orig="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+        if [ "$(echo $orig | cut -c 1)" != "/" ]; then
+          orig="$HOME/$orig"
+        fi
         if [ -L "${orig}" ]; then
           echo "unlink ${orig}"
           unlink "${orig}"
