@@ -291,7 +291,7 @@ EOF
                         echo ""
                         ;;
                   [Ee] ) echo "${edit2filecmd} '${dotfile}' '${orig}'"
-                        ${edit2filecmd} "${dotfile}" "${orig}"
+                        eval ${edit2filecmd} "${dotfile}" "${orig}"
                         ;;
                   [Ff] ) if [ -d "${orig}" ]; then
                           rm -r "${orig}"
@@ -444,7 +444,7 @@ EOF
   dot_edit() {
     # open dotlink file
     if [ ! "${dot_edit_default_editor}" = "" ];then
-      ${dot_edit_default_editor} "${dotlink}"
+      eval ${dot_edit_default_editor} "${dotlink}"
     elif hash "$EDITOR"; then
       $EDITOR "${dotlink}"
     else
@@ -516,7 +516,7 @@ EOF
 
     # open dotrc file
     if [ ! "${dot_edit_default_editor}" = "" ];then
-      ${dot_edit_default_editor} "${dotrc}"
+      eval ${dot_edit_default_editor} "${dotrc}"
     elif hash "$EDITOR"; then
       $EDITOR "${dotrc}"
     else
