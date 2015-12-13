@@ -214,13 +214,53 @@ then the command `dot` is no longer the name of this script.
 
 (You can call the main function by `dot_main` of cource.)
 
-### Edit or copy your configuratoin file
+### Edit your configuratoin file
 
 ```
 dot config 
 ```
 
-will edit or copy `$DOT_DIR/dotrc`.
+will edit `$DOT_DIR/dotrc`(if it doesn't exist, copy the template one).
+
+### Edit your dotlink manually
+
+```
+dot edit
+```
+
+will open `dotlink` and you can edit this file manually.
+
+**EXAMPLE**
+
+`dotlink`
+
+```
+
+# script ignore commented out line
+
+# and empty line
+
+# Format:
+# <dotfile>,<linkto>
+#
+# the script automatically add root directory to the file path.
+# So, you should write like below:
+myvimrc,.vimrc
+
+# Then the script will make the symbolic link from `$DOT_DIR/myvimrc` to `$HOME/.vimrc`.
+
+# Don't do like this:
+# x   ~/.dotfiles/myvimrc,~/.vimrc
+#
+
+# But the path start from slash "/" is correctly understood by the script.
+# It is useful when the file contains some private information and
+# you wouldn't upload it to your dotfiles repository.
+/home/username/Dropbox/briefcase/netrc,.netrc
+
+```
+
+My `dotlink` is [in my dotfiles repository](https://github.com/ssh0/dotfiles/blob/master/dotlink).
 
 ### [optional] Copy local settings
 
