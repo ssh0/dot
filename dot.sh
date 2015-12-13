@@ -194,8 +194,11 @@ EOF
   }
 
 
-  dot_set() {
+  dot_set() { #{{{
     # option handling
+    local linkfile
+    local mklink
+
     while getopts iv OPT
     do
       case $OPT in
@@ -204,15 +207,6 @@ EOF
       esac
     done
 
-
-    info() {
-      if ${dotset_verbose}; then
-        # verbose message
-        echo ""
-        echo "${1} -> ${2}"
-      fi
-    }
-
     if ${dotset_verbose}; then
       mklink="ln -sv"
     else
@@ -220,122 +214,172 @@ EOF
     fi
 
 
-    _dot_set() {
+    info() { #{{{
+      if ${dotset_verbose}; then
+        # verbose message
+        echo ""
+        echo "${1} -> ${2}"
+      fi
+    } #}}}
+
+
+    check_dir() { #{{{
+      local orig="$1"
+      local dotfile="$2"
+
+      origdir="${orig%/*}"
+
+      if [ -d "${origdir}" ]; then
+        return 0
+      fi
+
+      info "${orig}" "${dotfile}"
+      cecho ${color_error} "'${origdir}' doesn't exist."
+      if ! ${dotset_interactive}; then
+        return 0
+      fi
+
+      echo "[message] mkdir '${origdir}'? (Y/n):"
+      echo -n ">>> "; read confirm
+      if [ "$confirm" != "n" ]; then
+        mkdir -p "${origdir}" &&
+        return 0
+      else
+        echo "Aborted."
+        return 1
+      fi
+    } #}}}
+
+
+    if_islink() { #{{{
+      local orig="$1"
+      local dotfile="$2"
+      local linkto="$(readlink "${orig}")"
+      local yn
+
+      info "${orig}" "${dotfile}"
+
+      # if the link has already be set: do nothing
+      if [ "${linkto}" = "${dotfile}" ]; then
+        ${dotset_verbose} && cecho ${color_message} "link '${orig}' already exists."
+        return 0
+      fi
+
+      # if the link is not refer to: unlink or re-link
+      cecho ${color_error} "link '${orig}' is NOT the link of '${dotfile}'."
+      cecho ${color_error} "'${orig}' is link of '${linkto}'."
+
+      if ! ${dotset_interactive}; then
+        return 0
+      fi
+
+      echo "[message] unlink and re-link for '${orig}'? (y/n):"
+      while echo -n ">>> "; read yn; do
+        case $yn in
+          [Yy] ) unlink "${orig}"
+                 eval "${mklink}" "${dotfile}" "${orig}"
+                 break
+                 ;;
+          [Nn] ) break
+                 ;;
+             * ) echo "Please answer with y or n." ;;
+        esac
+      done
+
+      return 0
+    } #}}}
+
+
+    if_exist() { #{{{
+      local line
+      local orig="$1"
+      local dotfile="$2"
+      info "${orig}" "${dotfile}"
+
+      if ! ${dotset_interactive}; then
+        return 0
+      fi
+
+      while true; do
+        cecho ${color_notice} "'${orig}' already exists."
+        echo "(d):show diff, (e):edit files, (f):overwrite, (b):make backup, (n):do nothing"
+        echo -n ">>> "; read line
+        case $line in
+          [Dd] ) echo "${diffcmd} '${dotfile}' '${orig}'"
+                 eval "${diffcmd}" "${dotfile}" "${orig}"
+                 echo ""
+                 ;;
+          [Ee] ) echo "${edit2filecmd} '${dotfile}' '${orig}'"
+                 eval "${edit2filecmd}" "${dotfile}" "${orig}"
+                 ;;
+          [Ff] ) if [ -d "${orig}" ]; then
+                   rm -r "${orig}"
+                 else
+                   rm "${orig}"
+                 fi
+                 eval "${mklink}" "${dotfile}" "${orig}"
+                 break
+                 ;;
+          [Bb] ) eval "${mklink}" -b --suffix '.bak' "${dotfile}" "${orig}"
+                 break
+                 ;;
+          [Nn] ) break
+                 ;;
+              *) echo "Please answer with [d/e/f/b/n]."
+                 ;;
+        esac
+      done
+
+      return 0
+    } #}}}
+
+
+    _dot_set() { #{{{
       local l
+
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
         dotfile="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
         orig="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+
         if [ "$(echo $dotfile | cut -c 1)" != "/" ]; then
           dotfile="${dotdir}/$dotfile"
         fi
+
         if [ "$(echo $orig | cut -c 1)" != "/" ]; then
           orig="$HOME/$orig"
         fi
 
+        # if dotfile doesn't exist, print error message and pass
         if [ ! -e "${dotfile}" ]; then
           echo ""
           cecho ${color_error} "dotfile '${dotfile}' doesn't exist."
           continue
         fi
 
-        # if directory doesn't exist: mkdir or not
-        origdir="${orig%/*}"
-        if [ ! -d "${origdir}" ]; then
-          info "${orig}" "${dotfile}"
-          cecho ${color_error} "'${origdir}' doesn't exist."
-          if ${dotset_interactive}; then
-            echo "[message] mkdir '${origdir}'? (Y/n):"
-            echo -n ">>> "; read confirm
-            if [ "$confirm" != "n" ]; then
-              mkdir -p "${origdir}"
-            else
-              echo "Aborted."
-              break
-            fi
-          fi
-        fi
+        # if the targeted directory doesn't exist,
+        # ask whether make directory or not.
+        check_dir "${orig}" "${dotfile}" || continue
 
-        # if the file already exists
-        if [ -e "${orig}" ]; then
-          # if it is a symboliclink
-          if [ -L "${orig}" ]; then
-            linkto="$(readlink "${orig}")"
-            info "${orig}" "${dotfile}"
-            # if the link already be set: do nothing
-            if [ "${linkto}" = "${dotfile}" ]; then
-              ${dotset_verbose} && cecho ${color_message} "link '${orig}' already exists."
-              continue
-            # if the link is not refer to: unlink and re-link
-            else
-              cecho ${color_error} "link '${orig}' is NOT the link of '${dotfile}'."
-              cecho ${color_error} "'${orig}' is link of '${linkto}'."
-              if ${dotset_interactive}; then
-                echo "[message] unlink and re-link for '${orig}'? (y/n):"
-                while echo -n ">>> "; read yn; do
-                  case $yn in
-                    [Yy] ) unlink "${orig}"
-                          eval $mklink "${dotfile}" "${orig}"
-                          break ;;
-                    [Nn] ) break ;;
-                    * ) echo "Please answer with y or n." ;;
-                  esac
-                done
-                unset yn
-              fi
-              continue
-            fi
-          # if it is a file or directory: interaction menu
-          else
-            info "${orig}" "${dotfile}"
-            if ${dotset_interactive}; then
-              while true; do
-                cecho ${color_notice} "'${orig}' already exists."
-                echo "(d):show diff, (e):edit files, (f):overwrite, (b):make backup, (n):do nothing"
-                echo -n ">>> "; read line
-                case $line in
-                  [Dd] ) echo "${diffcmd} '${dotfile}' '${orig}'"
-                        eval ${diffcmd} "${dotfile}" "${orig}"
-                        echo ""
-                        ;;
-                  [Ee] ) echo "${edit2filecmd} '${dotfile}' '${orig}'"
-                        eval ${edit2filecmd} "${dotfile}" "${orig}"
-                        ;;
-                  [Ff] ) if [ -d "${orig}" ]; then
-                          rm -r "${orig}"
-                        else
-                          rm "${orig}"
-                        fi
-                        eval $mklink "${dotfile}" "${orig}"
-                        break
-                        ;;
-                  [Bb] ) eval $mklink -b --suffix '.bak' "${dotfile}" "${orig}"
-                        break
-                        ;;
-                  [Nn] ) break
-                        ;;
-                      *) echo "Please answer with [d/e/f/b/n]."
-                        ;;
-                esac
-              done
-              unset -v line
-            fi
+        if [ -e "${orig}" ]; then                 # if the file already exists:
+          if [ -L "${orig}" ]; then               #   if it is a symbolic-link:
+            if_islink "${orig}" "${dotfile}"          #      do nothing or relink
+          else                                    #   if it is a file or a dir:
+            if_exist "${orig}" "${dotfile}"           #      ask user what to do
           fi
-        else
-          # make symbolic file
-          ln -sv "${dotfile}" "${orig}"
+        else                                      # else:
+          eval "${mklink}" "${dotfile}" "${orig}" #   make symbolic link
         fi
       done
-      }
+    } #}}}
 
-    local linkfile
     for linkfile in "${linkfiles[@]}"; do
       _dot_set "${linkfile}"
     done
 
-    unset -f _dot_set info
-    unset dotfile linkto orig origdir
-  }
+    unset -f info check_dir if_islink if_exist _dot_set
+    unset dotfile orig origdir
 
+  } #}}}
 
   dot_add() {
     # default message
