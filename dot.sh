@@ -213,7 +213,6 @@ EOF
       fi
     }
 
-    local mklink
     if ${dotset_verbose}; then
       mklink="ln -sv"
     else
@@ -268,7 +267,7 @@ EOF
                 while echo -n ">>> "; read yn; do
                   case $yn in
                     [Yy] ) unlink "${orig}"
-                          $mklink "${dotfile}" "${orig}"
+                          eval $mklink "${dotfile}" "${orig}"
                           break ;;
                     [Nn] ) break ;;
                     * ) echo "Please answer with y or n." ;;
@@ -288,7 +287,7 @@ EOF
                 echo -n ">>> "; read line
                 case $line in
                   [Dd] ) echo "${diffcmd} '${dotfile}' '${orig}'"
-                        ${diffcmd} "${dotfile}" "${orig}"
+                        eval ${diffcmd} "${dotfile}" "${orig}"
                         echo ""
                         ;;
                   [Ee] ) echo "${edit2filecmd} '${dotfile}' '${orig}'"
@@ -299,10 +298,10 @@ EOF
                         else
                           rm "${orig}"
                         fi
-                        $mklink "${dotfile}" "${orig}"
+                        eval $mklink "${dotfile}" "${orig}"
                         break
                         ;;
-                  [Bb] ) $mklink -b --suffix '.bak' "${dotfile}" "${orig}"
+                  [Bb] ) eval $mklink -b --suffix '.bak' "${dotfile}" "${orig}"
                         break
                         ;;
                   [Nn] ) break
