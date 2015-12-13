@@ -265,7 +265,6 @@ EOF
               cecho ${color_error} "'${orig}' is link of '${linkto}'."
               if ${dotset_interactive}; then
                 echo "[message] unlink and re-link for '${orig}'? (y/n):"
-                local yn
                 while echo -n ">>> "; read yn; do
                   case $yn in
                     [Yy] ) unlink "${orig}"
@@ -275,6 +274,7 @@ EOF
                     * ) echo "Please answer with y or n." ;;
                   esac
                 done
+                unset -v yn
               fi
               continue
             fi
@@ -285,7 +285,7 @@ EOF
               while true; do
                 cecho ${color_notice} "'${orig}' already exists."
                 echo "(d):show diff, (e):edit files, (f):overwrite, (b):make backup, (n):do nothing"
-                echo -n ">>> "; local line; read line
+                echo -n ">>> "; read line
                 case $line in
                   [Dd] ) echo "${diffcmd} '${dotfile}' '${orig}'"
                         ${diffcmd} "${dotfile}" "${orig}"
@@ -311,6 +311,7 @@ EOF
                         ;;
                 esac
               done
+              unset -v line
             fi
           fi
         else
@@ -504,7 +505,6 @@ EOF
       echo "[message] make configuration file ? (Y/n)"
       echo "cp ${dotscriptpath}/examples/dotrc ${dotrc}"
       makeline
-      local confirm
       echo -n ">>> "; read confirm
       if [ "${confirm}" != "n" ]; then
         cp "${dotscriptpath}/examples/dotrc" "${dotrc}"
@@ -512,6 +512,7 @@ EOF
         echo "Aborted."
         return 1
       fi
+      unset -v confirm
     fi
 
     # open dotrc file
