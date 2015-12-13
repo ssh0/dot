@@ -381,7 +381,8 @@ EOF
 
   } #}}}
 
-  dot_add() {
+
+  dot_add() { #{{{
     # default message
     local message=""
 
@@ -402,9 +403,10 @@ EOF
     fi
 
 
-    orig_to_dot() {
+    orig_to_dot() { #{{{
       # mv from original path to dotdir
       local orig dot
+
       orig="$(get_fullpath "$1")"
       dot="$(get_fullpath "$2")"
 
@@ -412,87 +414,119 @@ EOF
 
       # link to orig path from dotfiles
       ln -siv "${dot}" "${orig}"
-    }
+    } #}}}
 
 
-    add_to_dotlink() {
+    add_to_dotlink() { #{{{
       # add the configration to the config file.
-      if [ ! "${message}" = "" ]; then
-        echo "# ${message}" >> "${dotlink}"
-      fi
-
+      test -n "${message}" && echo "# ${message}" >> "${dotlink}"
       echo "$(path_without_dotdir "$2"),$(path_without_home "$1")" >> "${dotlink}"
-    }
+    } #}}}
 
-    # if the first arugument is not a symbolic link
-    if [ ! -L "$1" ]; then
-      # if the second arugument isn't provided
-      if [ $# = 1 ]; then
-        cecho ${color_message} "Suggestion:"
-        echo "dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
-        echo ""
-        echo "Continue? [y/N]"
-        local confirm
-        read confirm
-        if [ "$confirm" != "y" ]; then
-          echo "Aborted."
-          return 1
-        fi
-        dot_add -m "${message}" "$1" "${dotdir}/$(path_without_home "$1")"
-      # if the second arguments is provided (default action)
-      elif [ $# = 2 ]; then
-        if [ -e "$1" ]; then
-          if [ ! -d "${2%/*}" ]; then
-            cecho ${color_error} "'${2%/*}' doesn't exist."
-            echo "[message] mkdir '${2%/*}'? (y/n):"
-            while echo -n ">>> "; read yn; do
-              case $yn in
-                [Yy] ) mkdir -p "${2%/*}"; break ;;
-                [Nn] ) unset yn; return 1 ;;
-                * ) echo "Please answer with y or n." ;;
-              esac
-            done
-            unset yn
-            return 1
-          fi
-        else
-          cecho ${color_error} "'$1' doesn't exist."
-          return 1
-        fi
-        orig_to_dot "$1" "$2"
-        add_to_dotlink "$1" "$2"
-      # other: return error message
-      else
-        echo "Aborted."
-        echo "Usage: 'dot add file'"
-        echo "       'dot add file ${dotdir}/any/path/to/the/file'"
-        return 1
-      fi
-    # if the first arugument is not a symbolic link
-    else
+
+    if_islink() { #{{{
       # write to dotlink
-      local f
+      local f abspath
+
       for f in "$@"; do
         if [ ! -L "$f" ]; then
           echo "'$f' is not symbolic link."
-        else
-          # get the absolute path
-          local abspath="$(readlink "$f")"
-          if [ "$(path_without_dotdir "${abspath}")" = "" ]; then
-            cecho ${color_error} "Target path (${abspath}) is not in the dotdir (${dotdir})."
-            echo "Aborted."
-            return 1
-          fi
-          # write to dotlink
-          add_to_dotlink "$f" "${abspath}"
+          continue
         fi
+
+        # get the absolute path
+        abspath="$(readlink "$f")"
+        if [ ! -n "$(path_without_dotdir "${abspath}")" ]; then
+          cecho ${color_error} "Target path (${abspath}) is not in the dotdir (${dotdir})."
+          echo "Aborted."
+          return 1
+        fi
+        # write to dotlink
+        add_to_dotlink "$f" "${abspath}"
       done
-    fi
-     unset -f orig_to_dot add_to_dotlink
-  }
+    } #}}}
 
 
-  dot_edit() {
+    suggest() { #{{{
+      local confirm
+
+      cecho ${color_message} "Suggestion:"
+      echo "dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
+      echo ""
+      echo "Continue? [y/N]"
+      read confirm
+      if [ "$confirm" != "y" ]; then
+        echo "Aborted."
+        return 1
+      fi
+
+      dot_add_main "$1" "${dotdir}/$(path_without_home $1)"
+    } #}}}
+
+
+    check_dir() { #{{{
+      local yn
+
+      if [ -d "${1%/*}" ]; then
+        return 0
+      fi
+
+      cecho ${color_error} "'${1%/*}' doesn't exist."
+      echo "[message] mkdir '${1%/*}'? (y/n):"
+      while echo -n ">>> "; read yn; do
+        case $yn in
+          [Yy] ) mkdir -p "${2%/*}"
+                 break
+                 ;;
+          [Nn] ) unset yn
+                 return 1
+                 ;;
+             * ) echo "Please answer with y or n."
+                 ;;
+        esac
+      done
+
+      return 0
+    } #}}}
+
+
+    dot_add_main() { #{{{
+      # if the first arugument is a symbolic link
+      if [ -L "$1" ]; then
+        if_islink "$@" || return 1
+        return 0
+      fi
+
+      # if the second arguments is provided (default action)
+      if [ $# = 2 ]; then
+
+        # if the targeted directory doesn't exist,
+        # ask whether make directory or not.
+        check_dir "$2" || return 1
+
+        orig_to_dot "$1" "$2"
+        add_to_dotlink "$1" "$2"
+
+        return 0
+      fi
+
+      # if the second arugument isn't provided, provide suggestion
+      test $# = 1 && ( suggest "$1" && return 0 || return 1 ) && return 0
+
+      # else
+      echo "Aborted."
+      echo "Usage: 'dot add file'"
+      echo "       'dot add file ${dotdir}/any/path/to/the/file'"
+
+      return 1
+    } #}}}
+
+
+    echo "dot_add_main $@"
+    dot_add_main "$@"
+
+    unset -f orig_to_dot add_to_dotlink if_islink suggest check_dir
+  } #}}}
     # open dotlink file
     if [ ! "${dot_edit_default_editor}" = "" ];then
       eval ${dot_edit_default_editor} "${dotlink}"
