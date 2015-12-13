@@ -6,16 +6,20 @@
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
 
-dot_main() {
+dot_main() { #{{{
 
-  # Local variables
+  # ---------------------------------------------------------------------------
+  # Local variables                                                         {{{
+  # ---------------------------------------------------------------------------
+
   local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
   local dotset_interactive dotset_verbose diffcmd edit2filecmd
   local dot_edit_default_editor
   local black red green yellow blue purple cyan white
   local color_message color_error color_notice
+  local dotscriptpath="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")"; pwd)"
 
-  # ---------------------------------------------------------------------------
+  # ------------------------------------------------------------------------}}}
   # Default settings                                                        {{{
   # ---------------------------------------------------------------------------
 
@@ -76,10 +80,7 @@ dot_main() {
 
   # ------------------------------------------------------------------------}}}
 
-  # get the path to this script
-  local dotscriptpath="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")"; pwd)"
-
-  usage() {
+  usage() { #{{{
     cat << EOF
 
 NAME
@@ -123,43 +124,44 @@ COMMAND OPTIONS
           -m <message>: Add your message for dotlink file.
 
 EOF
-  }
+  } #}}}
 
 
-  cecho() {
+  cecho() { #{{{
     local color=$1
     shift
     echo -e "\033[${color}m"$@"\033[00m"
-  }
+  } #}}}
 
 
-  makeline() {
+  makeline() { #{{{
     local columns line
+
     columns=$(tput cols)
     if [[ $columns -gt 70 ]]; then
       columns=70
     fi
     line=$(printf '%*s\n' "$columns" '' | tr ' ' -)
     echo "${line}"
-  }
+  } #}}}
 
 
-  get_fullpath() {
+  get_fullpath() { #{{{
     echo "$(cd "$(dirname "$1")" && pwd)"/"$(basename "$1")"
-  }
+  } #}}}
 
 
-  path_without_home() {
+  path_without_home() { #{{{
     get_fullpath "$1" | sed -ne "${home_pattern}"
-  }
+  } #}}}
 
 
-  path_without_dotdir() {
+  path_without_dotdir() { #{{{
     get_fullpath "$1" | sed -ne "${dotdir_pattern}"
-  }
+  } #}}}
 
 
-  dot_clone() {
+  dot_clone() { #{{{
     local cloneto confirm
     cloneto="${1:-"${dotdir}"}"
     cecho ${color_message} "\ngit clone ${clone_repository} ${cloneto}"
@@ -177,10 +179,10 @@ EOF
       return 1
     fi
     git clone "${clone_repository}" "${cloneto}"
-  }
+  } #}}}
 
 
-  dot_pull() {
+  dot_pull() { #{{{
     local cwd="$(pwd)"
     if [ "$1" = "--self" ]; then
       cd "${dotscriptpath}" && git pull
@@ -191,7 +193,7 @@ EOF
       cd "${dotdir}" && git pull
     fi
     cd "$cwd"
-  }
+  } #}}}
 
 
   dot_set() { #{{{
@@ -527,6 +529,9 @@ EOF
 
     unset -f orig_to_dot add_to_dotlink if_islink suggest check_dir
   } #}}}
+
+
+  dot_edit() { #{{{
     # open dotlink file
     if [ ! "${dot_edit_default_editor}" = "" ];then
       eval ${dot_edit_default_editor} "${dotlink}"
@@ -535,11 +540,12 @@ EOF
     else
       xdg-open "${dotlink}"
     fi
-  }
+  } #}}}
 
 
-  dot_unlink() {
+  dot_unlink() { #{{{
     local f
+
     for f in "$@"; do
       if [ ! -L "$f" ]; then
         echo "'$f' is not symbolic link."
@@ -557,13 +563,15 @@ EOF
         cp "$abspath" "$currentpath"
       fi
     done
-  }
+  } #}}}
 
 
-  dot_clear() {
+  dot_clear() { #{{{
+    local linkfile
 
-    _dot_clear() {
+    _dot_clear() { #{{{
       local l
+
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
         local orig="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
         if [ "$(echo $orig | cut -c 1)" != "/" ]; then
@@ -574,18 +582,17 @@ EOF
           unlink "${orig}"
         fi
       done
-    }
+    } #}}}
 
-    local linkfile
     for linkfile in "${linkfiles[@]}"; do
       _dot_clear "${linkfile}"
     done
 
     unset -f _dot_clear
-  }
+  } #}}}
 
 
-  dot_config() {
+  dot_config() { #{{{
     # init
     if [ ! -e "${dotrc}" ]; then
       cecho ${color_error} "'${dotrc}' doesn't exist."
@@ -610,9 +617,10 @@ EOF
     else
       xdg-open "${dotrc}"
     fi
-  }
+  } #}}}
 
-  # main command handling
+
+  # main command handling {{{
   case "$1" in
     "clone")
       shift 1; dot_clone "$@"
@@ -646,13 +654,16 @@ EOF
       usage
       ;;
   esac
+  # }}}
 
-  # Clean up namespace
+  # Clean up namespace {{{
   unset -f dotbundle usage cecho makeline
   unset -f get_fullpath path_without_home path_without_dotdir
   unset -f dot_clone dot_pull dot_set dot_add
   unset -f dot_edit dot_unlink dot_clear dot_config
-}
+  # }}}
+
+} #}}}
 
 
 eval "alias ${DOT_COMMAND:="dot"}=dot_main"
