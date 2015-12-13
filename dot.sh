@@ -35,13 +35,13 @@ dot_main() { #{{{
   dotset_interactive=true
   dotset_verbose=false
 
-  if hash colordiff; then
+  if hash colordiff 2>/dev/null; then
     diffcmd="colordiff -u"
   else
     diffcmd='diff -u'
   fi
 
-  if hash vimdiff; then
+  if hash vimdiff 2>/dev/null; then
     edit2filecmd='vimdiff'
   else
     edit2filecmd=${diffcmd}
@@ -533,9 +533,9 @@ EOF
 
   dot_edit() { #{{{
     # open dotlink file
-    if [ ! "${dot_edit_default_editor}" = "" ];then
+    if [ -n "${dot_edit_default_editor}" ];then
       eval ${dot_edit_default_editor} "${dotlink}"
-    elif hash "$EDITOR"; then
+    elif hash "$EDITOR" 2>/dev/null; then
       $EDITOR "${dotlink}"
     else
       xdg-open "${dotlink}"
