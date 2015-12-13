@@ -239,7 +239,7 @@ EOF
           cecho ${color_error} "'${origdir}' doesn't exist."
           if ${dotset_interactive}; then
             echo "[message] mkdir '${origdir}'? (Y/n):"
-            echo -n ">>> "; local confirm; read confirm
+            echo -n ">>> "; read confirm
             if [ "$confirm" != "n" ]; then
               mkdir -p "${origdir}"
             else
@@ -274,7 +274,7 @@ EOF
                     * ) echo "Please answer with y or n." ;;
                   esac
                 done
-                unset -v yn
+                unset yn
               fi
               continue
             fi
@@ -398,10 +398,11 @@ EOF
             while echo -n ">>> "; read yn; do
               case $yn in
                 [Yy] ) mkdir -p "${2%/*}"; break ;;
-                [Nn] ) unset -v yn; return 1 ;;
+                [Nn] ) unset yn; return 1 ;;
                 * ) echo "Please answer with y or n." ;;
               esac
             done
+            unset yn
             return 1
           fi
         else
