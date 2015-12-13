@@ -1,6 +1,6 @@
 [日本語](./README_ja.md)
 
-# dot v1.1
+# dot v1.2
 
 dotfiles management framework with shell (bash, zsh)
 

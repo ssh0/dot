@@ -1,6 +1,6 @@
 [English](./README.md)
 
-# dot v1.1
+# dot v1.2
 
 `dot`はシェルスクリプトで書かれたdotfiles管理フレームワークです。
 
