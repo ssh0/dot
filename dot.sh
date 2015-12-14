@@ -190,7 +190,7 @@ EOF
   dot_pull() { #{{{
     local cwd="$(pwd)"
     if [ "$1" = "--self" ]; then
-      cd "${dotscriptpath}" && git pull
+      cd "${DOT_SCRIPT_ROOTDIR}" && git pull
     else
       # git pull
       cecho ${color_message} "\ncd ${dotdir} && git pull"
@@ -432,10 +432,12 @@ EOF
       local dotfile linkto
       # add the configration to the config file.
       [ -n "${message}" ] && echo "# ${message}" >> "${dotlink}"
+
       dotfile="$(path_without_dotdir "$2")"
-      dotfile="${dotfile:=$2}"
+      dotfile="${dotfile:="$(get_fullpath "$2")"}"
       linkto="$(path_without_home "$1")"
-      linkto="${linkto:=$1}"
+      linkto="${linkto:="$(get_fullpath "$1")"}"
+
       echo "${dotfile},${linkto}" >> "${dotlink}"
     } #}}}
 
@@ -629,11 +631,11 @@ EOF
     if [ ! -e "${dotrc}" ]; then
       cecho ${color_error} "'${dotrc}' doesn't exist."
       echo "[message] make configuration file ? (Y/n)"
-      echo "cp ${dotscriptpath}/examples/dotrc ${dotrc}"
       makeline
       echo -n ">>> "; read confirm
       if [ "${confirm}" != "n" ]; then
-        cp "${dotscriptpath}/examples/dotrc" "${dotrc}"
+        echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotrc ${dotrc}"
+        cp "${DOT_SCRIPT_ROOTDIR}/examples/dotrc" "${dotrc}"
       else
         echo "Aborted."
         return 1
