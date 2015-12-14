@@ -636,6 +636,14 @@ EOF
   } #}}}
 
 
+ cleanup_namespace() { #{{{
+  unset -f dotbundle usage cecho makeline
+  unset -f get_fullpath path_without_home path_without_dotdir
+  unset -f dot_clone dot_pull dot_set dot_add
+  unset -f dot_edit dot_unlink dot_clear dot_config
+  unset -f $0
+ } #}}}
+
   # main command handling {{{
   case "$1" in
     "clone")
@@ -672,12 +680,6 @@ EOF
   esac
   # }}}
 
-  # Clean up namespace {{{
-  unset -f dotbundle usage cecho makeline
-  unset -f get_fullpath path_without_home path_without_dotdir
-  unset -f dot_clone dot_pull dot_set dot_add
-  unset -f dot_edit dot_unlink dot_clear dot_config
-  # }}}
 
 } #}}}
 
