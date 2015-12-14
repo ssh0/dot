@@ -6,6 +6,11 @@
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
 
+DOT_SCRIPT_ROOTDIR="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")" && pwd)"
+readonly DOT_SCRIPT_ROOTDIR
+export DOT_SCRIPT_ROOTDIR
+
+
 dot_main() { #{{{
 
   # ---------------------------------------------------------------------------
@@ -17,7 +22,6 @@ dot_main() { #{{{
   local dot_edit_default_editor
   local black red green yellow blue purple cyan white
   local color_message color_error color_notice
-  local dotscriptpath="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")"; pwd)"
 
   # ------------------------------------------------------------------------}}}
   # Default settings                                                        {{{
