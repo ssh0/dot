@@ -548,6 +548,22 @@ EOF
 
 
   dot_edit() { #{{{
+    # init
+    if [ ! -e "${dotlink}" ]; then
+      cecho ${color_error} "'${dotlink}' doesn't exist."
+      echo "[message] make dotlink file ? (Y/n)"
+      makeline
+      echo -n ">>> "; read confirm
+      if [ "${confirm}" != "n" ]; then
+        echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotlink ${dotlink}"
+        cp "${DOT_SCRIPT_ROOTDIR}/examples/dotlink" "${dotlink}"
+      else
+        echo "Aborted."
+        return 1
+      fi
+      unset -v confirm
+    fi
+
     # open dotlink file
     if [ -n "${dot_edit_default_editor}" ];then
       eval ${dot_edit_default_editor} "${dotlink}"
