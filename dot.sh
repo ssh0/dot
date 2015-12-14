@@ -375,7 +375,10 @@ EOF
     } #}}}
 
     for linkfile in "${linkfiles[@]}"; do
+      echo "From the link file '${linkfile}'"
+      echo "========================================"
       _dot_set "${linkfile}"
+      echo "Done."
     done
 
     unset -f info check_dir if_islink if_exist _dot_set
