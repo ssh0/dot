@@ -21,7 +21,7 @@ dot_main() { #{{{
   local dotset_interactive dotset_verbose diffcmd edit2filecmd
   local dot_edit_default_editor
   local black red green yellow blue purple cyan white
-  local color_message color_error color_notice
+  local color_message color_error color_notice dotrc
 
   # ------------------------------------------------------------------------}}}
   # Default settings                                                        {{{
@@ -79,7 +79,7 @@ dot_main() { #{{{
   }
 
   # path to the config file
-  local dotrc="$dotdir/dotrc"
+  dotrc="$dotdir/dotrc"
   dotbundle "${dotrc}"
 
   # ------------------------------------------------------------------------}}}
@@ -171,7 +171,7 @@ EOF
     cecho ${color_message} "\ngit clone ${clone_repository} ${cloneto}"
     makeline
     echo "Continue? [y/N]"
-    local confirm; read confirm
+    read confirm
     if [ "$confirm" != "y" ]; then
       echo "Aborted."
       echo ""
@@ -183,6 +183,7 @@ EOF
       return 1
     fi
     git clone "${clone_repository}" "${cloneto}"
+    unset -v confirm
   } #}}}
 
 
