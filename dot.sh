@@ -454,11 +454,13 @@ EOF
 
         # get the absolute path
         abspath="$(readlink "$f")"
-        if [ ! -n "$(path_without_dotdir "${abspath}")" ]; then
-          cecho ${color_error} "Target path (${abspath}) is not in the dotdir (${dotdir})."
+
+        if [ ! -e "${abspath}" ]; then
+          cecho ${color_error} "Target path (${abspath}) doesn't exist."
           echo "Aborted."
           return 1
         fi
+
         # write to dotlink
         add_to_dotlink "$f" "${abspath}"
       done
