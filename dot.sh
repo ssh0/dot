@@ -668,6 +668,7 @@ EOF
   do
     case $OPT in
       "c" ) dotrc="$OPTARG"
+            source "$dotrc"
             ;;
         * ) usage
             cleanup_namespace
