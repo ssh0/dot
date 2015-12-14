@@ -477,7 +477,7 @@ EOF
       echo "[message] mkdir '${1%/*}'? (y/n):"
       while echo -n ">>> "; read yn; do
         case $yn in
-          [Yy] ) mkdir -p "${2%/*}"
+          [Yy] ) mkdir -p "${1%/*}"
                  break
                  ;;
           [Nn] ) unset yn
