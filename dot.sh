@@ -662,6 +662,24 @@ EOF
   unset -f $0
  } #}}}
 
+
+  # Option handling {{{
+  while getopts c: OPT
+  do
+    case $OPT in
+      "c" ) dotrc="$OPTARG"
+            ;;
+        * ) usage
+            cleanup_namespace
+            return 1
+            ;;
+    esac
+  done
+
+  shift $((OPTIND-1))
+
+  # }}}
+
   # main command handling {{{
   case "$1" in
     "clone")
