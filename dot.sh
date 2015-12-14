@@ -33,8 +33,8 @@ dot_main() { #{{{
   dotlink="${DOT_LINK:-"$dotdir/dotlink"}"
   linkfiles=("${dotlink}")
 
-  home_pattern="s/\/home\/$USER\///p"
-  dotdir_pattern="s/\/home\/$USER\/\.dotfiles\///p"
+  home_pattern="s@$HOME/@@p"
+  dotdir_pattern="s@${dotdir}/@@p"
 
   dotset_interactive=true
   dotset_verbose=false
