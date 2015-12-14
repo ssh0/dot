@@ -420,9 +420,14 @@ EOF
 
 
     add_to_dotlink() { #{{{
+      local dotfile linkto
       # add the configration to the config file.
-      test -n "${message}" && echo "# ${message}" >> "${dotlink}"
-      echo "$(path_without_dotdir "$2"),$(path_without_home "$1")" >> "${dotlink}"
+      [ -n "${message}" ] && echo "# ${message}" >> "${dotlink}"
+      dotfile="$(path_without_dotdir "$2")"
+      dotfile="${dotfile:=$2}"
+      linkto="$(path_without_home "$1")"
+      linkto="${linkto:=$1}"
+      echo "${dotfile},${linkto}" >> "${dotlink}"
     } #}}}
 
 
