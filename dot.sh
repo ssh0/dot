@@ -382,7 +382,7 @@ EOF
     for linkfile in "${linkfiles[@]}"; do
       echo
       cecho ${green} "From the link file '${linkfile}'"
-      echo "========================================"
+      makeline
       _dot_set "${linkfile}"
       cecho ${green} "Done."
     done
@@ -543,8 +543,6 @@ EOF
       return 1
     } #}}}
 
-
-    echo "dot_add_main $@"
     dot_add_main "$@"
 
     unset -f orig_to_dot add_to_dotlink if_islink suggest check_dir
