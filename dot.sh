@@ -168,7 +168,7 @@ EOF
   dot_clone() { #{{{
     local cloneto confirm
     cloneto="${1:-"${dotdir}"}"
-    cecho ${color_message} "\ngit clone ${clone_repository} ${cloneto}"
+    cecho ${color_message} "\ngit clone --recursive ${clone_repository} ${cloneto}"
     makeline
     echo "Continue? [y/N]"
     read confirm
@@ -182,7 +182,7 @@ EOF
       echo "    export DOT_DIR=\$HOME/dotfiles"
       return 1
     fi
-    git clone "${clone_repository}" "${cloneto}"
+    git clone --recursive "${clone_repository}" "${cloneto}"
     unset -v confirm
   } #}}}
 
