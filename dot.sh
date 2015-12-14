@@ -513,7 +513,9 @@ EOF
       fi
 
       # if the second arugument isn't provided, provide suggestion
-      test $# = 1 && ( suggest "$1" && return 0 || return 1 ) && return 0
+      if [ $# = 1 ];then
+        suggest "$1" && return 0 || return 1
+      fi
 
       # else
       echo "Aborted."
