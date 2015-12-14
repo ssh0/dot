@@ -11,14 +11,14 @@ _dot() {
   case $state in
     cmds)
       _values "dot commands"\
-        "clone[Clone ssh0's dotfile repository on your computer.]" \
+        "clone[Clone dotfile repository on your computer with git.]" \
         "pull[Pull remote dotfile repository (by git).]" \
         "set[Make symbolic link interactively.]" \
-        "add[Move the file to the dotfile dir, make the link, and edit \$dotlink.]" \
+        "add[Move the file to the dotfile dir and make a symbolic link.]" \
         "edit[Edit \$dotlink.]" \
         "unlink[Unlink the selected symbolic link and copy its original file from the dotfile repository.]" \
         "clear[Remove the all symbolic link in the config file \$dotlink.]" \
-        "config[Edit rcfile \$dotrc.]" \
+        "config[Edit (or create) rcfile \$dotrc.]" \
       && ret=0
       ;;
     args)
@@ -26,6 +26,11 @@ _dot() {
       case $subcmd in
         "clone"|"unlink")
           _path_files && ret=0
+          ;;
+        "pull")
+          _values "options"\
+            '--self[Update dot framework from repository.]'\
+            && ret=0
           ;;
         "add")
           _arguments \
