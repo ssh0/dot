@@ -670,16 +670,23 @@ EOF
 
 
   # Option handling {{{
-  while getopts c: OPT
+  optstr="c:h -help"
+  while getopts ${optstr} OPT
   do
     case $OPT in
-      "c" ) dotrc="$OPTARG"
-            source "$dotrc"
-            ;;
-        * ) usage
-            cleanup_namespace
-            return 1
-            ;;
+      "c")
+        dotrc="$OPTARG"
+        source "$dotrc"
+        ;;
+      "h"|"-help" )
+        usage
+        cleanup_namespace
+        return 0
+        ;;
+      * ) usage
+        cleanup_namespace
+        return 1
+        ;;
     esac
   done
 
@@ -712,9 +719,6 @@ EOF
       ;;
     "config")
       shift 1; dot_config
-      ;;
-    "-h"|"--help" )
-      usage
       ;;
     *)
       echo "command '$1' not found."
