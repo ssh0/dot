@@ -91,7 +91,7 @@ NAME
       dot - manages symbolic links for dotfiles.
 
 USAGE
-      dot [-h|--help] <command> [<args>]
+      dot [-h|--help][-c <configfile>] <command> [<args>]
 
 COMMAND
       clone     Clone dotfile repository on your computer with git.
@@ -113,12 +113,18 @@ COMMAND
       config    Edit (or create) rcfile '$dotrc'.
 
 OPTION
-      -h,--help:    Show this help message.
+      -h,--help 
+                Show this help message.
+      -c <configfile>
+                Specify the configuration file to overload.
 
 COMMAND OPTIONS
       clone [<dir>]
           Clone ${clone_repository} onto the specified direction.
           default: ~/.dotfiles
+
+      pull [--self]
+          With --self option, update this script itself.
 
       set [-i][-v]
           -i: No interaction mode(skip all conflicts and do nothing).
