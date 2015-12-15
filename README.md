@@ -21,7 +21,7 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 
 |subcommand|description|option or arguments|
 |---       |---    |---        |
-| pull     |Pull from dotfile repository (by git)||
+| pull     |Pull from dotfile repository (by git)|`[--self]`|
 |set       |Set symbolic links configured in 'dotlink'.|`[-i][-v]`|                                                 |
 | add      |Move the new file to the dotfile dir, make the link, and add the link information to 'dotlink' automatically.|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
 |edit      | Edit 'dotlink'||
@@ -36,6 +36,12 @@ Pull from remote dotfile repository (by git)
 
 ```
 dot pull
+```
+
+With `--self` option, then git pull for `dot` and it will be up to date.
+
+```
+git pull --self
 ```
 
 ### dot set

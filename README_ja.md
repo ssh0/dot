@@ -19,7 +19,7 @@
 
 |サブコマンド名|説明|オプション or 引数|
 |---       |---    |---        |
-| pull     |dotfiesをpullしてくる(by git). ||
+| pull     |dotfiesをpullしてくる(by git). |`[--self]`|
 |set       |`dotlink`に書かれたシンボリックリンクを貼る|`[-i][-v]`|                                                 |
 | add      |新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
 |edit      |'dotlink'を手動で編集||
@@ -33,6 +33,12 @@
 dotfiesをpullしてくる(by git).  
 ```bash
 dot pull
+```
+
+`--self`オプションをつけると，`dot`自身を最新の状態に更新します。
+
+```
+dot pull --self
 ```
 
 ### dot set
