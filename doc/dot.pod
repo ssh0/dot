@@ -7,7 +7,7 @@ dot - manages symbolic links for dotfiles
 
 =head1 SYNOPSIS
 
-B<dot> [B<-h>|B<--help>] I<command> [I<args>]
+B<dot> [B<-h>|B<--help>][B<-c> I<configfile>] I<command> [I<args>]
 
 
 
@@ -68,6 +68,10 @@ Edit (or create) rcfile F<~/.config/dot/dotrc>.
 
 Show this help message.
 
+=item B<-c> I<configfile>
+
+Specify configuration file to overload.
+
 =back
 
 
@@ -78,6 +82,10 @@ Show this help message.
 =item B<clone> [I<dir>]
 
 Clone I<clone_repository> onto the specified direction. (default: I<~/.dotfiles>)
+
+=item B<pull> [B<--self>]
+
+With --self option, update this script itself.
 
 =item B<set>
 
