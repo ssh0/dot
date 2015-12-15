@@ -19,7 +19,7 @@ _dot() {
         "unlink[Unlink the selected symbolic link and copy its original file from the dotfile repository.]" \
         "clear[Remove the all symbolic link in the config file \$dotlink.]" \
         "config[Edit (or create) rcfile \$dotrc.]" \
-      && ret=0
+        && ret=0
       ;;
     args)
       local subcmd=$line[1]
