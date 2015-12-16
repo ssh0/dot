@@ -21,7 +21,7 @@ dot_main() { #{{{
   local dotset_interactive dotset_verbose diffcmd edit2filecmd
   local dot_edit_default_editor
   local black red green yellow blue purple cyan white
-  local color_message color_error color_notice dotrc
+  local color_message color_error color_notice dotrc columns hrule
 
   # ------------------------------------------------------------------------}}}
   # Default settings                                                        {{{
@@ -144,16 +144,15 @@ EOF
   } #}}}
 
 
-  makeline() { #{{{
-    local columns line
+  # makeline {{{
 
-    columns=$(tput cols)
-    if [[ $columns -gt 70 ]]; then
-      columns=70
-    fi
-    line=$(printf '%*s\n' "$columns" '' | tr ' ' -)
-    echo "${line}"
-  } #}}}
+  columns=$(tput cols)
+  if [[ $columns -gt 70 ]]; then
+    columns=70
+  fi
+  hrule="$( printf '%*s\n' "$columns" '' | tr ' ' - )"
+
+  #}}}
 
 
   get_fullpath() { #{{{
@@ -175,7 +174,7 @@ EOF
     local cloneto confirm
     cloneto="${1:-"${dotdir}"}"
     cecho ${color_message} "\ngit clone --recursive ${clone_repository} ${cloneto}"
-    makeline
+    echo "${hrule}"
     echo "Continue? [y/N]"
     read confirm
     if [ "$confirm" != "y" ]; then
@@ -200,7 +199,7 @@ EOF
     else
       # git pull
       cecho ${color_message} "\ncd ${dotdir} && git pull"
-      makeline
+      echo "${hrule}"
       cd "${dotdir}" && git pull
     fi
     cd "$cwd"
@@ -388,7 +387,7 @@ EOF
     for linkfile in "${linkfiles[@]}"; do
       echo
       cecho ${green} "From the link file '${linkfile}'"
-      makeline
+      echo "${hrule}"
       _dot_set "${linkfile}"
       cecho ${green} "Done."
     done
@@ -560,7 +559,7 @@ EOF
     if [ ! -e "${dotlink}" ]; then
       cecho ${color_error} "'${dotlink}' doesn't exist."
       echo "[message] make dotlink file ? (Y/n)"
-      makeline
+      echo "${hrule}"
       echo -n ">>> "; read confirm
       if [ "${confirm}" != "n" ]; then
         echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotlink ${dotlink}"
@@ -637,7 +636,7 @@ EOF
     if [ ! -e "${dotrc}" ]; then
       cecho ${color_error} "'${dotrc}' doesn't exist."
       echo "[message] make configuration file ? (Y/n)"
-      makeline
+      echo "${hrule}"
       echo -n ">>> "; read confirm
       if [ "${confirm}" != "n" ]; then
         echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotrc ${dotrc}"
@@ -661,7 +660,7 @@ EOF
 
 
  cleanup_namespace() { #{{{
-  unset -f dotbundle usage cecho makeline
+  unset -f dotbundle usage cecho
   unset -f get_fullpath path_without_home path_without_dotdir
   unset -f dot_clone dot_pull dot_set dot_add
   unset -f dot_edit dot_unlink dot_clear dot_config
