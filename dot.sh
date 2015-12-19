@@ -6,7 +6,7 @@
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
 
-DOT_SCRIPT_ROOTDIR="$(cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")" && pwd)"
+DOT_SCRIPT_ROOTDIR="$(builtin cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")" && pwd)"
 readonly DOT_SCRIPT_ROOTDIR
 export DOT_SCRIPT_ROOTDIR
 
@@ -156,7 +156,7 @@ EOF
 
 
   get_fullpath() { #{{{
-    echo "$(cd "$(dirname "$1")" && pwd)"/"$(basename "$1")"
+    echo "$(builtin cd "$(dirname "$1")" && pwd)"/"$(basename "$1")"
   } #}}}
 
 
@@ -195,14 +195,14 @@ EOF
   dot_pull() { #{{{
     local cwd="$(pwd)"
     if [ "$1" = "--self" ]; then
-      cd "${DOT_SCRIPT_ROOTDIR}" && git pull
+      builtin cd "${DOT_SCRIPT_ROOTDIR}" && git pull
     else
       # git pull
       cecho ${color_message} "\ncd ${dotdir} && git pull"
       echo "${hrule}"
-      cd "${dotdir}" && git pull
+      builtin cd "${dotdir}" && git pull
     fi
-    cd "$cwd"
+    builtin cd "$cwd"
   } #}}}
 
 
