@@ -18,8 +18,8 @@
 # So, you should write like below:
 #     .vimrc,.vimrc
 #
-# Don't do like this:
-# x   ~/.dotfiles/.vimrc,~/home/username/.vimrc
+# You can load from outside of the dotfiles directory:
+#     ~/Dropbox/.netrc,.netrc
 #
 # You can easily copy the existing file to the dotfiles repository
 # and add new link list by

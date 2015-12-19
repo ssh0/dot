@@ -350,8 +350,8 @@ EOF
       local l
 
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        dotfile="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
-        orig="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+        dotfile="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
+        orig="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
 
         if [ "$(echo $dotfile | cut -c 1)" != "/" ]; then
           dotfile="${dotdir}/$dotfile"
@@ -439,7 +439,15 @@ EOF
       [ -n "${message}" ] && echo "# ${message}" >> "${dotlink}"
 
       dotfile="$(path_without_dotdir "$2")"
-      dotfile="${dotfile:="$(get_fullpath "$2")"}"
+      if [ "${dotfile}" = "" ]; then
+        dotfile="$(path_without_home "$2")"
+        if [ -n ${dotfile} ]; then
+          dotfile="\$HOME/${dotfile}"
+        else
+          dotfile="$(get_fullpath "$2")"
+        fi
+      fi
+
       linkto="$(path_without_home "$1")"
       linkto="${linkto:="$(get_fullpath "$1")"}"
 
@@ -612,7 +620,7 @@ EOF
       local l
 
       for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        local orig="$(echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+        local orig="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
         if [ "$(echo $orig | cut -c 1)" != "/" ]; then
           orig="$HOME/$orig"
         fi

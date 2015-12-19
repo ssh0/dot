@@ -264,14 +264,11 @@ myvimrc,.vimrc
 
 # Then the script will make the symbolic link from `$DOT_DIR/myvimrc` to `$HOME/.vimrc`.
 
-# Don't do like this:
-# x   ~/.dotfiles/myvimrc,~/.vimrc
-#
-
-# But the path start from slash "/" is correctly understood by the script.
+# The path start from slash "/" is correctly understood by the script.
+# And you can use environment variables in it.
 # It is useful when the file contains some private information and
 # you wouldn't upload it to your dotfiles repository.
-/home/username/Dropbox/briefcase/netrc,.netrc
+$HOME/Dropbox/briefcase/netrc,.netrc
 
 ```
 

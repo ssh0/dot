@@ -282,14 +282,12 @@ myvimrc,.vimrc
 # このようにすると,`$DOT_DIR/myvimrc`から`$HOME/.vimrc`にシンボリックリンクが
 # 張られることになります。
 
-# 以下のように指定することはできません。
-# x   ~/.dotfiles/myvimrc,~/.vimrc
-#
 
 # "/"で始まる場合には,それはパスとして正しく認識されます。
+# また、環境変数も正しく解釈されます。
 # これはプライベートな情報を含んだファイルを管理したいときに役立ちます。
-# これらのファイルをdotfilesにアップロードすることなく,以下のようにできます。
-/home/username/Dropbox/briefcase/netrc,.netrc
+# 例えばファイルをdotfilesにアップロードすることなく,以下のようにできます。
+$HOME/Dropbox/briefcase/netrc,.netrc
 
 ```
 
