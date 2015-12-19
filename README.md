@@ -117,13 +117,13 @@ Share or don't share the configuration what you want.
 
 ### New machine setup
 
-If you have your own dotfiles already and manage with `dot`, just:
+If you have your own dotfiles already and managed with `dot`, just:
 
 * Install git and dot.
-* Clone to your computer.
-* Edit `dotrc` like below:  
+* Set environment variables in your terminal:  
 ```
-clone_repository='https://github.com/yourusername/dotfiles.git'
+DOT_REPO="https://github.com/username/dotfiles.git"
+DOT_DIR="$HOME/.dotfiles"
 ```
 * And just run  
 ```
@@ -147,7 +147,8 @@ dot add -m '' newfile /home/username/.dotfiles/newfile
 Continue? [y/N]'
 ```
 
-Type `y` and `Enter`, then move `newfile` to `/home/username/.dotfiles/newfile` and make symbolic link to `newfile` and this link information is written in `dotlink`
+Type `y` and `Enter`, then move `newfile` to `/home/username/.dotfiles/newfile`
+and make symbolic link to `newfile` and this link information is written in `dotlink`.
 
 Other things you should do is `git commit` and `git push` to your repository.
 (Or if you use Dropbox or so, you can skip these steps.)
@@ -169,17 +170,25 @@ dot add <link1> <link2> <link2> <link3> ...
 
 Clone this repository on your computer and source from your `bashrc` or `zshrc`.
 
+**COMMAND LINE**
+
 ```
 git clone https://github.com/ssh0/dot $HOME/.zsh/dot
 ```
 
+**in {bash,zsh}rc**
+
 ```
+export DOT_REPO="https://github.com/username/dotfiles.git"
+export DOT_DIR="$HOME/.dotfiles"
 source $HOME/.zsh/dot/dot.sh
 ```
 
 ### With plugin manager
 
-If you use some zsh plugin manager (ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), [antigen](https://github.com/zsh-users/antigen), etc.), load from `zshrc` like:
+If you use some zsh plugin manager (ex. [zplug](https://github.com/b4b4r07/zplug),
+[zgen](https://github.com/tarjoilija/zgen),
+[antigen](https://github.com/zsh-users/antigen), etc.), load from `zshrc` like:
 
 ```
 zplug "ssh0/dot"
@@ -200,7 +209,7 @@ First, you should set the dotfiles repository to manage and the dotfiles directo
 In `~/.zshrc`,
 
 ```
-export DOT_REPO="https://github.com/yourusername/dotfiles.git"
+export DOT_REPO="https://github.com/username/dotfiles.git"
 export DOT_DIR="$HOME/.dotfiles"
 ```
 

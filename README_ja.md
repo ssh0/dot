@@ -124,17 +124,17 @@ PCを立ち上げて`dot pull`コマンドを実行すれば，すぐに最新�
 dotfilesをGitHubなどで管理していて， `dot`を既に使っていれば，以下のように簡単にセットアップが行えます。
 
 * gitとdotを新PCにインストール
-* dotfilesをクローン
-* `dotrc`を以下のように編集:  
+* ターミナルで以下の環境変数を自分のリポジトリにあわせて変更:  
 ```
-clone_repository='https://github.com/yourusername/dotfiles.git'
+DOT_REPO="https://github.com/username/dotfiles.git"
+DOT_DIR="$HOME/.dotfiles"
 ```
 * 以下のコマンドを実行:  
 ```
-dot clone && dot set
+dot clone && dot set -v
 ```
 
-おしまい。
+これでdotfilesからクローンしてきて、シンボリックリンクを作成します。
 
 ### 普段使い
 
@@ -180,11 +180,18 @@ dot add <link1> <link2> <link2> <link3> ...
 
 このリポジトリを自分のPCにforkかcloneし,`bashrc`や`zshrc`から`source`してください。
 
+
+**COMMAND LINE**
+
 ```
 git clone https://github.com/ssh0/dot $HOME/.zsh/dot
 ```
 
+**in {bash,zsh}rc**
+
 ```
+export DOT_REPO="https://github.com/username/dotfiles.git"
+export DOT_DIR="$HOME/.dotfiles"
 source $HOME/.zsh/dot/dot.sh
 ```
 
@@ -211,7 +218,7 @@ antigen bundle ssh0/dot
 `~/.zshrc`に以下のように書いてください:
 
 ```
-export DOT_REPO="https://github.com/yourusername/dotfiles.git"
+export DOT_REPO="https://github.com/username/dotfiles.git"
 export DOT_DIR="$HOME/.dotfiles"
 ```
 
