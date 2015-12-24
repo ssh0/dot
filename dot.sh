@@ -306,17 +306,13 @@ EOF
         return 0
       fi
 
-      # if the link is not refer to: unlink or re-link
-      if ${dotset_verbose}; then
-        echo -n "  [$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
-        echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
-        echo -n "  [$(tput bold)$(tput setaf 2)now$(tput sgr0)] "
-        echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
-      fi
-
+      echo -n "  [$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
+      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
+      echo -n "  [$(tput bold)$(tput setaf 2)now$(tput sgr0)] "
+      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
       echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo -n "Unlink and re-link for $(tput bold)${orig}$(tput sgr0)? (y/n)"
-      while true; read yn; do
+      echo "Unlink and re-link for $(tput bold)${orig}$(tput sgr0)? (y/n)"
+      while echo -n ">>> "; read yn; do
         case $yn in
           [Yy] ) unlink "${orig}"
                  eval "${mklink}" "${dotfile}" "${orig}"
