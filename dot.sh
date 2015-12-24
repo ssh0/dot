@@ -215,13 +215,13 @@ EOF
       fi
 
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "'${origdir}' doesn't exist."
+      echo "$(tput bold)${origdir}$(tput sgr0) doesn't exist."
       if ! ${dotset_interactive}; then
         return 0
       fi
 
       echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo -n "mkdir '${origdir}'? (Y/n):"
+      echo -n "mkdir $(tput bold)${origdir}$(tput sgr0)? (Y/n):"
       read confirm
       if [ "$confirm" != "n" ]; then
         mkdir -p "${origdir}" &&
@@ -246,22 +246,23 @@ EOF
         return 0
       fi
 
+      echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
+      echo "Other link already exists at $(tput bold)${orig}$(tput sgr0)"
+
+      if ! ${dotset_interactive}; then
+        return 0
+      fi
+
       # if the link is not refer to: unlink or re-link
       if ${dotset_verbose}; then
-        echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-        echo "Other link is already existed."
         echo -n "  [$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
         echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
         echo -n "  [$(tput bold)$(tput setaf 2)now$(tput sgr0)] "
         echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
       fi
 
-      if ! ${dotset_interactive}; then
-        return 0
-      fi
-
-      echo -n "[$(tput bold)$(tput setaf 3)confirm$(tput sgr0)]"
-      echo -n "Unlink and re-link for '${orig}'? (y/n)"
+      echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+      echo -n "Unlink and re-link for $(tput bold)${orig}$(tput sgr0)? (y/n)"
       while true; read yn; do
         case $yn in
           [Yy] ) unlink "${orig}"
@@ -285,13 +286,13 @@ EOF
 
       if ! ${dotset_interactive}; then
         echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-        echo "File already exists at ${orig}."
+        echo "File already exists at $(tput bold)${orig}$(tput sgr0)."
         return 0
       fi
 
       while true; do
         echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-        echo "File already exists at ${orig}."
+        echo "File already exists at $(tput bold)${orig}$(tput sgr0)."
         echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
         echo "Choose the operation."
         echo "    ($(tput bold)d$(tput sgr0)):show diff"
@@ -366,9 +367,8 @@ EOF
     } #}}}
 
     for linkfile in "${linkfiles[@]}"; do
-      echo "[$(tput bold)$(tput setaf 4)Load start$(tput sgr0)] ${linkfile}"
+      echo "$(tput bold)$(tput setaf 4)Loading ${linkfile} ...$(tput sgr0)"
       _dot_set "${linkfile}"
-      echo "[$(tput bold)$(tput setaf 4)Load done$(tput sgr0)] ${linkfile}"
     done
 
     unset -f check_dir if_islink if_exist _dot_set
@@ -392,7 +392,8 @@ EOF
     shift $((OPTIND-1))
 
     if [ ! -e "$1" ]; then
-      echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] '$1' doesn't exist."
+      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+      echo "$(tput bold)$1$(tput sgr0) doesn't exist."
       return 1
     fi
 
@@ -439,7 +440,8 @@ EOF
 
       for f in "$@"; do
         if [ ! -L "$f" ]; then
-          echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] '$1' is not the symbolic link."
+          echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+          echo "$(tput bold)$1$(tput sgr0) is not the symbolic link."
           continue
         fi
 
@@ -447,7 +449,8 @@ EOF
         abspath="$(readlink "$f")"
 
         if [ ! -e "${abspath}" ]; then
-          echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] Target path '${abspath}' doesn't exist."
+          echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+          echo "Target path $(tput bold)${abspath}$(tput sgr0) doesn't exist."
           return 1
         fi
 
@@ -480,9 +483,10 @@ EOF
         return 0
       fi
 
-      echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] '${1%/*}' doesn't exist."
+      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+      echo "$(tput bold)${1%/*}$(tput sgr0) doesn't exist."
       echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo "mkdir '${1%/*}'? (y/n):"
+      echo "mkdir $(tput bold)${1%/*}$(tput sgr0)? (y/n):"
       while true; read yn; do
         case $yn in
           [Yy] ) mkdir -p "${1%/*}"
@@ -542,7 +546,7 @@ EOF
   dot_edit() { #{{{
     # init
     if [ ! -e "${dotlink}" ]; then
-      echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] ${dotlink}"
+      echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] $(tput bold)${dotlink}$(tput sgr0)"
       echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
       echo -n "make dotlink file ? (Y/n)"
       read confirm
@@ -573,7 +577,7 @@ EOF
     for f in "$@"; do
       if [ ! -L "$f" ]; then
         echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-        echo "'$f' is not the symbolic link."
+        echo "$(tput bold)$f$(tput sgr0) is not the symbolic link."
       else
         # get the file's path
         local currentpath="$(get_fullpath "$f")"
@@ -588,7 +592,8 @@ EOF
         cp "$abspath" "$currentpath"
 
         echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-        echo "'$f' was unlinked and its now the copy of '$abspath'."
+        echo -n "$(tput bold)$f$(tput sgr0) was unlinked "
+        echo "and its now the copy of $(tput bold)$abspath$(tput sgr0)."
       fi
     done
   } #}}}
@@ -624,7 +629,7 @@ EOF
     # init
     if [ ! -e "${dotrc}" ]; then
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "'${dotrc}' doesn't exist."
+      echo "$(tput bold)${dotrc}$(tput sgr0) doesn't exist."
       echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
       echo -n "make configuration file ? (Y/n)"
       read confirm
@@ -711,7 +716,7 @@ EOF
       ;;
     *)
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "command '$1' not found."
+      echo "command $(tput bold)$1$(tput sgr0) not found."
       usage
       ;;
   esac
