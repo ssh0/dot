@@ -19,9 +19,7 @@ dot_main() { #{{{
 
   local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
   local dotset_interactive dotset_verbose diffcmd edit2filecmd
-  local dot_edit_default_editor
-  local black red green yellow blue purple cyan white
-  local color_message color_error color_notice dotrc columns hrule
+  local dot_edit_default_editor dotrc columns hrule
 
   # ------------------------------------------------------------------------}}}
   # Default settings                                                        {{{
@@ -52,20 +50,6 @@ dot_main() { #{{{
   fi
 
   dot_edit_default_editor=''
-
-  # color palette
-  black=30
-  red=31
-  green=32
-  yellow=33
-  blue=34
-  purple=35
-  cyan=36
-  white=37
-
-  color_message=${blue}
-  color_error=${red}
-  color_notice=${yellow}
 
   # ------------------------------------------------------------------------}}}
   # Load user configuration                                                 {{{
@@ -137,13 +121,6 @@ EOF
   } #}}}
 
 
-  cecho() { #{{{
-    local color=$1
-    shift
-    echo -e "\033[${color}m"$@"\033[00m"
-  } #}}}
-
-
   # makeline {{{
 
   columns=$(tput cols)
@@ -173,9 +150,10 @@ EOF
   dot_clone() { #{{{
     local cloneto confirm
     cloneto="${1:-"${dotdir}"}"
-    cecho ${color_message} "\ngit clone --recursive ${clone_repository} ${cloneto}"
-    echo "${hrule}"
-    echo "Continue? [y/N]"
+    echo -n "[$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
+    echo "git clone --recursive ${clone_repository} ${cloneto}"
+    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+    echo -n "Continue? [y/N]"
     read confirm
     if [ "$confirm" != "y" ]; then
       echo "Aborted."
@@ -195,11 +173,11 @@ EOF
   dot_pull() { #{{{
     local cwd="$(pwd)"
     if [ "$1" = "--self" ]; then
+      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+      echo "Update dot."
       builtin cd "${DOT_SCRIPT_ROOTDIR}" && git pull
     else
       # git pull
-      cecho ${color_message} "\ncd ${dotdir} && git pull"
-      echo "${hrule}"
       builtin cd "${dotdir}" && git pull
     fi
     builtin cd "$cwd"
@@ -226,15 +204,6 @@ EOF
     fi
 
 
-    info() { #{{{
-      if ${dotset_verbose}; then
-        # verbose message
-        echo ""
-        echo "${1} -> ${2}"
-      fi
-    } #}}}
-
-
     check_dir() { #{{{
       local orig="$1"
       local dotfile="$2"
@@ -245,14 +214,15 @@ EOF
         return 0
       fi
 
-      info "${orig}" "${dotfile}"
-      cecho ${color_error} "'${origdir}' doesn't exist."
+      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+      echo "'${origdir}' doesn't exist."
       if ! ${dotset_interactive}; then
         return 0
       fi
 
-      echo "[message] mkdir '${origdir}'? (Y/n):"
-      echo -n ">>> "; read confirm
+      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+      echo -n "mkdir '${origdir}'? (Y/n):"
+      read confirm
       if [ "$confirm" != "n" ]; then
         mkdir -p "${origdir}" &&
         return 0
@@ -269,24 +239,30 @@ EOF
       local linkto="$(readlink "${orig}")"
       local yn
 
-      info "${orig}" "${dotfile}"
-
       # if the link has already be set: do nothing
       if [ "${linkto}" = "${dotfile}" ]; then
-        ${dotset_verbose} && cecho ${color_message} "link '${orig}' already exists."
+        ${dotset_verbose} &&
+          echo "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] ${orig}"
         return 0
       fi
 
       # if the link is not refer to: unlink or re-link
-      cecho ${color_error} "link '${orig}' is NOT the link of '${dotfile}'."
-      cecho ${color_error} "'${orig}' is link of '${linkto}'."
+      if ${dotset_verbose}; then
+        echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
+        echo "Other link is already existed."
+        echo -n "  [$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
+        echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
+        echo -n "  [$(tput bold)$(tput setaf 2)now$(tput sgr0)] "
+        echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
+      fi
 
       if ! ${dotset_interactive}; then
         return 0
       fi
 
-      echo "[message] unlink and re-link for '${orig}'? (y/n):"
-      while echo -n ">>> "; read yn; do
+      echo -n "[$(tput bold)$(tput setaf 3)confirm$(tput sgr0)]"
+      echo -n "Unlink and re-link for '${orig}'? (y/n)"
+      while true; read yn; do
         case $yn in
           [Yy] ) unlink "${orig}"
                  eval "${mklink}" "${dotfile}" "${orig}"
@@ -306,23 +282,29 @@ EOF
       local line
       local orig="$1"
       local dotfile="$2"
-      info "${orig}" "${dotfile}"
 
       if ! ${dotset_interactive}; then
+        echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
+        echo "File already exists at ${orig}."
         return 0
       fi
 
       while true; do
-        cecho ${color_notice} "'${orig}' already exists."
-        echo "(d):show diff, (e):edit files, (f):overwrite, (b):make backup, (n):do nothing"
+        echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
+        echo "File already exists at ${orig}."
+        echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+        echo "Choose the operation."
+        echo "    ($(tput bold)d$(tput sgr0)):show diff"
+        echo "    ($(tput bold)e$(tput sgr0)):edit files"
+        echo "    ($(tput bold)f$(tput sgr0)):replace"
+        echo "    ($(tput bold)b$(tput sgr0)):replace and make backup"
+        echo "    ($(tput bold)n$(tput sgr0)):do nothing"
         echo -n ">>> "; read line
         case $line in
-          [Dd] ) echo "${diffcmd} '${dotfile}' '${orig}'"
-                 eval "${diffcmd}" "${dotfile}" "${orig}"
+          [Dd] ) eval "${diffcmd}" "${dotfile}" "${orig}"
                  echo ""
                  ;;
-          [Ee] ) echo "${edit2filecmd} '${dotfile}' '${orig}'"
-                 eval "${edit2filecmd}" "${dotfile}" "${orig}"
+          [Ee] ) eval "${edit2filecmd}" "${dotfile}" "${orig}"
                  ;;
           [Ff] ) if [ -d "${orig}" ]; then
                    rm -r "${orig}"
@@ -363,8 +345,7 @@ EOF
 
         # if dotfile doesn't exist, print error message and pass
         if [ ! -e "${dotfile}" ]; then
-          echo ""
-          cecho ${color_error} "dotfile '${dotfile}' doesn't exist."
+          echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] ${dotfile}"
           continue
         fi
 
@@ -385,14 +366,12 @@ EOF
     } #}}}
 
     for linkfile in "${linkfiles[@]}"; do
-      echo
-      cecho ${green} "From the link file '${linkfile}'"
-      echo "${hrule}"
+      echo "[$(tput bold)$(tput setaf 4)Load start$(tput sgr0)] ${linkfile}"
       _dot_set "${linkfile}"
-      cecho ${green} "Done."
+      echo "[$(tput bold)$(tput setaf 4)Load done$(tput sgr0)] ${linkfile}"
     done
 
-    unset -f info check_dir if_islink if_exist _dot_set
+    unset -f check_dir if_islink if_exist _dot_set
     unset dotfile orig origdir
 
   } #}}}
@@ -413,8 +392,7 @@ EOF
     shift $((OPTIND-1))
 
     if [ ! -e "$1" ]; then
-      cecho ${color_error} "'$1' doesn't exist."
-      echo "Aborted."
+      echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] '$1' doesn't exist."
       return 1
     fi
 
@@ -461,7 +439,7 @@ EOF
 
       for f in "$@"; do
         if [ ! -L "$f" ]; then
-          echo "'$f' is not symbolic link."
+          echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] '$1' is not the symbolic link."
           continue
         fi
 
@@ -469,8 +447,7 @@ EOF
         abspath="$(readlink "$f")"
 
         if [ ! -e "${abspath}" ]; then
-          cecho ${color_error} "Target path (${abspath}) doesn't exist."
-          echo "Aborted."
+          echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] Target path '${abspath}' doesn't exist."
           return 1
         fi
 
@@ -483,13 +460,12 @@ EOF
     suggest() { #{{{
       local confirm
 
-      cecho ${color_message} "Suggestion:"
-      echo "dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
-      echo ""
+      echo "[$(tput bold)$(tput setaf 6)suggestion$(tput sgr0)]"
+      echo "    dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
+      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
       echo "Continue? [y/N]"
       read confirm
       if [ "$confirm" != "y" ]; then
-        echo "Aborted."
         return 1
       fi
 
@@ -504,9 +480,10 @@ EOF
         return 0
       fi
 
-      cecho ${color_error} "'${1%/*}' doesn't exist."
-      echo "[message] mkdir '${1%/*}'? (y/n):"
-      while echo -n ">>> "; read yn; do
+      echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] '${1%/*}' doesn't exist."
+      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+      echo "mkdir '${1%/*}'? (y/n):"
+      while true; read yn; do
         case $yn in
           [Yy] ) mkdir -p "${1%/*}"
                  break
@@ -549,7 +526,7 @@ EOF
       fi
 
       # else
-      echo "Aborted."
+      echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] Aborted."
       echo "Usage: 'dot add file'"
       echo "       'dot add file ${dotdir}/any/path/to/the/file'"
 
@@ -565,10 +542,10 @@ EOF
   dot_edit() { #{{{
     # init
     if [ ! -e "${dotlink}" ]; then
-      cecho ${color_error} "'${dotlink}' doesn't exist."
-      echo "[message] make dotlink file ? (Y/n)"
-      echo "${hrule}"
-      echo -n ">>> "; read confirm
+      echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] ${dotlink}"
+      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+      echo -n "make dotlink file ? (Y/n)"
+      read confirm
       if [ "${confirm}" != "n" ]; then
         echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotlink ${dotlink}"
         cp "${DOT_SCRIPT_ROOTDIR}/examples/dotlink" "${dotlink}"
@@ -595,7 +572,8 @@ EOF
 
     for f in "$@"; do
       if [ ! -L "$f" ]; then
-        echo "'$f' is not symbolic link."
+        echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+        echo "'$f' is not the symbolic link."
       else
         # get the file's path
         local currentpath="$(get_fullpath "$f")"
@@ -608,6 +586,9 @@ EOF
 
         # copy the file
         cp "$abspath" "$currentpath"
+
+        echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+        echo "'$f' was unlinked and its now the copy of '$abspath'."
       fi
     done
   } #}}}
@@ -642,10 +623,11 @@ EOF
   dot_config() { #{{{
     # init
     if [ ! -e "${dotrc}" ]; then
-      cecho ${color_error} "'${dotrc}' doesn't exist."
-      echo "[message] make configuration file ? (Y/n)"
-      echo "${hrule}"
-      echo -n ">>> "; read confirm
+      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+      echo "'${dotrc}' doesn't exist."
+      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
+      echo -n "make configuration file ? (Y/n)"
+      read confirm
       if [ "${confirm}" != "n" ]; then
         echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotrc ${dotrc}"
         cp "${DOT_SCRIPT_ROOTDIR}/examples/dotrc" "${dotrc}"
@@ -668,7 +650,7 @@ EOF
 
 
  cleanup_namespace() { #{{{
-  unset -f dotbundle usage cecho
+  unset -f dotbundle usage
   unset -f get_fullpath path_without_home path_without_dotdir
   unset -f dot_clone dot_pull dot_set dot_add
   unset -f dot_edit dot_unlink dot_clear dot_config
@@ -728,6 +710,7 @@ EOF
       shift 1; dot_config
       ;;
     *)
+      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
       echo "command '$1' not found."
       usage
       ;;

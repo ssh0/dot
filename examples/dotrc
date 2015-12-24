@@ -37,20 +37,6 @@
 # (setting priority: this option > $EDITOR (default) > xdg-open)
 # dot_edit_default_editor='vim +'
 
-# Color settings
-
-# You can change the colors as you want.
-# (black, red, green, yellow, blue, purple, cyan, white) can be used.
-
-# color for normal messages (just showing information).
-# color_message=${blue}
-
-# color for messages attract attention.
-# color_notice=${yellow}
-
-# color for error messages.
-# color_error=${red}
-
 # If you want load a machine specific configuration, source that file here.
 # `dotbundle file` source the file if it exists.
 # dotbundle "$HOME/.config/dot/dotrc.local"
