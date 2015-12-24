@@ -11,64 +11,9 @@ readonly DOT_SCRIPT_ROOTDIR
 export DOT_SCRIPT_ROOTDIR
 
 
-dot_main() { #{{{
+dot_main() {
 
-  # ---------------------------------------------------------------------------
-  # Local variables                                                         {{{
-  # ---------------------------------------------------------------------------
-
-  local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
-  local dotset_interactive dotset_verbose diffcmd edit2filecmd
-  local dot_edit_default_editor dotrc columns hrule
-
-  # ------------------------------------------------------------------------}}}
-  # Default settings                                                        {{{
-  # ---------------------------------------------------------------------------
-
-  clone_repository="${DOT_REPO:-"https://github.com/ssh0/dotfiles.git"}"
-
-  dotdir="${DOT_DIR:-"$HOME/.dotfiles"}"
-  dotlink="${DOT_LINK:-"$dotdir/dotlink"}"
-  linkfiles=("${dotlink}")
-
-  home_pattern="s@$HOME/@@p"
-  dotdir_pattern="s@${dotdir}/@@p"
-
-  dotset_interactive=true
-  dotset_verbose=false
-
-  if hash colordiff 2>/dev/null; then
-    diffcmd="colordiff -u"
-  else
-    diffcmd='diff -u'
-  fi
-
-  if hash vimdiff 2>/dev/null; then
-    edit2filecmd='vimdiff'
-  else
-    edit2filecmd=${diffcmd}
-  fi
-
-  dot_edit_default_editor=''
-
-  # ------------------------------------------------------------------------}}}
-  # Load user configuration                                                 {{{
-  # ---------------------------------------------------------------------------
-
-
-  dotbundle() {
-    if [ -e "$1" ]; then
-      source "$1"
-    fi
-  }
-
-  # path to the config file
-  dotrc="$dotdir/dotrc"
-  dotbundle "${dotrc}"
-
-  # ------------------------------------------------------------------------}}}
-
-  usage() { #{{{
+  dot_usage() { #{{{
     cat << EOF
 
 NAME
@@ -106,7 +51,7 @@ OPTION
 
 COMMAND OPTIONS
       clone [<dir>]
-          Clone ${clone_repository} onto the specified direction.
+          Clone \$DOT_REPO onto the specified direction.
           default: ~/.dotfiles
 
       pull [--self]
@@ -122,596 +67,6 @@ COMMAND OPTIONS
 EOF
   } #}}}
 
-
-  # makeline {{{
-
-  columns=$(tput cols)
-  if [[ $columns -gt 70 ]]; then
-    columns=70
-  fi
-  hrule="$( printf '%*s\n' "$columns" '' | tr ' ' - )"
-
-  #}}}
-
-
-  get_fullpath() { #{{{
-    echo "$(builtin cd "$(dirname "$1")" && pwd)"/"$(basename "$1")"
-  } #}}}
-
-
-  path_without_home() { #{{{
-    get_fullpath "$1" | sed -ne "${home_pattern}"
-  } #}}}
-
-
-  path_without_dotdir() { #{{{
-    get_fullpath "$1" | sed -ne "${dotdir_pattern}"
-  } #}}}
-
-
-  dot_clone() { #{{{
-    local cloneto confirm
-    cloneto="${1:-"${dotdir}"}"
-    echo -n "[$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
-    echo "git clone --recursive ${clone_repository} ${cloneto}"
-    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-    echo -n "Continue? [y/N]"
-    read confirm
-    if [ "$confirm" != "y" ]; then
-      echo "Aborted."
-      echo ""
-      echo "If you want to clone other repository, change environment variable DOT_REPO."
-      echo "    export DOT_REPO=https://github.com/Your_Username/dotfiles.git"
-      echo "Set the directory to clone by:"
-      echo "    dot clone ~/dotfiles"
-      echo "    export DOT_DIR=\$HOME/dotfiles"
-      return 1
-    fi
-    git clone --recursive "${clone_repository}" "${cloneto}"
-    unset -v confirm
-  } #}}}
-
-
-  dot_pull() { #{{{
-    local cwd="$(pwd)"
-    if [ "$1" = "--self" ]; then
-      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo "Update dot."
-      builtin cd "${DOT_SCRIPT_ROOTDIR}" && git pull
-    else
-      # git pull
-      builtin cd "${dotdir}" && git pull
-    fi
-    builtin cd "$cwd"
-  } #}}}
-
-
-  dot_list() {
-
-    _dot_list() { #{{{
-      local l
-
-      for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        dotfile="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
-        orig="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
-
-        if [ "$(echo $dotfile | cut -c 1)" != "/" ]; then
-          dotfile="${dotdir}/$dotfile"
-        fi
-
-        if [ "$(echo $orig | cut -c 1)" != "/" ]; then
-          orig="$HOME/$orig"
-        fi
-
-        # if dotfile doesn't exist
-        if [ ! -e "${dotfile}" ]; then
-          echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-          continue
-        fi
-
-        if [ -e "${orig}" ]; then                 # if the file already exists:
-          if [ -L "${orig}" ]; then               #   if it is a symbolic-link:
-            linkto="$(readlink "${orig}")"
-
-            # if the link has already be set: do nothing
-            if [ "${linkto}" = "${dotfile}" ]; then
-              echo "[$(tput bold)$(tput setaf 2)✔$(tput sgr0)] ${orig}"
-            else
-              echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-            fi
-          else                                    #   if it is a file or a dir:
-            echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-          fi
-        else                                      # else:
-          echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-        fi
-      done
-    } #}}}
-
-    for linkfile in "${linkfiles[@]}"; do
-      echo "$(tput bold)$(tput setaf 4)From ${linkfile}$(tput sgr0)"
-      _dot_list "${linkfile}"
-    done
-
-    unset _dot_list
-    unset dotfile orig origdir
-
-  }
-
-  dot_set() { #{{{
-    # option handling
-    local linkfile
-    local mklink
-
-    while getopts iv OPT
-    do
-      case $OPT in
-        "i" ) dotset_interactive=false ;;
-        "v" ) dotset_verbose=true ;;
-      esac
-    done
-
-    if ${dotset_verbose}; then
-      mklink="ln -sv"
-    else
-      mklink="ln -s"
-    fi
-
-
-    check_dir() { #{{{
-      local orig="$1"
-
-      origdir="${orig%/*}"
-
-      if [ -d "${origdir}" ]; then
-        return 0
-      fi
-
-      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "$(tput bold)${origdir}$(tput sgr0) doesn't exist."
-      if ! ${dotset_interactive}; then
-        return 0
-      fi
-
-      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo -n "mkdir $(tput bold)${origdir}$(tput sgr0)? (Y/n):"
-      read confirm
-      if [ "$confirm" != "n" ]; then
-        mkdir -p "${origdir}" &&
-        return 0
-      else
-        echo "Aborted."
-        return 1
-      fi
-    } #}}}
-
-
-    if_islink() { #{{{
-      local orig="$1"
-      local dotfile="$2"
-      local linkto="$(readlink "${orig}")"
-      local yn
-
-      # if the link has already be set: do nothing
-      if [ "${linkto}" = "${dotfile}" ]; then
-        ${dotset_verbose} &&
-          echo "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] ${orig}"
-        return 0
-      fi
-
-      echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-      echo "Other link already exists at $(tput bold)${orig}$(tput sgr0)"
-
-      if ! ${dotset_interactive}; then
-        return 0
-      fi
-
-      echo -n "  [$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
-      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
-      echo -n "  [$(tput bold)$(tput setaf 2)now$(tput sgr0)] "
-      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
-      echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo "Unlink and re-link for $(tput bold)${orig}$(tput sgr0)? (y/n)"
-      while echo -n ">>> "; read yn; do
-        case $yn in
-          [Yy] ) unlink "${orig}"
-                 eval "${mklink}" "${dotfile}" "${orig}"
-                 break
-                 ;;
-          [Nn] ) break
-                 ;;
-             * ) echo "Please answer with y or n." ;;
-        esac
-      done
-
-      return 0
-    } #}}}
-
-
-    if_exist() { #{{{
-      local line
-      local orig="$1"
-      local dotfile="$2"
-
-      if ! ${dotset_interactive}; then
-        echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-        echo "File already exists at $(tput bold)${orig}$(tput sgr0)."
-        return 0
-      fi
-
-      while true; do
-        echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-        echo "File already exists at $(tput bold)${orig}$(tput sgr0)."
-        echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-        echo "Choose the operation."
-        echo "    ($(tput bold)d$(tput sgr0)):show diff"
-        echo "    ($(tput bold)e$(tput sgr0)):edit files"
-        echo "    ($(tput bold)f$(tput sgr0)):replace"
-        echo "    ($(tput bold)b$(tput sgr0)):replace and make backup"
-        echo "    ($(tput bold)n$(tput sgr0)):do nothing"
-        echo -n ">>> "; read line
-        case $line in
-          [Dd] ) eval "${diffcmd}" "${dotfile}" "${orig}"
-                 echo ""
-                 ;;
-          [Ee] ) eval "${edit2filecmd}" "${dotfile}" "${orig}"
-                 ;;
-          [Ff] ) if [ -d "${orig}" ]; then
-                   rm -r "${orig}"
-                 else
-                   rm "${orig}"
-                 fi
-                 eval "${mklink}" "${dotfile}" "${orig}"
-                 break
-                 ;;
-          [Bb] ) eval "${mklink}" -b --suffix '.bak' "${dotfile}" "${orig}"
-                 break
-                 ;;
-          [Nn] ) break
-                 ;;
-              *) echo "Please answer with [d/e/f/b/n]."
-                 ;;
-        esac
-      done
-
-      return 0
-    } #}}}
-
-
-    _dot_set() { #{{{
-      local l
-
-      for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        dotfile="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
-        orig="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
-
-        if [ "$(echo $dotfile | cut -c 1)" != "/" ]; then
-          dotfile="${dotdir}/$dotfile"
-        fi
-
-        if [ "$(echo $orig | cut -c 1)" != "/" ]; then
-          orig="$HOME/$orig"
-        fi
-
-        # if dotfile doesn't exist, print error message and pass
-        if [ ! -e "${dotfile}" ]; then
-          echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] ${dotfile}"
-          continue
-        fi
-
-        # if the targeted directory doesn't exist,
-        # ask whether make directory or not.
-        check_dir "${orig}" || continue
-
-        if [ -e "${orig}" ]; then                 # if the file already exists:
-          if [ -L "${orig}" ]; then               #   if it is a symbolic-link:
-            if_islink "${orig}" "${dotfile}"          #      do nothing or relink
-          else                                    #   if it is a file or a dir:
-            if_exist "${orig}" "${dotfile}"           #      ask user what to do
-          fi
-        else                                      # else:
-          eval "${mklink}" "${dotfile}" "${orig}" #   make symbolic link
-        fi
-      done
-    } #}}}
-
-    for linkfile in "${linkfiles[@]}"; do
-      echo "$(tput bold)$(tput setaf 4)Loading ${linkfile} ...$(tput sgr0)"
-      _dot_set "${linkfile}"
-    done
-
-    unset -f check_dir if_islink if_exist _dot_set
-    unset dotfile orig origdir
-
-  } #}}}
-
-
-  dot_add() { #{{{
-    # default message
-    local message=""
-
-    # option handling
-    while getopts m:h OPT
-    do
-      case $OPT in
-        "m" ) message="${OPTARG}";;
-      esac
-    done
-
-    shift $((OPTIND-1))
-
-    if [ ! -e "$1" ]; then
-      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "$(tput bold)$1$(tput sgr0) doesn't exist."
-      return 1
-    fi
-
-
-    orig_to_dot() { #{{{
-      # mv from original path to dotdir
-      local orig dot
-
-      orig="$(get_fullpath "$1")"
-      dot="$(get_fullpath "$2")"
-
-      mv -i "${orig}" "${dot}"
-
-      # link to orig path from dotfiles
-      ln -siv "${dot}" "${orig}"
-    } #}}}
-
-
-    add_to_dotlink() { #{{{
-      local dotfile linkto
-      # add the configration to the config file.
-      [ -n "${message}" ] && echo "# ${message}" >> "${dotlink}"
-
-      dotfile="$(path_without_dotdir "$2")"
-      if [ "${dotfile}" = "" ]; then
-        dotfile="$(path_without_home "$2")"
-        if [ -n ${dotfile} ]; then
-          dotfile="\$HOME/${dotfile}"
-        else
-          dotfile="$(get_fullpath "$2")"
-        fi
-      fi
-
-      linkto="$(path_without_home "$1")"
-      linkto="${linkto:="$(get_fullpath "$1")"}"
-
-      echo "${dotfile},${linkto}" >> "${dotlink}"
-    } #}}}
-
-
-    if_islink() { #{{{
-      # write to dotlink
-      local f abspath
-
-      for f in "$@"; do
-        if [ ! -L "$f" ]; then
-          echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-          echo "$(tput bold)$1$(tput sgr0) is not the symbolic link."
-          continue
-        fi
-
-        # get the absolute path
-        abspath="$(readlink "$f")"
-
-        if [ ! -e "${abspath}" ]; then
-          echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-          echo "Target path $(tput bold)${abspath}$(tput sgr0) doesn't exist."
-          return 1
-        fi
-
-        # write to dotlink
-        add_to_dotlink "$f" "${abspath}"
-      done
-    } #}}}
-
-
-    suggest() { #{{{
-      local confirm
-
-      echo "[$(tput bold)$(tput setaf 6)suggestion$(tput sgr0)]"
-      echo "    dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
-      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo "Continue? [y/N]"
-      read confirm
-      if [ "$confirm" != "y" ]; then
-        return 1
-      fi
-
-      dot_add_main "$1" "${dotdir}/$(path_without_home $1)"
-    } #}}}
-
-
-    check_dir() { #{{{
-      local yn
-
-      if [ -d "${1%/*}" ]; then
-        return 0
-      fi
-
-      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "$(tput bold)${1%/*}$(tput sgr0) doesn't exist."
-      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo "mkdir $(tput bold)${1%/*}$(tput sgr0)? (y/n):"
-      while true; read yn; do
-        case $yn in
-          [Yy] ) mkdir -p "${1%/*}"
-                 break
-                 ;;
-          [Nn] ) unset yn
-                 return 1
-                 ;;
-             * ) echo "Please answer with y or n."
-                 ;;
-        esac
-      done
-
-      return 0
-    } #}}}
-
-
-    dot_add_main() { #{{{
-      # if the first arugument is a symbolic link
-      if [ -L "$1" ]; then
-        if_islink "$@" || return 1
-        return 0
-      fi
-
-      # if the second arguments is provided (default action)
-      if [ $# = 2 ]; then
-
-        # if the targeted directory doesn't exist,
-        # ask whether make directory or not.
-        check_dir "$2" || return 1
-
-        orig_to_dot "$1" "$2"
-        add_to_dotlink "$1" "$2"
-
-        return 0
-      fi
-
-      # if the second arugument isn't provided, provide suggestion
-      if [ $# = 1 ];then
-        suggest "$1" && return 0 || return 1
-      fi
-
-      # else
-      echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] Aborted."
-      echo "Usage: 'dot add file'"
-      echo "       'dot add file ${dotdir}/any/path/to/the/file'"
-
-      return 1
-    } #}}}
-
-    dot_add_main "$@"
-
-    unset -f orig_to_dot add_to_dotlink if_islink suggest check_dir
-  } #}}}
-
-
-  dot_edit() { #{{{
-    # init
-    if [ ! -e "${dotlink}" ]; then
-      echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] $(tput bold)${dotlink}$(tput sgr0)"
-      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo -n "make dotlink file ? (Y/n)"
-      read confirm
-      if [ "${confirm}" != "n" ]; then
-        echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotlink ${dotlink}"
-        cp "${DOT_SCRIPT_ROOTDIR}/examples/dotlink" "${dotlink}"
-      else
-        echo "Aborted."
-        return 1
-      fi
-      unset -v confirm
-    fi
-
-    # open dotlink file
-    if [ -n "${dot_edit_default_editor}" ];then
-      eval ${dot_edit_default_editor} "${dotlink}"
-    elif hash "$EDITOR" 2>/dev/null; then
-      $EDITOR "${dotlink}"
-    else
-      xdg-open "${dotlink}"
-    fi
-  } #}}}
-
-
-  dot_unlink() { #{{{
-    local f
-
-    for f in "$@"; do
-      if [ ! -L "$f" ]; then
-        echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-        echo "$(tput bold)$f$(tput sgr0) is not the symbolic link."
-      else
-        # get the file's path
-        local currentpath="$(get_fullpath "$f")"
-
-        # get the absolute path
-        local abspath="$(readlink "$f")"
-
-        # unlink the file
-        unlink "$currentpath"
-
-        # copy the file
-        cp "$abspath" "$currentpath"
-
-        echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-        echo -n "$(tput bold)$f$(tput sgr0) was unlinked "
-        echo "and its now the copy of $(tput bold)$abspath$(tput sgr0)."
-      fi
-    done
-  } #}}}
-
-
-  dot_clear() { #{{{
-    local linkfile
-
-    _dot_clear() { #{{{
-      local l
-
-      for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-        local orig="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
-        if [ "$(echo $orig | cut -c 1)" != "/" ]; then
-          orig="$HOME/$orig"
-        fi
-        if [ -L "${orig}" ]; then
-          echo "unlink ${orig}"
-          unlink "${orig}"
-        fi
-      done
-    } #}}}
-
-    for linkfile in "${linkfiles[@]}"; do
-      _dot_clear "${linkfile}"
-    done
-
-    unset -f _dot_clear
-  } #}}}
-
-
-  dot_config() { #{{{
-    # init
-    if [ ! -e "${dotrc}" ]; then
-      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "$(tput bold)${dotrc}$(tput sgr0) doesn't exist."
-      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo -n "make configuration file ? (Y/n)"
-      read confirm
-      if [ "${confirm}" != "n" ]; then
-        echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotrc ${dotrc}"
-        cp "${DOT_SCRIPT_ROOTDIR}/examples/dotrc" "${dotrc}"
-      else
-        echo "Aborted."
-        return 1
-      fi
-      unset -v confirm
-    fi
-
-    # open dotrc file
-    if [ ! "${dot_edit_default_editor}" = "" ];then
-      eval ${dot_edit_default_editor} "${dotrc}"
-    elif hash "$EDITOR"; then
-      $EDITOR "${dotrc}"
-    else
-      xdg-open "${dotrc}"
-    fi
-  } #}}}
-
-
- cleanup_namespace() { #{{{
-  unset -f dotbundle usage
-  unset -f get_fullpath path_without_home path_without_dotdir
-  unset -f dot_clone dot_pull dot_set dot_add
-  unset -f dot_edit dot_unlink dot_clear dot_config
-  unset -f $0
- } #}}}
-
-
   # Option handling {{{
   optstr="c:h -help"
   while getopts ${optstr} OPT
@@ -719,19 +74,20 @@ EOF
     case $OPT in
       "c")
         dotrc="$OPTARG"
-        source "$dotrc"
         ;;
       "h"|"-help" )
-        usage
-        cleanup_namespace
+        dot_usage
         return 0
         ;;
-      * ) usage
-        cleanup_namespace
+      * )
+        dot_usage
         return 1
         ;;
     esac
   done
+
+  source "$DOT_SCRIPT_ROOTDIR/lib/common"
+  trap cleanup_namespace EXIT
 
   shift $((OPTIND-1))
 
@@ -740,42 +96,60 @@ EOF
   # main command handling {{{
   case "$1" in
     "clone")
-      shift 1; dot_clone "$@"
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clone"
+      dot_clone "$@"
       ;;
     "pull")
-      shift 1; dot_pull "$@"
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_pull"
+      dot_pull "$@"
       ;;
     "list")
-      shift 1; dot_list
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_list"
+      dot_list
       ;;
     "set")
-      shift 1; dot_set "$@"
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_set"
+      dot_set "$@"
       ;;
     "add")
-      shift 1; dot_add "$@"
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_add"
+      dot_add "$@"
       ;;
     "edit")
-      shift 1; dot_edit
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_edit"
+      dot_edit
       ;;
     "unlink")
-      shift 1; dot_unlink "$@"
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_unlink"
+      dot_unlink "$@"
       ;;
     "clear")
-      shift 1; dot_clear
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clear"
+      dot_clear
       ;;
     "config")
-      shift 1; dot_config
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_config"
+      dot_config
       ;;
     *)
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
       echo "command $(tput bold)$1$(tput sgr0) not found."
-      usage
+      dot_usage
       ;;
   esac
+
   # }}}
 
-
-} #}}}
+}
 
 
 eval "alias ${DOT_COMMAND:="dot"}=dot_main"
