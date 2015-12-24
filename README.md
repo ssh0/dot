@@ -22,7 +22,8 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 |subcommand|description|option or arguments|
 |---       |---    |---        |
 | pull     |Pull from dotfile repository (by git)|`[--self]`|
-|set       |Set symbolic links configured in 'dotlink'.|`[-i][-v]`|                                                 |
+|list      |Show the list which files will be managed by dot.| |
+|set       |Set symbolic links configured in 'dotlink'.|`[-i][-v]`|
 | add      |Move the new file to the dotfile dir, make the link, and add the link information to 'dotlink' automatically.|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
 |edit      | Edit 'dotlink'||
 |config    | Edit configuration file 'dotrc'||
@@ -43,6 +44,27 @@ With `--self` option, then git pull for `dot` and it will be up to date.
 ```
 git pull --self
 ```
+
+### dot list
+
+Show the list which files be managed by dot.
+
+```
+$ dot list
+[✔] /home/username/.Xmodmap
+[✔] /home/username/.Xdefaults
+[✘] /home/username/.Xresources
+
+. . .
+
+
+[✔] /home/username/.profile
+[✘] /home/username/.netrc
+[✔] /home/username/.gitconfig
+```
+
+* "✘" means this file is not managed by dot now but is written in dotlink.
+* "✔" means this file is managed by dot now.
 
 ### dot set
 

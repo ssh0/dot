@@ -33,6 +33,10 @@ Clone ssh0's dotfile repository on your computer.
 
 Pull remote dotfile repository (by git).
 
+=item B<list>
+
+Show the list which files will be managed by dot.
+
 =item B<set>
 
 Make symbolic link interactively. This command sets symbolic links configured in F<~/.config/dot/dotlink>.

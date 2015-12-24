@@ -20,7 +20,8 @@
 |サブコマンド名|説明|オプション or 引数|
 |---       |---    |---        |
 | pull     |dotfiesをpullしてくる(by git). |`[--self]`|
-|set       |`dotlink`に書かれたシンボリックリンクを貼る|`[-i][-v]`|                                                 |
+|list      |`dot`で管理するファイルを一覧を表示| |
+|set       |`dotlink`に書かれたシンボリックリンクを貼る|`[-i][-v]`|
 | add      |新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
 |edit      |'dotlink'を手動で編集||
 |config    |設定ファイル'dotrc'を編集||
@@ -40,6 +41,28 @@ dot pull
 ```
 dot pull --self
 ```
+
+
+### dot list
+
+`dot`で管理するファイルを一覧表示する。
+
+```
+$ dot list
+[✔] /home/username/.Xmodmap
+[✔] /home/username/.Xdefaults
+[✘] /home/username/.Xresources
+
+. . .
+
+
+[✔] /home/username/.profile
+[✘] /home/username/.netrc
+[✔] /home/username/.gitconfig
+```
+
+* "✘" は現在dotで管理されていないがdotlinkに対応が書かれているものを表す。
+* "✔" はdotで管理されているものを表す。
 
 ### dot set
 
