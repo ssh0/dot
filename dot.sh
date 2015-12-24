@@ -86,7 +86,7 @@ EOF
     esac
   done
 
-  source "$DOT_SCRIPT_ROOTDIR/lib/common"
+  source "$DOT_SCRIPT_ROOTDIR/lib/common.sh"
   trap cleanup_namespace EXIT
 
   shift $((OPTIND-1))
@@ -97,47 +97,47 @@ EOF
   case "$1" in
     "clone")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clone"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clone.sh"
       dot_clone "$@"
       ;;
     "pull")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_pull"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_pull.sh"
       dot_pull "$@"
       ;;
     "list")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_list"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_list.sh"
       dot_list
       ;;
     "set")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_set"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_set.sh"
       dot_set "$@"
       ;;
     "add")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_add"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_add.sh"
       dot_add "$@"
       ;;
     "edit")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_edit"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_edit.sh"
       dot_edit
       ;;
     "unlink")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_unlink"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_unlink.sh"
       dot_unlink "$@"
       ;;
     "clear")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clear"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clear.sh"
       dot_clear
       ;;
     "config")
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_config"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_config.sh"
       dot_config
       ;;
     *)
