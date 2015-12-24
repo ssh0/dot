@@ -13,6 +13,7 @@ _dot() {
       _values "dot commands"\
         "clone[Clone dotfile repository on your computer with git.]" \
         "pull[Pull remote dotfile repository (by git).]" \
+        "list[Show the list which files will be managed by dot.]"
         "set[Make symbolic link interactively.]" \
         "add[Move the file to the dotfile dir and make a symbolic link.]" \
         "edit[Edit \$dotlink.]" \
