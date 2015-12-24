@@ -156,7 +156,7 @@ dot_set() {
 
       # if dotfile doesn't exist, print error message and pass
       if [ ! -e "${dotfile}" ]; then
-        echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] ${dotfile}"
+        echo "[$(tput bold)$(tput setaf 1)not found$(tput sgr0)] ${dotfile}"
         continue
       fi
 
