@@ -3,8 +3,7 @@ dot_pull() {
   local cwd="$(pwd)"
 
   if [ "$1" = "--self" ]; then
-    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-    echo "Update dot."
+    echo "[$(tput bold)$(tput setaf 4)Update dot.$(tput sgr0)] "
     builtin cd "${DOT_SCRIPT_ROOTDIR}" && git pull
   else
     # git pull

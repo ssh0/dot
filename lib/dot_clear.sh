@@ -11,8 +11,9 @@ dot_clear() {
         orig="$HOME/$orig"
       fi
       if [ -L "${orig}" ]; then
-        echo "unlink ${orig}"
         unlink "${orig}"
+        echo -n "[$(tput bold)$(tput setaf 1)unlink$(tput sgr0)] "
+        echo "${orig}"
       fi
     done
   } #}}}

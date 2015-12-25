@@ -2,7 +2,6 @@
 dot_set() { 
   # option handling
   local linkfile
-  local mklink
 
   while getopts iv OPT
   do
@@ -11,12 +10,6 @@ dot_set() {
       "v" ) dotset_verbose=true ;;
     esac
   done
-
-  if ${dotset_verbose}; then
-    mklink="ln -sv"
-  else
-    mklink="ln -s"
-  fi
 
 
   check_dir() { #{{{
@@ -34,8 +27,7 @@ dot_set() {
       return 0
     fi
 
-    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-    echo -n "mkdir $(tput bold)${origdir}$(tput sgr0)? (Y/n):"
+    echo -n "make directory $(tput bold)${origdir}$(tput sgr0)? (Y/n):"
     read confirm
     if [ "$confirm" != "n" ]; then
       mkdir -p "${origdir}" &&
@@ -71,17 +63,22 @@ dot_set() {
     echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
     echo -n "  [$(tput bold)$(tput setaf 2)now$(tput sgr0)] "
     echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
-    echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
     echo "Unlink and re-link for $(tput bold)${orig}$(tput sgr0)? (y/n)"
     while echo -n ">>> "; read yn; do
       case $yn in
-        [Yy] ) unlink "${orig}"
-                eval "${mklink}" "${dotfile}" "${orig}"
-                break
-                ;;
-        [Nn] ) break
-                ;;
-            * ) echo "Please answer with y or n." ;;
+        [Yy] )
+          unlink "${orig}"
+          ln -s "${dotfile}" "${orig}"
+          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
+          echo "${orig}"
+          break
+          ;;
+        [Nn] )
+          break
+          ;;
+        * )
+          echo "Please answer with y or n."
+          ;;
       esac
     done
 
@@ -103,7 +100,6 @@ dot_set() {
     while true; do
       echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
       echo "File already exists at $(tput bold)${orig}$(tput sgr0)."
-      echo -n "  [$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
       echo "Choose the operation."
       echo "    ($(tput bold)d$(tput sgr0)):show diff"
       echo "    ($(tput bold)e$(tput sgr0)):edit files"
@@ -112,26 +108,38 @@ dot_set() {
       echo "    ($(tput bold)n$(tput sgr0)):do nothing"
       echo -n ">>> "; read line
       case $line in
-        [Dd] ) eval "${diffcmd}" "${dotfile}" "${orig}"
-                echo ""
-                ;;
-        [Ee] ) eval "${edit2filecmd}" "${dotfile}" "${orig}"
-                ;;
-        [Ff] ) if [ -d "${orig}" ]; then
-                  rm -r "${orig}"
-                else
-                  rm "${orig}"
-                fi
-                eval "${mklink}" "${dotfile}" "${orig}"
-                break
-                ;;
-        [Bb] ) eval "${mklink}" -b --suffix '.bak' "${dotfile}" "${orig}"
-                break
-                ;;
-        [Nn] ) break
-                ;;
-            *) echo "Please answer with [d/e/f/b/n]."
-                ;;
+        [Dd] )
+          eval "${diffcmd}" "${dotfile}" "${orig}"
+          echo ""
+          ;;
+        [Ee] )
+          eval "${edit2filecmd}" "${dotfile}" "${orig}"
+          ;;
+        [Ff] )
+          if [ -d "${orig}" ]; then
+            rm -r "${orig}"
+          else
+            rm "${orig}"
+          fi
+          ln -s "${dotfile}" "${orig}"
+          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
+          echo "${orig}"
+          break
+          ;;
+        [Bb] )
+          ln -sb --suffix '.bak' "${dotfile}" "${orig}"
+          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
+          echo "${orig}"
+          echo -n "[$(tput bold)$(tput setaf 2)make backup$(tput sgr0)] "
+          echo "${orig}.bak"
+          break
+          ;;
+        [Nn] )
+          break
+          ;;
+        *)
+          echo "Please answer with [d/e/f/b/n]."
+          ;;
       esac
     done
 
@@ -171,7 +179,11 @@ dot_set() {
           if_exist "${orig}" "${dotfile}"           #      ask user what to do
         fi
       else                                      # else:
-        eval "${mklink}" "${dotfile}" "${orig}" #   make symbolic link
+        ln -s "${dotfile}" "${orig}" #   make symbolic link
+        if ${dotset_verbose}; then
+          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
+          echo "${orig}"
+        fi
       fi
     done
   } #}}}

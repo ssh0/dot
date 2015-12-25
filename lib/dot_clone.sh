@@ -6,7 +6,6 @@ dot_clone() {
 
   echo -n "[$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
   echo "git clone --recursive ${clone_repository} ${cloneto}"
-  echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
   echo -n "Continue? [y/N]"
   read confirm
   if [ "$confirm" != "y" ]; then

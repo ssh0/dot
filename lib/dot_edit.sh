@@ -3,7 +3,6 @@ dot_edit() {
   # init
   if [ ! -e "${dotlink}" ]; then
     echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] $(tput bold)${dotlink}$(tput sgr0)"
-    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
     echo -n "make dotlink file ? (Y/n)"
     read confirm
     if [ "${confirm}" != "n" ]; then

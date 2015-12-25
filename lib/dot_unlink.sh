@@ -19,9 +19,10 @@ dot_unlink() {
       # copy the file
       cp "$abspath" "$currentpath"
 
-      echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-      echo -n "$(tput bold)$f$(tput sgr0) was unlinked "
-      echo "and its now the copy of $(tput bold)$abspath$(tput sgr0)."
+      echo -n "[$(tput bold)$(tput setaf 1)unlink$(tput sgr0)] "
+      echo "$f"
+      echo -n "[$(tput bold)$(tput setaf 2)copy$(tput sgr0)] "
+      echo "$abspath"
     fi
   done
 

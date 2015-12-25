@@ -87,7 +87,6 @@ dot_add() {
 
     echo "[$(tput bold)$(tput setaf 6)suggestion$(tput sgr0)]"
     echo "    dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
-    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
     echo "Continue? [y/N]"
     read confirm
     if [ "$confirm" != "y" ]; then
@@ -107,8 +106,7 @@ dot_add() {
 
     echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
     echo "$(tput bold)${1%/*}$(tput sgr0) doesn't exist."
-    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
-    echo "mkdir $(tput bold)${1%/*}$(tput sgr0)? (y/n):"
+    echo "make directory $(tput bold)${1%/*}$(tput sgr0)? (y/n)"
     while true; read yn; do
       case $yn in
         [Yy] ) mkdir -p "${1%/*}"

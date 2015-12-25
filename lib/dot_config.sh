@@ -4,7 +4,6 @@ dot_config() {
   if [ ! -e "${dotrc}" ]; then
     echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
     echo "$(tput bold)${dotrc}$(tput sgr0) doesn't exist."
-    echo -n "[$(tput bold)$(tput setaf 6)message$(tput sgr0)] "
     echo -n "make configuration file ? (Y/n)"
     read confirm
     if [ "${confirm}" != "n" ]; then
