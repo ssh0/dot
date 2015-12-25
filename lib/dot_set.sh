@@ -117,9 +117,9 @@ dot_set() {
           ;;
         [Ff] )
           if [ -d "${orig}" ]; then
-            rm -r "${orig}"
+            rm -r -- "${orig}"
           else
-            rm "${orig}"
+            rm -- "${orig}"
           fi
           ln -s "${dotfile}" "${orig}"
           echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
