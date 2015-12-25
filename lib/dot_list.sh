@@ -1,52 +1,50 @@
 # vim: ft=sh
 dot_list() { 
+  local linkfile l
 
   _dot_list() { #{{{
-    local l
+    local dotfile orig origdir linkto
+    # extract environment variables
+    dotfile="$(eval echo $1)"
+    orig="$(eval echo $2)"
 
-    for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-      dotfile="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
-      orig="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+    # path completion
+    [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
+    [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"
 
-      if [ "$(echo $dotfile | cut -c 1)" != "/" ]; then
-        dotfile="${dotdir}/$dotfile"
-      fi
+    # if dotfile doesn't exist
+    if [ ! -e "${dotfile}" ]; then
+      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+      return 1
+    fi
 
-      if [ "$(echo $orig | cut -c 1)" != "/" ]; then
-        orig="$HOME/$orig"
-      fi
+    if [ ! -e "${orig}" ]; then
+      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+      return 1
+    fi
 
-      # if dotfile doesn't exist
-      if [ ! -e "${dotfile}" ]; then
-        echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-        continue
-      fi
+    if [ ! -L "${orig}" ]; then
+      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+      return 1
+    fi
 
-      if [ -e "${orig}" ]; then                 # if the file already exists:
-        if [ -L "${orig}" ]; then               #   if it is a symbolic-link:
-          linkto="$(readlink "${orig}")"
+    linkto="$(readlink "${orig}")"
 
-          # if the link has already be set: do nothing
-          if [ "${linkto}" = "${dotfile}" ]; then
-            echo "[$(tput bold)$(tput setaf 2)✔$(tput sgr0)] ${orig}"
-          else
-            echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-          fi
-        else                                    #   if it is a file or a dir:
-          echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-        fi
-      else                                      # else:
-        echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
-      fi
-    done
+    if [ "${linkto}" = "${dotfile}" ]; then
+      echo "[$(tput bold)$(tput setaf 2)✔$(tput sgr0)] ${orig}"
+    else
+      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+    fi
+    return 0
   } #}}}
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(tput bold)$(tput setaf 4)From ${linkfile}$(tput sgr0)"
-    _dot_list "${linkfile}"
+    for l in $(grep -Ev '^#|^$' "${linkfile}"); do
+      _dot_list $(echo $l | tr ',' ' ')
+    done
   done
 
   unset -f _dot_list $0
-  unset dotfile orig origdir
 
 } 

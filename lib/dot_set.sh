@@ -1,7 +1,7 @@
 # vim: ft=sh
 dot_set() { 
   # option handling
-  local linkfile
+  local linkfile l
 
   while getopts iv OPT
   do
@@ -17,15 +17,12 @@ dot_set() {
 
     origdir="${orig%/*}"
 
-    if [ -d "${origdir}" ]; then
-      return 0
-    fi
+    [ -d "${origdir}" ] && return 0
 
     echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
     echo "$(tput bold)${origdir}$(tput sgr0) doesn't exist."
-    if ! ${dotset_interactive}; then
-      return 0
-    fi
+
+    ${dotset_interactive} || return 0
 
     echo -n "make directory $(tput bold)${origdir}$(tput sgr0)? (Y/n):"
     read confirm
@@ -55,9 +52,7 @@ dot_set() {
     echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
     echo "Other link already exists at $(tput bold)${orig}$(tput sgr0)"
 
-    if ! ${dotset_interactive}; then
-      return 0
-    fi
+    ${dotset_interactive} || return 0
 
     echo -n "  [$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
     echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
@@ -148,53 +143,49 @@ dot_set() {
 
 
   _dot_set() { #{{{
-    local l
+    local dotfile orig
+    # extract environment variables
+    dotfile="$(eval echo $1)"
+    orig="$(eval echo $2)"
 
-    for l in $(grep -Ev '^#' "$1" | grep -Ev '^$'); do
-      dotfile="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $1; }')"
-      orig="$(eval echo "$l" | awk 'BEGIN {FS=","; }  { print $2; }')"
+    # path completion
+    [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
+    [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"
 
-      if [ "$(echo $dotfile | cut -c 1)" != "/" ]; then
-        dotfile="${dotdir}/$dotfile"
+    # if dotfile doesn't exist, print error message and pass
+    if [ ! -e "${dotfile}" ]; then
+      echo "[$(tput bold)$(tput setaf 1)not found$(tput sgr0)] ${dotfile}"
+      return 1
+    fi
+
+    # if the targeted directory doesn't exist,
+    # ask whether make directory or not.
+    check_dir "${orig}" || return 1
+
+    if [ -e "${orig}" ]; then                 # if the file already exists:
+      if [ -L "${orig}" ]; then               #   if it is a symbolic-link:
+        if_islink "${orig}" "${dotfile}"      #      do nothing or relink
+      else                                    #   if it is a file or a dir:
+        if_exist "${orig}" "${dotfile}"       #      ask user what to do
+      fi                                      #
+    else                                      # else:
+      ln -s "${dotfile}" "${orig}"            #   make symbolic link
+      if ${dotset_verbose}; then
+        echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
+        echo "${orig}"
       fi
+    fi
 
-      if [ "$(echo $orig | cut -c 1)" != "/" ]; then
-        orig="$HOME/$orig"
-      fi
-
-      # if dotfile doesn't exist, print error message and pass
-      if [ ! -e "${dotfile}" ]; then
-        echo "[$(tput bold)$(tput setaf 1)not found$(tput sgr0)] ${dotfile}"
-        continue
-      fi
-
-      # if the targeted directory doesn't exist,
-      # ask whether make directory or not.
-      check_dir "${orig}" || continue
-
-      if [ -e "${orig}" ]; then                 # if the file already exists:
-        if [ -L "${orig}" ]; then               #   if it is a symbolic-link:
-          if_islink "${orig}" "${dotfile}"          #      do nothing or relink
-        else                                    #   if it is a file or a dir:
-          if_exist "${orig}" "${dotfile}"           #      ask user what to do
-        fi
-      else                                      # else:
-        ln -s "${dotfile}" "${orig}" #   make symbolic link
-        if ${dotset_verbose}; then
-          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
-          echo "${orig}"
-        fi
-      fi
-    done
   } #}}}
 
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(tput bold)$(tput setaf 4)Loading ${linkfile} ...$(tput sgr0)"
-    _dot_set "${linkfile}"
+    for l in $(grep -Ev '^#|^$' "${linkfile}"); do
+      _dot_set $(echo $l | tr ',' ' ')
+    done
   done
 
   unset -f check_dir if_islink if_exist _dot_set $0
-  unset dotfile orig origdir
 
 } 
