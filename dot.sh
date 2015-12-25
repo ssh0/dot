@@ -20,7 +20,7 @@ NAME
       dot - manages symbolic links for dotfiles.
 
 USAGE
-      dot [-h|--help][-c <configfile>] <command> [<args>]
+      dot [-h|--help][-c|--config <configfile>] <command> [<args>]
 
 COMMAND
       clone     Clone dotfile repository on your computer with git.
@@ -46,7 +46,7 @@ COMMAND
 OPTION
       -h,--help 
                 Show this help message.
-      -c <configfile>
+      -c,--config <configfile>
                 Specify the configuration file to overload.
 
 COMMAND OPTIONS
@@ -68,14 +68,24 @@ EOF
   } #}}}
 
   # Option handling {{{
-  optstr="c:h -help"
-  while getopts ${optstr} OPT
+  local arg
+  for arg in "$@"; do
+    shift
+    case "$arg" in
+      "--help") set -- "$@" "-h" ;;
+      "--config") set -- "$@" "-c" ;;
+      *)        set -- "$@" "$arg" ;;
+    esac
+  done
+
+  OPTIND=1
+  while getopts "c:h" OPT
   do
     case $OPT in
       "c")
         dotrc="$OPTARG"
         ;;
-      "h"|"-help" )
+      "h")
         dot_usage
         return 0
         ;;
