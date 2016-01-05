@@ -4,7 +4,7 @@
 
 local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
 local dotset_interactive dotset_verbose diffcmd edit2filecmd
-local dot_edit_default_editor dotrc columns hrule
+local dot_edit_default_editor dotrc columns hrule tp_bold tp_reset
 
 # --------------------------------------------------------------------------}}}
 # Default settings                                                          {{{
@@ -56,10 +56,15 @@ dotbundle "${dotrc}"
 # makeline {{{
 
 columns=$(tput cols)
-if [[ $columns -gt 70 ]]; then
-  columns=70
-fi
-  hrule="$( printf '%*s\n' "$columns" '' | tr ' ' - )"
+hrule="$( printf '%*s\n' "$columns" '' | tr ' ' - )"
+
+#}}}
+
+
+# tput {{{
+
+tp_bold="$(tput bold)"
+tp_reset="$(tput sgr0)"
 
 #}}}
 
@@ -79,8 +84,48 @@ path_without_dotdir() { #{{{
 } #}}}
 
 
+__confirm() { #{{{
+  # __confirm [ y | n ]
+  local default="$1"
+  local yn confirm
+  if [ "${default}" = "y" ]; then
+    yn="Y/n"
+    default=0
+  elif [ "${default}" = "n" ]; then
+    yn="y/N"
+    default=1
+  else
+    yn="y/n"
+  fi
+
+  echo -n "[$yn]> "
+  read confirm
+  if [ "${confirm}" = "" ]; then
+    return $default
+  elif [ "${confirm}" = "y" ]; then
+    return 0
+  elif [ "${confirm}" = "n" ]; then
+    return 1
+  else
+    echo "Answer with 'y' or 'n'. Aborted."
+    return 1
+  fi
+
+} #}}}
+
+
+prmpt() { #{{{
+  echo "[${tp_bold}$(tput setaf $1)$2${tp_reset}] "
+} #}}}
+
+
+bd_() { #{{{
+  echo "${tp_bold}$@${tp_reset}"
+} #}}}
+
+
 cleanup_namespace() { #{{{
-  unset -f dotbundle get_fullpath path_without_home path_without_dotdir
-  unset -f $0
+  unset -f dot_usage dotbundle get_fullpath path_without_home path_without_dotdir
+  unset -f __confirm prmpt bd_ $0
 } #}}}
 

@@ -4,8 +4,7 @@ dot_unlink() {
 
   for f in "$@"; do
     if [ ! -L "$f" ]; then
-      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-      echo "$(tput bold)$f$(tput sgr0) is not the symbolic link."
+      echo "$(prmpt 1 error)$(bd_ $f) is not the symbolic link."
     else
       # get the file's path
       local currentpath="$(get_fullpath "$f")"
@@ -19,10 +18,8 @@ dot_unlink() {
       # copy the file
       cp "$abspath" "$currentpath"
 
-      echo -n "[$(tput bold)$(tput setaf 1)unlink$(tput sgr0)] "
-      echo "$f"
-      echo -n "[$(tput bold)$(tput setaf 2)copy$(tput sgr0)] "
-      echo "$abspath"
+      echo "$(prmpt 1 unlink)$f"
+      echo "$(prmpt 2 copy)$abspath"
     fi
   done
 

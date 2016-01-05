@@ -19,19 +19,15 @@ dot_set() {
 
     [ -d "${origdir}" ] && return 0
 
-    echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-    echo "$(tput bold)${origdir}$(tput sgr0) doesn't exist."
+    echo "$(prmpt 1 error)$(bd_ ${origdir}) doesn't exist."
 
     ${dotset_interactive} || return 0
 
-    echo -n "make directory $(tput bold)${origdir}$(tput sgr0)? (Y/n):"
-    read confirm
-    if [ "$confirm" != "n" ]; then
-      mkdir -p "${origdir}" &&
-      return 0
+    echo -n "make directory $(bd_ ${origdir})?"
+    if __confirm y; then
+      mkdir -p "${origdir}" && return 0
     else
-      echo "Aborted."
-      return 1
+      echo "Aborted."; return 1
     fi
   } #}}}
 
@@ -45,37 +41,24 @@ dot_set() {
     # if the link has already be set: do nothing
     if [ "${linkto}" = "${dotfile}" ]; then
       ${dotset_verbose} &&
-        echo "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] ${orig}"
+        echo "$(prmpt 2 done)${orig}"
       return 0
     fi
 
-    echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-    echo "Other link already exists at $(tput bold)${orig}$(tput sgr0)"
+    echo "$(prmpt 1 conflict)Other link already exists at $(bd_ ${orig})"
 
     ${dotset_interactive} || return 0
 
-    echo -n "  [$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
+    echo -n "  $(prmpt 3 try)"
     echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
-    echo -n "  [$(tput bold)$(tput setaf 2)now$(tput sgr0)] "
+    echo -n "  $(prmpt 2 now)"
     echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
-    echo "Unlink and re-link for $(tput bold)${orig}$(tput sgr0)? (y/n)"
-    while echo -n ">>> "; read yn; do
-      case $yn in
-        [Yy] )
-          unlink "${orig}"
-          ln -s "${dotfile}" "${orig}"
-          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
-          echo "${orig}"
-          break
-          ;;
-        [Nn] )
-          break
-          ;;
-        * )
-          echo "Please answer with y or n."
-          ;;
-      esac
-    done
+    echo "Unlink and re-link for $(bd_ ${orig})? "
+    if __confirm; then
+      unlink "${orig}"
+      ln -s "${dotfile}" "${orig}"
+      echo "$(prmpt 2 done)${orig}"
+    fi
 
     return 0
   } #}}}
@@ -87,20 +70,18 @@ dot_set() {
     local dotfile="$2"
 
     if ! ${dotset_interactive}; then
-      echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-      echo "File already exists at $(tput bold)${orig}$(tput sgr0)."
+      echo "$(prmpt 1 conflict)File already exists at $(bd_ ${orig})."
       return 0
     fi
 
     while true; do
-      echo -n "[$(tput bold)$(tput setaf 1)conflict$(tput sgr0)] "
-      echo "File already exists at $(tput bold)${orig}$(tput sgr0)."
-      echo "Choose the operation."
-      echo "    ($(tput bold)d$(tput sgr0)):show diff"
-      echo "    ($(tput bold)e$(tput sgr0)):edit files"
-      echo "    ($(tput bold)f$(tput sgr0)):replace"
-      echo "    ($(tput bold)b$(tput sgr0)):replace and make backup"
-      echo "    ($(tput bold)n$(tput sgr0)):do nothing"
+      echo "$(prmpt 1 conflict)File already exists at $(bd_ ${orig})."
+      echo "Choose the operation:"
+      echo "    ($(bd_ d)):show diff"
+      echo "    ($(bd_ e)):edit files"
+      echo "    ($(bd_ f)):replace"
+      echo "    ($(bd_ b)):replace and make backup"
+      echo "    ($(bd_ n)):do nothing"
       echo -n ">>> "; read line
       case $line in
         [Dd] )
@@ -117,16 +98,13 @@ dot_set() {
             rm -- "${orig}"
           fi
           ln -s "${dotfile}" "${orig}"
-          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
-          echo "${orig}"
+          echo "$(prmpt 2 done)${orig}"
           break
           ;;
         [Bb] )
           ln -sb --suffix '.bak' "${dotfile}" "${orig}"
-          echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
-          echo "${orig}"
-          echo -n "[$(tput bold)$(tput setaf 2)make backup$(tput sgr0)] "
-          echo "${orig}.bak"
+          echo "$(prmpt 2 done)${orig}"
+          echo "$(prmpt 2 "make backup")${orig}.bak"
           break
           ;;
         [Nn] )
@@ -154,7 +132,7 @@ dot_set() {
 
     # if dotfile doesn't exist, print error message and pass
     if [ ! -e "${dotfile}" ]; then
-      echo "[$(tput bold)$(tput setaf 1)not found$(tput sgr0)] ${dotfile}"
+      echo "$(prmpt 1 "not found")${dotfile}"
       return 1
     fi
 
@@ -171,8 +149,7 @@ dot_set() {
     else                                      # else:
       ln -s "${dotfile}" "${orig}"            #   make symbolic link
       if ${dotset_verbose}; then
-        echo -n "[$(tput bold)$(tput setaf 2)done$(tput sgr0)] "
-        echo "${orig}"
+        echo "$(prmpt 2 done)${orig}"
       fi
     fi
 
@@ -180,7 +157,7 @@ dot_set() {
 
 
   for linkfile in "${linkfiles[@]}"; do
-    echo "$(tput bold)$(tput setaf 4)Loading ${linkfile} ...$(tput sgr0)"
+    echo "$(prmpt 4 "Loading ${linkfile} ...")"
     for l in $(grep -Ev '^#|^$' "${linkfile}"); do
       _dot_set $(echo $l | tr ',' ' ')
     done

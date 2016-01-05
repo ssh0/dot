@@ -1,14 +1,12 @@
 # vim: ft=sh
 
 dot_clone() { 
-  local cloneto confirm
+  local cloneto
   cloneto="${1:-"${dotdir}"}"
 
-  echo -n "[$(tput bold)$(tput setaf 3)try$(tput sgr0)] "
-  echo "git clone --recursive ${clone_repository} ${cloneto}"
-  echo -n "Continue? [y/N]"
-  read confirm
-  if [ "$confirm" != "y" ]; then
+  echo "$(prmpt 3 try)git clone --recursive ${clone_repository} ${cloneto}"
+  echo -n "Continue? "
+  if ! __confirm y; then
     echo "Aborted."
     echo ""
     echo "If you want to clone other repository, change environment variable DOT_REPO."
@@ -21,6 +19,5 @@ dot_clone() {
 
   git clone --recursive "${clone_repository}" "${cloneto}"
 
-  unset -v confirm
   unset -f $0
 } 

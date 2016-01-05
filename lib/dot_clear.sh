@@ -13,13 +13,12 @@ dot_clear() {
 
     if [ -L "${orig}" ]; then
       unlink "${orig}"
-      echo -n "[$(tput bold)$(tput setaf 1)unlink$(tput sgr0)] "
-      echo "${orig}"
+      echo "$(prmpt 1 unlink)${orig}"
     fi
   } #}}}
 
   for linkfile in "${linkfiles[@]}"; do
-    echo "$(tput bold)$(tput setaf 4)Loading ${linkfile} ...$(tput sgr0)"
+    echo "$(prmpt 4 "Loading ${linkfile} ...")"
     for l in $(grep -Ev '^#|^$' "${linkfile}"); do
       _dot_clear $(echo $l | tr ',' ' ')
     done

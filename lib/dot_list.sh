@@ -14,32 +14,32 @@ dot_list() {
 
     # if dotfile doesn't exist
     if [ ! -e "${dotfile}" ]; then
-      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+      echo "$(prmpt 1 ✘)${orig}"
       return 1
     fi
 
     if [ ! -e "${orig}" ]; then
-      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+      echo "$(prmpt 1 ✘)${orig}"
       return 1
     fi
 
     if [ ! -L "${orig}" ]; then
-      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+      echo "$(prmpt 1 ✘)${orig}"
       return 1
     fi
 
     linkto="$(readlink "${orig}")"
 
     if [ "${linkto}" = "${dotfile}" ]; then
-      echo "[$(tput bold)$(tput setaf 2)✔$(tput sgr0)] ${orig}"
+      echo "$(prmpt 2 ✔)${orig}"
     else
-      echo "[$(tput bold)$(tput setaf 1)✘$(tput sgr0)] ${orig}"
+      echo "$(prmpt 1 ✘)${orig}"
     fi
     return 0
   } #}}}
 
   for linkfile in "${linkfiles[@]}"; do
-    echo "$(tput bold)$(tput setaf 4)From ${linkfile}$(tput sgr0)"
+    echo "$(prmpt 4 "From ${linkfile}")"
     for l in $(grep -Ev '^#|^$' "${linkfile}"); do
       _dot_list $(echo $l | tr ',' ' ')
     done

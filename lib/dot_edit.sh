@@ -2,17 +2,14 @@
 dot_edit() { 
   # init
   if [ ! -e "${dotlink}" ]; then
-    echo "[$(tput bold)$(tput setaf 1)empty$(tput sgr0)] $(tput bold)${dotlink}$(tput sgr0)"
-    echo -n "make dotlink file ? (Y/n)"
-    read confirm
-    if [ "${confirm}" != "n" ]; then
+    echo "$(prmpt 1 empty)$(bd_ ${dotlink})"
+    echo "make dotlink file ? "
+    if __confirm y; then
       echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotlink ${dotlink}"
       cp "${DOT_SCRIPT_ROOTDIR}/examples/dotlink" "${dotlink}"
     else
-      echo "Aborted."
-      return 1
+      echo "Aborted."; return 1
     fi
-    unset -v confirm
   fi
 
   # open dotlink file

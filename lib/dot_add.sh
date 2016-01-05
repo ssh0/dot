@@ -14,8 +14,7 @@ dot_add() {
   shift $((OPTIND-1))
 
   if [ ! -e "$1" ]; then
-    echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-    echo "$(tput bold)$1$(tput sgr0) doesn't exist."
+    echo "$(prmpt 1 error)$(bd_ $1) doesn't exist."
     return 1
   fi
 
@@ -62,8 +61,7 @@ dot_add() {
 
     for f in "$@"; do
       if [ ! -L "$f" ]; then
-        echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-        echo "$(tput bold)$1$(tput sgr0) is not the symbolic link."
+        echo "$(prmpt 1 error)$(bd_ $1) is not the symbolic link."
         continue
       fi
 
@@ -71,8 +69,7 @@ dot_add() {
       abspath="$(readlink "$f")"
 
       if [ ! -e "${abspath}" ]; then
-        echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-        echo "Target path $(tput bold)${abspath}$(tput sgr0) doesn't exist."
+        echo -n "$(prmpt 1 error)Target path $(bd_ ${abspath}) doesn't exist."
         return 1
       fi
 
@@ -83,15 +80,10 @@ dot_add() {
 
 
   suggest() { #{{{
-    local confirm
-
-    echo "[$(tput bold)$(tput setaf 6)suggestion$(tput sgr0)]"
+    echo "$(prmpt 6 suggestion)"
     echo "    dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
-    echo "Continue? [y/N]"
-    read confirm
-    if [ "$confirm" != "y" ]; then
-      return 1
-    fi
+    echo -n "Continue? "
+    __confirm n || return 1
 
     dot_add_main "$1" "${dotdir}/$(path_without_home $1)"
   } #}}}
@@ -104,23 +96,15 @@ dot_add() {
       return 0
     fi
 
-    echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
-    echo "$(tput bold)${1%/*}$(tput sgr0) doesn't exist."
-    echo "make directory $(tput bold)${1%/*}$(tput sgr0)? (y/n)"
-    while true; read yn; do
-      case $yn in
-        [Yy] ) mkdir -p "${1%/*}"
-                break
-                ;;
-        [Nn] ) unset yn
-                return 1
-                ;;
-            * ) echo "Please answer with y or n."
-                ;;
-      esac
-    done
+    echo "$(prmpt 1 error)$(bd_ ${1%/*}) doesn't exist."
+    echo -n "make directory $(bd_ ${1%/*})? "
+    if __confirm; then
+      mkdir -p "${1%/*}"
+      return 0
+    else
+      return 1
+    fi
 
-    return 0
   } #}}}
 
 
@@ -150,7 +134,7 @@ dot_add() {
     fi
 
     # else
-    echo "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] Aborted."
+    echo "$(prmpt 1 error)Aborted."
     echo "Usage: 'dot add file'"
     echo "       'dot add file ${dotdir}/any/path/to/the/file'"
 
