@@ -65,6 +65,8 @@ COMMAND OPTIONS
           -m <message>: Add your message for dotlink file.
 
 EOF
+
+  unset -f $0
   } #}}}
 
   # Option handling {{{
