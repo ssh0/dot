@@ -152,6 +152,10 @@ EOF
       source "$DOT_SCRIPT_ROOTDIR/lib/dot_config.sh"
       dot_config
       ;;
+    "cd")
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_cd.sh"
+      dot_cd
+      ;;
     *)
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
       echo "command $(tput bold)$1$(tput sgr0) not found."
