@@ -23,6 +23,7 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 |---       |---    |---        |
 | pull     |Pull from dotfile repository (by git)|`[--self]`|
 |list      |Show the list which files will be managed by dot.| |
+|cd        |Change directory to 'dotdir'.| |
 |set       |Set symbolic links configured in 'dotlink'.|`[-i][-v]`|
 | add      |Move the new file to the dotfile dir, make the link, and add the link information to 'dotlink' automatically.|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
 |edit      | Edit 'dotlink'||
@@ -65,6 +66,10 @@ $ dot list
 
 * "✘" means this file is not managed by dot now but is written in dotlink.
 * "✔" means this file is managed by dot now.
+
+### dot cd
+
+Change directory to `dotdir`.
 
 ### dot set
 

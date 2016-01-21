@@ -27,6 +27,8 @@ COMMAND
 
       pull      Pull remote dotfile repository (by git).
 
+      cd        Change directory to 'dotdir'.
+
       list      Show the list which files will be managed by dot.
 
       set       Make symbolic link interactively.

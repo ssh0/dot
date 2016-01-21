@@ -21,6 +21,7 @@
 |---       |---    |---        |
 | pull     |dotfiesをpullしてくる(by git). |`[--self]`|
 |list      |`dot`で管理するファイルを一覧を表示| |
+|cd        |ディレクトリ`dotdir`に移動| |
 |set       |`dotlink`に書かれたシンボリックリンクを貼る|`[-i][-v]`|
 | add      |新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
 |edit      |'dotlink'を手動で編集||
@@ -63,6 +64,10 @@ $ dot list
 
 * "✘" は現在dotで管理されていないがdotlinkに対応が書かれているものを表す。
 * "✔" はdotで管理されているものを表す。
+
+### dot cd
+
+ディレクトリ`dotdir`に移動します。
 
 ### dot set
 
