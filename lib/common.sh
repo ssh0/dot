@@ -125,7 +125,7 @@ bd_() { #{{{
 
 
 cleanup_namespace() { #{{{
-  unset -f dot_usage dotbundle get_fullpath path_without_home path_without_dotdir
+  unset -f dotbundle get_fullpath path_without_home path_without_dotdir
   unset -f __confirm prmpt bd_ $0
 } #}}}
 
