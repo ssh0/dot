@@ -162,6 +162,7 @@ EOF
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
       echo "command $(tput bold)$1$(tput sgr0) not found."
       dot_usage
+      return 1
       ;;
   esac
 
