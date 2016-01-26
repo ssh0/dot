@@ -43,7 +43,7 @@ dot pull
 With `--self` option, then git pull for `dot` and it will be up to date.
 
 ```
-git pull --self
+dot pull --self
 ```
 
 ### dot list
