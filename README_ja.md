@@ -17,20 +17,27 @@
 
 **サブコマンド**
 
-|サブコマンド名|説明|オプション or 引数|
-|---       |---    |---        |
-| pull     |dotfiesをpullしてくる(by git). |`[--self]`|
-|list      |`dot`で管理するファイルを一覧を表示| |
-|cd        |ディレクトリ`dotdir`に移動| |
-|set       |`dotlink`に書かれたシンボリックリンクを貼る|`[-i][-v]`|
-| add      |新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
-|edit      |'dotlink'を手動で編集||
-|config    |設定ファイル'dotrc'を編集||
-|unlink    |選択したシンボリックリンクをunlinkし，dotfilesから元ファイルをコピー|`link1 [link2 [link3 [...] ] ]`|
-|clear     |`$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlink||
-|clone     |gitコマンドを使ってdotfilesを自分のPCにクローン|`[/directory/to/clone/]`|
+|サブコマンド名       |説明                                                                               |オプション or 引数                                                        |
+|---                  |---                                                                                |---                                                                       |
+|[pull](#dot_pull)    |dotfiesをpullしてくる(by git).                                                     |`[--self]`                                                                |
+|[list](#dot_list)    |`dot`で管理するファイルを一覧を表示                                                |                                                                          |
+|[cd](#dot_cd)        |ディレクトリ`dotdir`に移動                                                         |                                                                          |
+|[set](#dot_set)      |`dotlink`に書かれたシンボリックリンクを貼る                                        |`[-i][-v]`                                                                |
+|[add](#dot_add)      |新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
+|[edit](#dot_edit)    |'dotlink'を手動で編集                                                              |                                                                          |
+|[config](#dot_config)|設定ファイル'dotrc'を編集                                                          |                                                                          |
+|[unlink](#dot_unlink)|選択したシンボリックリンクをunlinkし，dotfilesから元ファイルをコピー               |`link1 [link2 [link3 [...] ] ]`                                           |
+|[clear](#dot_clear)  |`$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlink               |                                                                          |
+|[clone](#dot_clone)  |gitコマンドを使ってdotfilesを自分のPCにクローン                                    |`[/directory/to/clone/]`                                                  |
 
-### dot pull
+**オプション**
+
+|オプション   |説明                      |引数     |
+|---          |---                       |---      |
+| -h, --help  |ヘルプを表示              |         |
+| -c, --config|読み込む設定ファイルを指定| `dotrc` |
+
+### <a name="dot_pull">dot pull</a>
 
 dotfiesをpullしてくる(by git).  
 ```bash
@@ -43,8 +50,7 @@ dot pull
 dot pull --self
 ```
 
-
-### dot list
+### <a name="dot_list">dot list</a>
 
 `dot`で管理するファイルを一覧表示する。
 
@@ -65,11 +71,11 @@ $ dot list
 * "✘" は現在dotで管理されていないがdotlinkに対応が書かれているものを表す。
 * "✔" はdotで管理されているものを表す。
 
-### dot cd
+### <a name="dot_cd">dot cd</a>
 
 ディレクトリ`dotdir`に移動します。
 
-### dot set
+### <a name="dot_set">dot set</a>
 
 このコマンドは，`dotlink`に書かれたシンボリックリンクを貼っていきます。
 
@@ -89,7 +95,7 @@ $ dot list
 dot set [-i][-v]
 ```
 
-### dot add
+### <a name="dot_add">dot add</a>
 
 新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記
 
@@ -97,7 +103,7 @@ dot set [-i][-v]
 dot add some_file [~/.dotfiles/path/to/the/file]
 ```
 
-### dot edit
+### <a name="dot_edit">dot edit</a>
 
 'dotlink'を手動で編集する。
 
@@ -105,7 +111,7 @@ dot add some_file [~/.dotfiles/path/to/the/file]
 dot edit
 ```
 
-### dot config
+### <a name="dot_config">dot config</a>
 
 設定ファイル'dotrc'を編集する。
 
@@ -113,7 +119,7 @@ dot edit
 dot config
 ```
 
-### dot unlink
+### <a name="dot_unlink">dot unlink</a>
 
 選択したシンボリックリンクをunlinkし，dotfilesから元ファイルのコピーを持ってくる。
 
@@ -121,7 +127,7 @@ dot config
 dot unlink <link> [<link> <link> ... ]
 ```
 
-### dot clear
+### <a name="dot_clear">dot clear</a>
 
 `$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlinkする
 
@@ -129,7 +135,7 @@ dot unlink <link> [<link> <link> ... ]
 dot clear
 ```
 
-### dot clone
+### <a name="dot_clone">dot clone</a>
 
 gitコマンドを使ってdotfilesを自分のPCにクローンする
 
