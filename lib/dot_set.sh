@@ -148,9 +148,7 @@ dot_set() {
       fi                                      #
     else                                      # else:
       ln -s "${dotfile}" "${orig}"            #   make symbolic link
-      if ${dotset_verbose}; then
-        echo "$(prmpt 2 done)${orig}"
-      fi
+      echo "$(prmpt 2 done)${orig}"
     fi
 
   } #}}}
