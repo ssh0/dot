@@ -24,12 +24,12 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 |[pull](#dot_pull)    |Pull from dotfile repository (by git)                                                                        |`[--self]`                                                                |
 |[list](#dot_list)    |Show the list which files will be managed by dot.                                                            |                                                                          |
 |[cd](#dot_cd)        |Change directory to 'dotdir'.                                                                                |                                                                          |
-|[set](#dot_set)      |Set symbolic links configured in 'dotlink'.                                                                  |`[-i][-v]`                                                                |
-|[add](#dot_add)      |Move the new file to the dotfile dir, make the link, and add the link information to 'dotlink' automatically.|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
-|[edit](#dot_edit)    |Edit 'dotlink'                                                                                               |                                                                          |
+|[set](#dot_set)      |Set symbolic links configured in `dotlink`.                                                                  |`[-i][-v]`                                                                |
+|[add](#dot_add)      |Move the new file to the dotfile dir, make the link, and add the link information to `dotlink` automatically.|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
+|[edit](#dot_edit)    |Edit `dotlink`                                                                                               |                                                                          |
 |[config](#dot_config)|Edit configuration file 'dotrc'                                                                              |                                                                          |
 |[unlink](#dot_unlink)|Unlink the selected symbolic links and copy its original files from the dotfile directory.                   |`link1 [link2 [link3 [...] ] ]`                                           |
-|[clear](#dot_clear)  |Remove the *all* symbolic link written in the dotlink file `$dotlink`.                                       |                                                                          |
+|[clear](#dot_clear)  |Remove the *all* symbolic link written in the dotlink file `dotlink`.                                       |                                                                          |
 |[clone](#dot_clone)  |Clone dotfile repository on your computer with git.                                                          |`[/directory/to/clone/]`                                                  |
 
 **option**
@@ -43,9 +43,7 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 
 Pull from remote dotfile repository (by git)
 
-```
-dot pull
-```
+![dot pull](./img/dot_pull.png)
 
 With `--self` option, then git pull for `dot` and it will be up to date.
 
@@ -57,21 +55,9 @@ dot pull --self
 
 Show the list which files be managed by dot.
 
-```
-$ dot list
-[✔] /home/username/.Xmodmap
-[✔] /home/username/.Xdefaults
-[✘] /home/username/.Xresources
+![dot list](./img/dot_list.png)
 
-. . .
-
-
-[✔] /home/username/.profile
-[✘] /home/username/.netrc
-[✔] /home/username/.gitconfig
-```
-
-* "✘" means this file is not managed by dot now but is written in dotlink.
+* "✘" means this file is not managed by dot now but is written in `dotlink`.
 * "✔" means this file is managed by dot now.
 
 ### <a name="dot_cd">dot cd</a>
@@ -80,28 +66,29 @@ Change directory to `dotdir`.
 
 ### <a name="dot_set">dot set</a>
 
-Set symbolic links configured in 'dotlink'.
+Set symbolic links configured in `dotlink`.
 
-If you have your file already, you can choose the operation interactively:  
-show diff, edit these files, overwrite, make-backup or do-nothing.
+If you have your file already, you can choose the operation interactively:
+
+* show diff
+* edit file
+* replace
+* replace and make backu
+* do nothing
 
 With option "-i", this script runs without interaction mode and with "-v", this script shows verbose messages.
 
-```
-dot set [-i][-v]
-```
+![dot set](./img/dot_set.png)
 
 ### <a name="dot_add">dot add</a>
 
-Move the new file to the dotfile dir, make the link, and add the link information to 'dotlink' automatically.
+Move the new file to the dotfile dir, make the link, and add the link information to `dotlink` automatically.
 
-```
-dot add some_file [~/.dotfiles/path/to/the/file]
-```
+![dot add](./img/dot_add.png)
 
 ### <a name="dot_edit">dot edit</a>
 
-Edit 'dotlink'
+Edit `dotlink`
 
 ```
 dot edit
@@ -119,13 +106,11 @@ dot config
 
 Unlink the selected symbolic links and copy its original files from the dotfile directory.
 
-```
-dot unlink <link> [<link> <link> ... ]
-```
+![dot unlink](./img/dot_unlink.png)
 
 ### <a name="dot_clear">dot clear</a>
 
-Remove the *all* symbolic link written in the dotlink file `$dotlink`.
+Remove the *all* symbolic link written in the dotlink file `dotlink`.
 
 ```
 dot clear
@@ -175,10 +160,9 @@ dot add newfile
 Then the script asks you like:
 
 ```
-Suggestion:
-dot add -m '' newfile /home/username/.dotfiles/newfile
-
-Continue? [y/N]'
+[suggestion]
+    dot add -m '' newfile /home/username/.dotfiles/newfile
+Continue? [y/N]> 
 ```
 
 Type `y` and `Enter`, then move `newfile` to `/home/username/.dotfiles/newfile`

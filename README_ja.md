@@ -24,10 +24,10 @@
 |[cd](#dot_cd)        |ディレクトリ`dotdir`に移動                                                         |                                                                          |
 |[set](#dot_set)      |`dotlink`に書かれたシンボリックリンクを貼る                                        |`[-i][-v]`                                                                |
 |[add](#dot_add)      |新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
-|[edit](#dot_edit)    |'dotlink'を手動で編集                                                              |                                                                          |
-|[config](#dot_config)|設定ファイル'dotrc'を編集                                                          |                                                                          |
+|[edit](#dot_edit)    |`dotlink`を手動で編集                                                              |                                                                          |
+|[config](#dot_config)|設定ファイル`dotrc`を編集                                                          |                                                                          |
 |[unlink](#dot_unlink)|選択したシンボリックリンクをunlinkし，dotfilesから元ファイルをコピー               |`link1 [link2 [link3 [...] ] ]`                                           |
-|[clear](#dot_clear)  |`$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlink               |                                                                          |
+|[clear](#dot_clear)  |`dotlink`ファイルに記載された**すべての**シンボリックリンクをunlink               |                                                                          |
 |[clone](#dot_clone)  |gitコマンドを使ってdotfilesを自分のPCにクローン                                    |`[/directory/to/clone/]`                                                  |
 
 **オプション**
@@ -39,10 +39,9 @@
 
 ### <a name="dot_pull">dot pull</a>
 
-dotfiesをpullしてくる(by git).  
-```bash
-dot pull
-```
+dotfiesをpullしてくる(by git)。
+
+![dot pull](./img/dot_pull.png)
 
 `--self`オプションをつけると，`dot`自身を最新の状態に更新します。
 
@@ -54,21 +53,9 @@ dot pull --self
 
 `dot`で管理するファイルを一覧表示する。
 
-```
-$ dot list
-[✔] /home/username/.Xmodmap
-[✔] /home/username/.Xdefaults
-[✘] /home/username/.Xresources
+![dot list](./img/dot_list.png)
 
-. . .
-
-
-[✔] /home/username/.profile
-[✘] /home/username/.netrc
-[✔] /home/username/.gitconfig
-```
-
-* "✘" は現在dotで管理されていないがdotlinkに対応が書かれているものを表す。
+* "✘" は現在dotで管理されていないが`dotlink`に対応が書かれているものを表す。
 * "✔" はdotで管理されているものを表す。
 
 ### <a name="dot_cd">dot cd</a>
@@ -81,31 +68,27 @@ $ dot list
 
 もし既にファイルが存在する場合には,
 
-1. 差分表示
-2. 2ファイルを編集
-3. 既存ファイルに上書き
-4. バックアップを作成して上書き
-5. 何もしない
+* 差分表示
+* 2ファイルを編集
+* 既存ファイルに上書き
+* バックアップを作成して上書き
+* 何もしない
 
 の操作を選ぶことができます。
 
 オプション`-i`をつけると非対話的になり，もし競合が起こった際は何もしません。 `-v`オプションをつけると，より冗長なメッセージを表示します。
 
-```
-dot set [-i][-v]
-```
+![dot set](./img/dot_set.png)
 
 ### <a name="dot_add">dot add</a>
 
 新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記
 
-```
-dot add some_file [~/.dotfiles/path/to/the/file]
-```
+![dot add](./img/dot_add.png)
 
 ### <a name="dot_edit">dot edit</a>
 
-'dotlink'を手動で編集する。
+`dotlink`を手動で編集する。
 
 ```
 dot edit
@@ -113,7 +96,7 @@ dot edit
 
 ### <a name="dot_config">dot config</a>
 
-設定ファイル'dotrc'を編集する。
+設定ファイル`dotrc`を編集する。
 
 ```
 dot config
@@ -123,13 +106,11 @@ dot config
 
 選択したシンボリックリンクをunlinkし，dotfilesから元ファイルのコピーを持ってくる。
 
-```
-dot unlink <link> [<link> <link> ... ]
-```
+![dot unlink](./img/dot_unlink.png)
 
 ### <a name="dot_clear">dot clear</a>
 
-`$dotlink`ファイルに記載された**すべての**シンボリックリンクをunlinkする
+`dotlink`ファイルに記載された**すべての**シンボリックリンクをunlinkする
 
 ```
 dot clear
@@ -183,10 +164,9 @@ dot add newfile
 こうすると，スクリプト側から:
 
 ```
-Suggestion:
-dot add -m '' newfile /home/username/.dotfiles/newfile
-
-Continue? [y/N]'
+[suggestion]
+    dot add -m '' newfile /home/username/.dotfiles/newfile
+Continue? [y/N]> 
 ```
 
 のように訊かれるので`y`を押して`Enter`キーを押すと，`newfile`が`/home/username/.dotfiles/newfile`に移動され，`newfile`のあった場所にシンボリックリンクが貼られ，この対応関係が`dotlink`に追記されます。
