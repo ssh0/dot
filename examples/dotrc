@@ -3,40 +3,40 @@
 # If you want to know all the description, see README.
 
 # You can change the dotfiles to clone
-# clone_repository='https://github.com/username/dotfiles.git'
+clone_repository='https://github.com/username/dotfiles.git'
 
 # Set the directory that the script regard as dotfiles directory.
-# dotdir="$HOME/.dotfiles"
+#dotdir="$HOME/.dotfiles"
 
 # Set the path to your dotlink which describes the correspondence relation.
-# dotlink="$dotdir/dotlink"
-# linkfiles=("${dotlink}")
+#dotlink="$dotdir/dotlink"
+#linkfiles=("${dotlink}")
 
 # If you want to load additional local setting, add its path to $linkfiles.
 # (But it doesn't affect to `dot edit` and `dot add` command, so you should
 # edit these files manually.)
-# dotlinklocal="$HOME/.config/dot/dotlink.local"
-# linkfiles=("${dotlink}" "${dotlinklocal}")
+#dotlinklocal="$HOME/.config/dot/dotlink.local"
+#linkfiles=("${dotlink}" "${dotlinklocal}")
 
 # Options
 
 # You can choose the action interactively if the file to link is already exist.
 # If you set it false, just show message but do nothing (provided option -i).
-# dotset_interactive=true
+#dotset_interactive=true
 
 # Toggle the verbosity for output of `dot set` (option -v).
-# dotset_verbose=false
+#dotset_verbose=false
 
 # You can choose diff command as you want.
-# diffcmd="colordiff -u"
+#diffcmd="colordiff -u"
 
 # Command to edit two files with diff highlights.
-# edit2filecmd='vimdiff'
+#edit2filecmd='vimdiff'
 
 # Set your favorite editor.
 # (setting priority: this option > $EDITOR (default) > xdg-open)
-# dot_edit_default_editor='vim +'
+#dot_edit_default_editor='vim +'
 
 # If you want load a machine specific configuration, source that file here.
 # `dotbundle file` source the file if it exists.
-# dotbundle "$HOME/.config/dot/dotrc.local"
+#dotbundle "$HOME/.config/dot/dotrc.local"
