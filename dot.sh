@@ -1,7 +1,7 @@
 # vim: ft=zsh
 # dot - dotfiles management framework
 
-# Version:    1.2
+# Version:    1.2.1
 # Repository: https://github.com/ssh0/dotfiles.git
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
