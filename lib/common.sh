@@ -86,30 +86,33 @@ path_without_dotdir() { #{{{
 
 __confirm() { #{{{
   # __confirm [ y | n ]
-  local default="$1"
-  local yn confirm
-  if [ "${default}" = "y" ]; then
+  local default=1
+  local yn confirm ret
+  if [ "$1" = "y" ]; then
     yn="Y/n"
-    default=0
-  elif [ "${default}" = "n" ]; then
+    ret=0
+  elif [ "$1" = "n" ]; then
     yn="y/N"
-    default=1
+    ret=1
   else
     yn="y/n"
+    ret=$default
   fi
 
-  echo -n "[$yn]> "
-  read confirm
-  if [ "${confirm}" = "" ]; then
-    return $default
-  elif [ "${confirm}" = "y" ]; then
-    return 0
-  elif [ "${confirm}" = "n" ]; then
-    return 1
-  else
-    echo "Answer with 'y' or 'n'. Aborted."
-    return 1
-  fi
+  while echo -n "[$yn]> "; read confirm; do
+    if [ "${confirm}" = "" ]; then
+      break
+    elif [ "${confirm}" = "y" ]; then
+      ret=0
+      break
+    elif [ "${confirm}" = "n" ]; then
+      ret=1
+      break
+    else
+      echo "Please answer with 'y' or 'n'."
+    fi
+  done
+  return $ret
 
 } #}}}
 
