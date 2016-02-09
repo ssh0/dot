@@ -15,56 +15,32 @@ dot_main() {
 
   dot_usage() { #{{{
     cat << EOF
+dot - manages symbolic links for dotfiles.
 
-NAME
-      dot - manages symbolic links for dotfiles.
+USAGE:  dot [OPTIONS] <COMMANDS> [<args>]
 
-USAGE
-      dot [-h|--help][-c|--config <configfile>] <command> [<args>]
+COMMANDS:
+      clone      Clone dotfile repository on your computer with git.
+      pull       Pull the directory from the remote dotfiles repository.
+      cd         Change directory to 'dotdir'.
+      list       Show the list which files will be managed by dot.
+      set        Set the symbolic links interactively.
+      add        Move the file to the dotfiles directory and make its symbolic link to that place.
+      edit       Edit dotlink file.
+      unlink     Unlink the selected symbolic links and copy from its original.
+      clear      Remove the all symbolic links in 'dotlink'.
+      config     Edit (or create if it doesn't exist) rcfile 'dotrc'.
 
-COMMAND
-      clone     Clone dotfile repository on your computer with git.
-
-      pull      Pull remote dotfile repository (by git).
-
-      cd        Change directory to 'dotdir'.
-
-      list      Show the list which files will be managed by dot.
-
-      set       Make symbolic link interactively.
-                This command sets symbolic links configured in '$dotlink'.
-
-      add       Move the file to the dotfile dir and make an symbolic link.
-
-      edit      Edit dotlink file '$dotlink'.
-
-      unlink    Unlink the selected symbolic link and copy its original file
-                from the dotfile repository.
-
-      clear     Remove the all symbolic link in the config file '$dotlink'.
-
-      config    Edit (or create) rcfile '$dotrc'.
-
-OPTION
-      -h,--help 
-                Show this help message.
+OPTIONS:
+      -h,--help  Show this help message.
+      -H,--help-all
+                 Show man page.
       -c,--config <configfile>
-                Specify the configuration file to overload.
+                 Specify the configuration file to load.
+                 default: ''
 
-COMMAND OPTIONS
-      clone [<dir>]
-          Clone \$DOT_REPO onto the specified direction.
-          default: ~/.dotfiles
-
-      pull [--self]
-          With --self option, update this script itself.
-
-      set [-i][-v]
-          -i: No interaction mode(skip all conflicts and do nothing).
-          -v: Print verbose messages.
-
-      add [-m <message>] original_file [dotfile_direction]
-          -m <message>: Add your message for dotlink file.
+If you want to know more about dot,
+    dot --help-all
 
 EOF
 
@@ -77,13 +53,14 @@ EOF
     shift
     case "$arg" in
       "--help") set -- "$@" "-h" ;;
+      "--help-all") set -- "$@" "-H" ;;
       "--config") set -- "$@" "-c" ;;
       *)        set -- "$@" "$arg" ;;
     esac
   done
 
   OPTIND=1
-  while getopts "c:h" OPT
+  while getopts "c:hH" OPT
   do
     case $OPT in
       "c")
@@ -91,6 +68,10 @@ EOF
         ;;
       "h")
         dot_usage
+        return 0
+        ;;
+      "H")
+        man "${DOT_SCRIPT_ROOTDIR}/doc/dot.1"
         return 0
         ;;
       * )
