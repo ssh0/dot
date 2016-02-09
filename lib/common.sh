@@ -4,7 +4,7 @@
 
 local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
 local dotset_interactive dotset_verbose diffcmd edit2filecmd
-local dot_edit_default_editor dotrc columns hrule tp_bold tp_reset
+local dot_edit_default_editor columns hrule tp_bold tp_reset
 
 # --------------------------------------------------------------------------}}}
 # Default settings                                                          {{{
@@ -43,7 +43,7 @@ dot_edit_default_editor=''
 
 dotbundle() {
   if [ -e "$1" ]; then
-      source "$1"
+    source "$1"
   fi
 }
 
