@@ -20,21 +20,21 @@ default: help
 help:
 	@echo 'Help message'
 	@echo ''
-	@echo 'make:                   Do nothing and show help message.'
-	@echo 'make options:           Show some options for installation.'
-	@echo 'make install:           Install $(NAME).'
-	@echo 'make copy-config:       Copy default configuration to $(DOTDIR).'
-	@echo 'make copy-local-config: Copy local configuration template to $(USERCONFDIR).'
-	@echo 'make uninstall:         Uninstall $(NAME).'
-	@echo 'make man:               Compile the manpage with "pod2man".'
+	@echo 'make                    Do nothing and show help message.'
+	@echo 'make options            Show some options for installation.'
+	@echo 'make install            Install $(NAME).'
+	@echo 'make copy-config        Copy default configuration to $(USERCONFDIR).'
+	@echo 'make copy-local-config  Copy local configuration template to $(USERCONFDIR).'
+	@echo 'make uninstall          Uninstall $(NAME).'
+	@echo 'make man                Compile the manpage with "pod2man".'
 
 options:
 	@echo 'Options'
 	@echo
-	@echo 'INSTALLDIR = $(INSTALLDIR)'
-	@echo 'MANPREFIX = $(MANPREFIX)'
-	@echo 'DOCDIR = $(DOCDIR)'
-	@echo 'DOTDIR = $(DOTDIR)'
+	@echo 'INSTALLDIR  = $(INSTALLDIR)'
+	@echo 'MANPREFIX   = $(MANPREFIX)'
+	@echo 'DOCDIR      = $(DOCDIR)'
+	@echo 'DOTDIR      = $(DOTDIR)'
 	@echo 'USERCONFDIR = $(USERCONFDIR)'
 
 install:
@@ -50,10 +50,10 @@ install:
 	ln -sf $(CURDIR)/dot.sh $(INSTALLDIR)/bin/dot
 
 copy-config:
-	@echo 'Copy the default configuration files to user dotfiles directory.'
+	@echo 'Copy the default configuration files to user config directory.'
 	@echo
-	install -d $(DOTDIR)
-	cp -i examples/dotrc examples/dotlink --target-directory=$(DOTDIR)
+	install -d $(USERCONFDIR)
+	cp -i examples/dotrc --target-directory=$(USERCONFDIR)
 
 copy-local-config:
 	@echo 'Copy the default local configuration files to user config directory.'
