@@ -36,7 +36,6 @@ dot_set() {
     local orig="$1"
     local dotfile="$2"
     local linkto="$(readlink "${orig}")"
-    local yn
 
     # if the link has already be set: do nothing
     if [ "${linkto}" = "${dotfile}" ]; then
@@ -49,12 +48,12 @@ dot_set() {
 
     ${dotset_interactive} || return 0
 
-    echo -n "  $(prmpt 3 try)"
-    echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
     echo -n "  $(prmpt 2 now)"
     echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
-    echo "Unlink and re-link for $(bd_ ${orig})? "
-    if __confirm; then
+    echo -n "  $(prmpt 3 try)"
+    echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
+    echo "Unlink and re-link for $(bd_ ${orig}) ? "
+    if __confirm n; then
       unlink "${orig}"
       ln -s "${dotfile}" "${orig}"
       echo "$(prmpt 2 done)${orig}"
