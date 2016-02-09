@@ -4,7 +4,9 @@ _dot() {
   local context curcontext="$curcontext" state line
   _arguments -C \
     '1: :->cmds' \
-    '-h[Show this help message.]' \
+    {-h,--help}'[Show help message.]: :' \
+    {-H,--help-all}'[Show manpage.]: :' \
+    {-c,--config}'[Specify the configuration to load]:specify configuration file:_files' \
     '*::arg:->args' \
     && ret=0
 
@@ -12,15 +14,15 @@ _dot() {
     cmds)
       _values "dot commands"\
         "clone[Clone dotfile repository on your computer with git.]" \
-        "pull[Pull remote dotfile repository (by git).]" \
+        "pull[Pull the directory from the remote dotfiles repository.]" \
         "cd[Change directory to \$dotdir.]" \
         "list[Show the list which files will be managed by dot.]" \
-        "set[Make symbolic link interactively.]" \
-        "add[Move the file to the dotfile dir and make a symbolic link.]" \
-        "edit[Edit \$dotlink.]" \
-        "unlink[Unlink the selected symbolic link and copy its original file from the dotfile repository.]" \
-        "clear[Remove the all symbolic link in the config file \$dotlink.]" \
-        "config[Edit (or create) rcfile \$dotrc.]" \
+        "set[Set the symbolic links interactively.]" \
+        "add[Move the file to the dotfiles directory and make its symbolic link to that place.]" \
+        "edit[Edit \$dotlink file.]" \
+        "unlink[Unlink the selected symbolic links and copy from its original.]" \
+        "clear[Remove the all symbolic links in \$dotlink.]" \
+        "config[Edit (or create if it doesn't exist) rcfile \$dotrc.]" \
         && ret=0
       ;;
     args)

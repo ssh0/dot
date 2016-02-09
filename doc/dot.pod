@@ -27,11 +27,11 @@ Script is written in bash, and very configurable.
 
 =item B<clone>
 
-Clone ssh0's dotfile repository on your computer.
+Clone dotfile repository on your computer with git.
 
 =item B<pull>
 
-Pull remote dotfile repository (by git).
+Pull the repository from the remote dotfiles repository.
 
 =item B<cd>
 
@@ -43,11 +43,11 @@ Show the list which files will be managed by dot.
 
 =item B<set>
 
-Make symbolic link interactively. This command sets symbolic links configured in F<~/.config/dot/dotlink>.
+Set the symbolic links interactively. This command sets symbolic links configured in F<~/.config/dot/dotlink>.
 
 =item B<add>
 
-Move the file to the dotfile dir and make an symbolic link.
+Move the file to the dotfile dir and make its symbolic link to that place.
 
 =item B<edit>
 
@@ -55,15 +55,15 @@ Edit dotlink file F<~/.config/dot/dotlink>.
 
 =item B<unlink>
 
-Unlink the selected symbolic link and copy its original file from the dotfile repository.
+Unlink the selected symbolic links and copy from its original files in the dotfiles repository.
 
 =item B<clear>
 
-Remove the all symbolic link in the config file F<~/.config/dot/dotlink>.
+Remove the all symbolic links in F<~/.config/dot/dotlink>.
 
 =item B<config>
 
-Edit (or create) rcfile F<~/.config/dot/dotrc>.
+Edit (or create if the file doesn't exist) rcfile F<~/.config/dot/dotrc>.
 
 =back
 
@@ -74,7 +74,11 @@ Edit (or create) rcfile F<~/.config/dot/dotrc>.
 
 =item B<-h>, B<--help>
 
-Show this help message.
+Show the help message.
+
+=item B<-H>, B<--help-all>
+
+Show man page.
 
 =item B<-c> I<configfile>
 
@@ -93,7 +97,7 @@ Clone I<clone_repository> onto the specified direction. (default: I<~/.dotfiles>
 
 =item B<pull> [B<--self>]
 
-With --self option, update this script itself.
+With --self option, update B<dot> itself.
 
 =item B<set>
 
@@ -115,7 +119,7 @@ Print verbose messages.
 
 =item B<-m> I<message>
 
-Add your message for dotlink file.
+Add your comment for dotlink file.
 
 =back
 
@@ -142,7 +146,7 @@ Text file to save symbolic links information (default: I<DOT_DIR/dotlink>)
 
 =head1 CONFIGURATION
 
-Configuration file is B<DOT_DIR/dotrc> and symbolic information is in B<DOT_DIR/dotlink>.
+Configuration file is B<$HOME/.config/dot/dotrc> and symbolic information is in B<$DOT_DIR/dotlink>.
 
 =head1 AUTHOR
 

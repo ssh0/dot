@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "DOT 1"
-.TH DOT 1 "dot-1.2" "01/21/2016" "dot manual"
+.TH DOT 1 "dot-1.2.1" "02/09/2016" "dot manual"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -152,10 +152,10 @@ Script is written in bash, and very configurable.
 .IX Header "COMMANDS"
 .IP "\fBclone\fR" 10
 .IX Item "clone"
-Clone ssh0's dotfile repository on your computer.
+Clone dotfile repository on your computer with git.
 .IP "\fBpull\fR" 10
 .IX Item "pull"
-Pull remote dotfile repository (by git).
+Pull the repository from the remote dotfiles repository.
 .IP "\fBcd\fR" 10
 .IX Item "cd"
 Change directory to \fIdotdir\fR.
@@ -164,27 +164,30 @@ Change directory to \fIdotdir\fR.
 Show the list which files will be managed by dot.
 .IP "\fBset\fR" 10
 .IX Item "set"
-Make symbolic link interactively. This command sets symbolic links configured in \fI~/.config/dot/dotlink\fR.
+Set the symbolic links interactively. This command sets symbolic links configured in \fI~/.config/dot/dotlink\fR.
 .IP "\fBadd\fR" 10
 .IX Item "add"
-Move the file to the dotfile dir and make an symbolic link.
+Move the file to the dotfile dir and make its symbolic link to that place.
 .IP "\fBedit\fR" 10
 .IX Item "edit"
 Edit dotlink file \fI~/.config/dot/dotlink\fR.
 .IP "\fBunlink\fR" 10
 .IX Item "unlink"
-Unlink the selected symbolic link and copy its original file from the dotfile repository.
+Unlink the selected symbolic links and copy from its original files in the dotfiles repository.
 .IP "\fBclear\fR" 10
 .IX Item "clear"
-Remove the all symbolic link in the config file \fI~/.config/dot/dotlink\fR.
+Remove the all symbolic links in \fI~/.config/dot/dotlink\fR.
 .IP "\fBconfig\fR" 10
 .IX Item "config"
-Edit (or create) rcfile \fI~/.config/dot/dotrc\fR.
+Edit (or create if the file doesn't exist) rcfile \fI~/.config/dot/dotrc\fR.
 .SH "OPTION"
 .IX Header "OPTION"
 .IP "\fB\-h\fR, \fB\-\-help\fR" 10
 .IX Item "-h, --help"
-Show this help message.
+Show the help message.
+.IP "\fB\-H\fR, \fB\-\-help\-all\fR" 10
+.IX Item "-H, --help-all"
+Show man page.
 .IP "\fB\-c\fR \fIconfigfile\fR" 10
 .IX Item "-c configfile"
 Specify configuration file to overload.
@@ -195,7 +198,7 @@ Specify configuration file to overload.
 Clone \fIclone_repository\fR onto the specified direction. (default: \fI~/.dotfiles\fR)
 .IP "\fBpull\fR [\fB\-\-self\fR]" 4
 .IX Item "pull [--self]"
-With \-\-self option, update this script itself.
+With \-\-self option, update \fBdot\fR itself.
 .IP "\fBset\fR" 4
 .IX Item "set"
 .RS 4
@@ -217,7 +220,7 @@ Print verbose messages.
 .IP "\fB\-m\fR \fImessage\fR" 12
 .IX Item "-m message"
 .PD
-Add your message for dotlink file.
+Add your comment for dotlink file.
 .RE
 .RS 4
 .RE
@@ -234,7 +237,7 @@ Directory for dotfiles (default: \fI\f(CI$HOME\fI/.dotfiles\fR)
 Text file to save symbolic links information (default: \fIDOT_DIR/dotlink\fR)
 .SH "CONFIGURATION"
 .IX Header "CONFIGURATION"
-Configuration file is \fBDOT_DIR/dotrc\fR and symbolic information is in \fBDOT_DIR/dotlink\fR.
+Configuration file is \fB\f(CB$HOME\fB/.config/dot/dotrc\fR and symbolic information is in \fB\f(CB$DOT_DIR\fB/dotlink\fR.
 .SH "AUTHOR"
 .IX Header "AUTHOR"
 ssh0 (Shotaro Fujimoto <https://github.com/ssh0>)
