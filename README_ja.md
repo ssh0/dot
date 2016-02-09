@@ -1,6 +1,6 @@
 [English](./README.md)
 
-# dot v1.2
+# dot v1.2.1
 
 `dot`はシェルスクリプトで書かれたdotfiles管理フレームワークです。
 
@@ -263,7 +263,7 @@ export DOT_COMMAND=DOOOOOOOOOOOOT
 dot config
 ```
 
-で編集することができ,また設定ファイルが存在しなければ,デフォルトの設定ファイルが`$DOT_DIR/dotrc`にコピーされます。
+で編集することができ,また設定ファイルが存在しなければ,デフォルトの設定ファイルが`$HOME/.config/dot/dotrc`にコピーされます。
 
 ### dotlinkファイルを編集する
 

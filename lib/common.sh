@@ -48,7 +48,7 @@ dotbundle() {
 }
 
 # path to the config file
-dotrc="${dotrc:-$dotdir/dotrc}"
+dotrc="${dotrc:-"$HOME/.config/dot/dotrc"}"
 dotbundle "${dotrc}"
 
 # --------------------------------------------------------------------------}}}

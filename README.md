@@ -1,6 +1,6 @@
 [日本語](./README_ja.md)
 
-# dot v1.2
+# dot v1.2.1
 
 dotfiles management framework with shell (bash, zsh)
 
@@ -253,7 +253,7 @@ then the command `dot` is no longer the name of this script.
 dot config 
 ```
 
-will edit `$DOT_DIR/dotrc`(if it doesn't exist, copy the template one).
+will edit `$HOME/.config/dot/dotrc`(if it doesn't exist, copy the template one).
 
 ### Edit your dotlink manually
 
