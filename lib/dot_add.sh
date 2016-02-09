@@ -97,8 +97,8 @@ dot_add() {
     fi
 
     echo "$(prmpt 1 error)$(bd_ ${1%/*}) doesn't exist."
-    echo -n "make directory $(bd_ ${1%/*})? "
-    if __confirm; then
+    echo -n "make directory $(bd_ ${1%/*}) ? "
+    if __confirm y; then
       mkdir -p "${1%/*}"
       return 0
     else
