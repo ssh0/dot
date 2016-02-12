@@ -37,7 +37,7 @@ OPTIONS:
                  Show man page.
       -c,--config <configfile>
                  Specify the configuration file to load.
-                 default: ''
+                 default: '\$HOME/.config/dotrc'
 
 If you want to know more about dot,
     dot --help-all

@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "DOT 1"
-.TH DOT 1 "dot-1.2.1" "02/09/2016" "dot manual"
+.TH DOT 1 "dot-1.2.1" "02/12/2016" "dot manual"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -164,22 +164,22 @@ Change directory to \fIdotdir\fR.
 Show the list which files will be managed by dot.
 .IP "\fBset\fR" 10
 .IX Item "set"
-Set the symbolic links interactively. This command sets symbolic links configured in \fI~/.config/dot/dotlink\fR.
+Set the symbolic links interactively. This command sets symbolic links configured in \fIdotlink\fR.
 .IP "\fBadd\fR" 10
 .IX Item "add"
 Move the file to the dotfile dir and make its symbolic link to that place.
 .IP "\fBedit\fR" 10
 .IX Item "edit"
-Edit dotlink file \fI~/.config/dot/dotlink\fR.
+Edit dotlink file \fIdotlink\fR.
 .IP "\fBunlink\fR" 10
 .IX Item "unlink"
 Unlink the selected symbolic links and copy from its original files in the dotfiles repository.
 .IP "\fBclear\fR" 10
 .IX Item "clear"
-Remove the all symbolic links in \fI~/.config/dot/dotlink\fR.
+Remove the all symbolic links in \fIdotlink\fR.
 .IP "\fBconfig\fR" 10
 .IX Item "config"
-Edit (or create if the file doesn't exist) rcfile \fI~/.config/dot/dotrc\fR.
+Edit (or create if the file doesn't exist) rcfile \fIdotrc\fR.
 .SH "OPTION"
 .IX Header "OPTION"
 .IP "\fB\-h\fR, \fB\-\-help\fR" 10
@@ -190,7 +190,7 @@ Show the help message.
 Show man page.
 .IP "\fB\-c\fR \fIconfigfile\fR" 10
 .IX Item "-c configfile"
-Specify configuration file to overload.
+Specify configuration file to overload. (default: \fI~/.config/dot/dotrc\fR)
 .SH "COMMAND OPTIONS"
 .IX Header "COMMAND OPTIONS"
 .IP "\fBclone\fR [\fIdir\fR]" 4
@@ -234,7 +234,7 @@ Dotfiles repository to manage with this program. You may should change this envi
 Directory for dotfiles (default: \fI\f(CI$HOME\fI/.dotfiles\fR)
 .IP "\fB\s-1DOT_LINK\s0\fR" 10
 .IX Item "DOT_LINK"
-Text file to save symbolic links information (default: \fIDOT_DIR/dotlink\fR)
+Text file to save symbolic links information (default: \fI\f(CI$DOT_DIR\fI/dotlink\fR)
 .SH "CONFIGURATION"
 .IX Header "CONFIGURATION"
 Configuration file is \fB\f(CB$HOME\fB/.config/dot/dotrc\fR and symbolic information is in \fB\f(CB$DOT_DIR\fB/dotlink\fR.

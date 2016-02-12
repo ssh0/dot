@@ -43,7 +43,7 @@ Show the list which files will be managed by dot.
 
 =item B<set>
 
-Set the symbolic links interactively. This command sets symbolic links configured in F<~/.config/dot/dotlink>.
+Set the symbolic links interactively. This command sets symbolic links configured in F<dotlink>.
 
 =item B<add>
 
@@ -51,7 +51,7 @@ Move the file to the dotfile dir and make its symbolic link to that place.
 
 =item B<edit>
 
-Edit dotlink file F<~/.config/dot/dotlink>.
+Edit dotlink file F<dotlink>.
 
 =item B<unlink>
 
@@ -59,11 +59,11 @@ Unlink the selected symbolic links and copy from its original files in the dotfi
 
 =item B<clear>
 
-Remove the all symbolic links in F<~/.config/dot/dotlink>.
+Remove the all symbolic links in F<dotlink>.
 
 =item B<config>
 
-Edit (or create if the file doesn't exist) rcfile F<~/.config/dot/dotrc>.
+Edit (or create if the file doesn't exist) rcfile F<dotrc>.
 
 =back
 
@@ -82,7 +82,7 @@ Show man page.
 
 =item B<-c> I<configfile>
 
-Specify configuration file to overload.
+Specify configuration file to overload. (default: I<~/.config/dot/dotrc>)
 
 =back
 
@@ -140,7 +140,7 @@ Directory for dotfiles (default: I<$HOME/.dotfiles>)
 
 =item B<DOT_LINK>
 
-Text file to save symbolic links information (default: I<DOT_DIR/dotlink>)
+Text file to save symbolic links information (default: I<$DOT_DIR/dotlink>)
 
 =back
 
