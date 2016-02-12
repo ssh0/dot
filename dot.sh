@@ -44,7 +44,6 @@ If you want to know more about dot,
 
 EOF
 
-  unset -f $0
   } #}}}
 
   # Option handling {{{
@@ -68,14 +67,17 @@ EOF
         ;;
       "h")
         dot_usage
+        unset -f dot_usage
         return 0
         ;;
       "H")
         man "${DOT_SCRIPT_ROOTDIR}/doc/dot.1"
+        unset -f dot_usage
         return 0
         ;;
       * )
         dot_usage
+        unset -f dot_usage
         return 1
         ;;
     esac
