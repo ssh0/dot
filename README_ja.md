@@ -265,6 +265,58 @@ dot config
 
 で編集することができ,また設定ファイルが存在しなければ,デフォルトの設定ファイルが`$HOME/.config/dot/dotrc`にコピーされます。
 
+### 読み込む設定ファイルを指定する
+
+オプション`-c, --config`を使えば，指定したファイルを設定ファイルとして読み込んでコマンドを実行できます。
+
+**使用例**
+
+* 各アプリケーション毎の設定ファイルを違うリポジトリで管理している場合
+* 他の人のdotfilesの一部を引用してくる場合
+* など ...
+
+具体的に他の人のdotfilesを使用する場合，以下のようなファイルを作成しておきます(このファイル自体を自分のdotfilesリポジトリ内で管理しておくと便利かもしれません)。
+
+ファイル名: `~/.config/dot/dotrc-someone`
+
+```bash
+clone_repository=https://github.com/someone/dotfiles.git
+dotdir=$HOME/.dotfiles-someone
+dotlink=$HOME/.config/dot/dotlink-someone
+linkfiles=("$HOME/.config/dot/dotlink-someone")
+```
+
+`bashrc`や`zshrc`などに以下のように書いておき，`dot-someone`コマンドを実行すると上に書いた設定ファイルが読み込まれるようにしておくと便利です。
+
+```bash
+alias dot-someone="dot -c $HOME/.config/dot/dotrc-someone"
+```
+
+あとは通常の`dot`コマンドと同じように使うことができます。
+
+`dot-someone edit`を実行してシンボリックリンクの対応を書き，`dot-someone set`を実行して実際にシンボリックリンクを張ってください。
+
+`set`コマンドや`pull`コマンドなど，すべての設定ファイルをそれぞれ読み込んで実行したい場合もあると思うので，以下のような関数を用意すると便利かもしれません。
+
+```bash
+dotconfigs=("file1" "file2" "file3")
+
+dotall() {
+  for dotconfig in ${dotconfigs[@]}; do
+    dot -c "${dotconfig}" "$@"
+  done
+}
+
+```
+
+zshで補完を有効にするには
+
+```zsh
+compdef dotall=dot_main
+```
+
+の行を追加することを忘れないようにしてください。
+
 ### dotlinkファイルを編集する
 
 `dotlink`ファイルは

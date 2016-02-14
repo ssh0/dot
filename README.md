@@ -255,6 +255,59 @@ dot config
 
 will edit `$HOME/.config/dot/dotrc`(if it doesn't exist, copy the template one).
 
+### Specify the configuration file to load
+
+With `-c, --config` option, you can execute dot command specifing the configuration file to load.
+
+**Usage example**
+
+* If you divide some configuration files for each application to different repositories
+* If you borrow from other people's dotfiles
+* etc.
+
+If you want to borrow other person's dotfiles repository, create a configuration file like below.
+(It is useful that this file will be managed in *your* dotfiles.)
+
+filename: `~/.config/dot/dotrc-someone`
+
+```bash
+clone_repository=https://github.com/someone/dotfiles.git
+dotdir=$HOME/.dotfiles-someone
+dotlink=$HOME/.config/dot/dotlink-someone
+linkfiles=("$HOME/.config/dot/dotlink-someone")
+```
+
+It is useful to define a function in your `bashrc` or `zshrc` like below in order to run the `dot` command with loading the config file above.
+
+```bash
+alias dot-someone="dot -c $HOME/.config/dot/dotrc-someone"
+```
+
+Then, you can use `dot-someone` command in the same way.
+
+Run `dot-someone edit` to write the link relations and execute `dot-someone set` to deploy symbolic links.
+
+It's also helpful that you define a function to run `dot` command loading each dot-config files (especially `set` command or `pull`) like below.
+
+In your `bashrc` or `zshrc`:
+
+```bash
+dotconfigs=("file1" "file2" "file3")
+
+dotall() {
+  for dotconfig in ${dotconfigs[@]}; do
+    dot -c "${dotconfig}" "$@"
+  done
+}
+
+```
+
+In Zsh, to enable completion add the line:
+
+```zsh
+compdef dotall=dot_main
+```
+
 ### Edit your dotlink manually
 
 ```
