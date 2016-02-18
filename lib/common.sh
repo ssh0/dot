@@ -60,7 +60,6 @@ hrule="$( printf '%*s\n' "$columns" '' | tr ' ' - )"
 
 #}}}
 
-
 # tput {{{
 
 tp_bold="$(tput bold)"
@@ -68,21 +67,17 @@ tp_reset="$(tput sgr0)"
 
 #}}}
 
-
 get_fullpath() { #{{{
   echo "$(builtin cd "$(dirname "$1")" && pwd)"/"$(basename "$1")"
 } #}}}
-
 
 path_without_home() { #{{{
   get_fullpath "$1" | sed -ne "${home_pattern}"
 } #}}}
 
-
 path_without_dotdir() { #{{{
   get_fullpath "$1" | sed -ne "${dotdir_pattern}"
 } #}}}
-
 
 __confirm() { #{{{
   # __confirm [ y | n ]
@@ -116,16 +111,13 @@ __confirm() { #{{{
 
 } #}}}
 
-
 prmpt() { #{{{
   echo "${tp_bold}$(tput setaf $1)$2${tp_reset} "
 } #}}}
 
-
 bd_() { #{{{
   echo "${tp_bold}$@${tp_reset}"
 } #}}}
-
 
 cleanup_namespace() { #{{{
   unset -f dotbundle get_fullpath path_without_home path_without_dotdir

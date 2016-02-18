@@ -18,7 +18,6 @@ dot_add() {
     return 1
   fi
 
-
   orig_to_dot() { #{{{
     # mv from original path to dotdir
     local orig dot
@@ -31,7 +30,6 @@ dot_add() {
     # link to orig path from dotfiles
     ln -siv "${dot}" "${orig}"
   } #}}}
-
 
   add_to_dotlink() { #{{{
     local dotfile linkto
@@ -53,7 +51,6 @@ dot_add() {
 
     echo "${dotfile},${linkto}" >> "${dotlink}"
   } #}}}
-
 
   if_islink() { #{{{
     # write to dotlink
@@ -78,7 +75,6 @@ dot_add() {
     done
   } #}}}
 
-
   suggest() { #{{{
     echo "$(prmpt 6 suggestion)"
     echo "    dot add -m '${message}' $1 ${dotdir}/$(path_without_home "$1")"
@@ -87,7 +83,6 @@ dot_add() {
 
     dot_add_main "$1" "${dotdir}/$(path_without_home $1)"
   } #}}}
-
 
   check_dir() { #{{{
     local yn
@@ -106,7 +101,6 @@ dot_add() {
     fi
 
   } #}}}
-
 
   dot_add_main() { #{{{
     # if the first arugument is a symbolic link
@@ -140,7 +134,6 @@ dot_add() {
 
     return 1
   } #}}}
-
 
   dot_add_main "$@"
 

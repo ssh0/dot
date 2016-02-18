@@ -29,7 +29,7 @@ COMMANDS:
       edit       Edit dotlink file.
       unlink     Unlink the selected symbolic links and copy from its original.
       clear      Remove the all symbolic links in 'dotlink'.
-      config     Edit (or create if it doesn't exist) rcfile 'dotrc'.
+      config     Edit (or create if it does not exist) rcfile 'dotrc'.
 
 OPTIONS:
       -h,--help  Show this help message.
