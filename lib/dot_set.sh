@@ -11,7 +11,6 @@ dot_set() {
     esac
   done
 
-
   check_dir() { #{{{
     local orig="$1"
 
@@ -30,7 +29,6 @@ dot_set() {
       echo "Aborted."; return 1
     fi
   } #}}}
-
 
   if_islink() { #{{{
     local orig="$1"
@@ -61,7 +59,6 @@ dot_set() {
 
     return 0
   } #}}}
-
 
   if_exist() { #{{{
     local line
@@ -118,7 +115,6 @@ dot_set() {
     return 0
   } #}}}
 
-
   _dot_set() { #{{{
     local dotfile orig
     # extract environment variables
@@ -151,7 +147,6 @@ dot_set() {
     fi
 
   } #}}}
-
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "Loading ${linkfile} ...")"
