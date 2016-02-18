@@ -1,6 +1,6 @@
 [日本語](./README_ja.md)
 
-# dot v1.2.1
+# dot v1.2.2
 
 dotfiles management framework with shell (bash, zsh)
 
@@ -22,6 +22,7 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 |subcommand           |description                                                                                                  |option or arguments                                                       |
 |---                  |---                                                                                                          |---                                                                       |
 |[pull](#dot_pull)    |Pull from dotfile repository (by git)                                                                        |`[--self]`                                                                |
+|[update](#dot_pull)  |Alias command for 'pull' command                                                                             |`[--self]`                                                                |
 |[list](#dot_list)    |Show the list which files will be managed by dot.                                                            |                                                                          |
 |[cd](#dot_cd)        |Change directory to 'dotdir'.                                                                                |                                                                          |
 |[set](#dot_set)      |Set symbolic links configured in `dotlink`.                                                                  |`[-i][-v]`                                                                |
@@ -39,7 +40,7 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 | -h, --help  |Show help message.                     |         |
 | -c, --config|Specify the configuration file to load.| `dotrc` |
 
-### <a name="dot_pull">dot pull</a>
+### <a name="dot_pull">dot pull (or dot update)</a>
 
 Pull from remote dotfile repository (by git)
 

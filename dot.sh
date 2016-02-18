@@ -2,7 +2,7 @@
 # dot - dotfiles management framework
 
 # Version:    1.2.1
-# Repository: https://github.com/ssh0/dotfiles.git
+# Repository: https://github.com/ssh0/dot
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
 
@@ -22,6 +22,7 @@ USAGE:  dot [OPTIONS] <COMMANDS> [<args>]
 COMMANDS:
       clone      Clone dotfile repository on your computer with git.
       pull       Pull the directory from the remote dotfiles repository.
+      update     Alias command for 'pull' command.
       cd         Change directory to 'dotdir'.
       list       Show the list which files will be managed by dot.
       set        Set the symbolic links interactively.
@@ -97,7 +98,7 @@ EOF
       source "$DOT_SCRIPT_ROOTDIR/lib/dot_clone.sh"
       dot_clone "$@"
       ;;
-    "pull")
+    "pull"|"update")
       shift 1
       source "$DOT_SCRIPT_ROOTDIR/lib/dot_pull.sh"
       dot_pull "$@"

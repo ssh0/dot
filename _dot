@@ -15,6 +15,7 @@ _dot() {
       _values "dot commands"\
         "clone[Clone dotfile repository on your computer with git.]" \
         "pull[Pull the directory from the remote dotfiles repository.]" \
+        "update[Alias command for 'pull' command.]" \
         "cd[Change directory to \$dotdir.]" \
         "list[Show the list which files will be managed by dot.]" \
         "set[Set the symbolic links interactively.]" \
@@ -31,7 +32,7 @@ _dot() {
         "clone"|"unlink")
           _path_files && ret=0
           ;;
-        "pull")
+        "pull"|"update")
           _values "options"\
             '--self[Update dot framework from repository.]'\
             && ret=0

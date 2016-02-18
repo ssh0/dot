@@ -33,6 +33,10 @@ Clone dotfile repository on your computer with git.
 
 Pull the repository from the remote dotfiles repository.
 
+=item B<update>
+
+Alias command for "pull" command.
+
 =item B<cd>
 
 Change directory to F<dotdir>.

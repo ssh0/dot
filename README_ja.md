@@ -1,6 +1,6 @@
 [English](./README.md)
 
-# dot v1.2.1
+# dot v1.2.2
 
 `dot`はシェルスクリプトで書かれたdotfiles管理フレームワークです。
 
@@ -20,6 +20,7 @@
 |サブコマンド名       |説明                                                                               |オプション or 引数                                                        |
 |---                  |---                                                                                |---                                                                       |
 |[pull](#dot_pull)    |dotfiesをpullしてくる(by git).                                                     |`[--self]`                                                                |
+|[update](#dot_pull)  |'pull'コマンドの別名                                                                 |`[--self]`                                                                |
 |[list](#dot_list)    |`dot`で管理するファイルを一覧を表示                                                |                                                                          |
 |[cd](#dot_cd)        |ディレクトリ`dotdir`に移動                                                         |                                                                          |
 |[set](#dot_set)      |`dotlink`に書かれたシンボリックリンクを貼る                                        |`[-i][-v]`                                                                |
@@ -37,7 +38,7 @@
 | -h, --help  |ヘルプを表示              |         |
 | -c, --config|読み込む設定ファイルを指定| `dotrc` |
 
-### <a name="dot_pull">dot pull</a>
+### <a name="dot_pull">dot pull (or dot update)</a>
 
 dotfiesをpullしてくる(by git)。
 
