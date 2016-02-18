@@ -10,11 +10,11 @@ dot_list() {
     dotfile="$(eval echo ${dotfile})"
     orig="$(echo $1 | cut -d, -f2)"
     orig="$(eval echo ${orig})"
-    message="${dotfile}${delimiter}${orig}"
 
     # path completion
     [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
     [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"
+    message="${dotfile}${delimiter}${orig}"
 
     # if dotfile doesn't exist
     if [[ -e "${dotfile}" || -e "${orig}" || -L "${orig}" ]]; then
