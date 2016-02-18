@@ -3,37 +3,33 @@ dot_list() {
   local linkfile l
 
   _dot_list() { #{{{
-    local dotfile orig origdir linkto
+    local dotfile orig origdir linkto message
+    local delimiter=","
     # extract environment variables
-    dotfile="$(eval echo $1)"
-    orig="$(eval echo $2)"
+    dotfile="$(echo $1 | cut -d, -f1)"
+    dotfile="$(eval echo ${dotfile})"
+    orig="$(echo $1 | cut -d, -f2)"
+    orig="$(eval echo ${orig})"
+    message="${dotfile}${delimiter}${orig}"
 
     # path completion
     [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
     [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"
 
     # if dotfile doesn't exist
-    if [ ! -e "${dotfile}" ]; then
-      echo "$(prmpt 1 ✘)${orig}"
-      return 1
-    fi
-
-    if [ ! -e "${orig}" ]; then
-      echo "$(prmpt 1 ✘)${orig}"
-      return 1
-    fi
-
-    if [ ! -L "${orig}" ]; then
-      echo "$(prmpt 1 ✘)${orig}"
+    if [[ -e "${dotfile}" || -e "${orig}" || -L "${orig}" ]]; then
+      :
+    else
+      echo "$(prmpt 1 ✘)${message}"
       return 1
     fi
 
     linkto="$(readlink "${orig}")"
 
     if [ "${linkto}" = "${dotfile}" ]; then
-      echo "$(prmpt 2 ✔)${orig}"
+      echo "$(prmpt 2 ✔)${message}"
     else
-      echo "$(prmpt 1 ✘)${orig}"
+      echo "$(prmpt 1 ✘)${message}"
     fi
     return 0
   } #}}}
@@ -41,7 +37,7 @@ dot_list() {
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "From ${linkfile}")"
     for l in $(grep -Ev '^#|^$' "${linkfile}"); do
-      _dot_list $(echo $l | tr ',' ' ')
+      _dot_list "$l"
     done
   done
 
