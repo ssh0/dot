@@ -118,7 +118,7 @@ __confirm() { #{{{
 
 
 prmpt() { #{{{
-  echo "[${tp_bold}$(tput setaf $1)$2${tp_reset}] "
+  echo "${tp_bold}$(tput setaf $1)$2${tp_reset} "
 } #}}}
 
 
