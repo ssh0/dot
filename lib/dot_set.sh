@@ -150,7 +150,7 @@ dot_set() {
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "Loading ${linkfile} ...")"
-    for l in $(grep -Ev '^#|^$' "${linkfile}"); do
+    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
       _dot_set $(echo $l | tr ',' ' ')
     done
   done

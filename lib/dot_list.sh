@@ -36,7 +36,7 @@ dot_list() {
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "From ${linkfile}")"
-    for l in $(grep -Ev '^#|^$' "${linkfile}"); do
+    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
       _dot_list "$l"
     done
   done
