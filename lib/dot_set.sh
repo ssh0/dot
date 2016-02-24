@@ -89,9 +89,9 @@ dot_set() {
           ;;
         [Ff] )
           if [ -d "${orig}" ]; then
-            rm -r -- "${orig}"
+            rm -rf -- "${orig}"
           else
-            rm -- "${orig}"
+            rm -f -- "${orig}"
           fi
           ln -s "${dotfile}" "${orig}"
           echo "$(prmpt 2 done)${orig}"
