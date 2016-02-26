@@ -20,7 +20,7 @@ dot_set() {
 
     echo "$(prmpt 1 error)$(bd_ ${origdir}) doesn't exist."
 
-    ${dotset_interactive} || return 0
+    ${dotset_interactive} || return 1
 
     echo -n "make directory $(bd_ ${origdir})?"
     if __confirm y; then
