@@ -22,11 +22,11 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 | subcommand            | description                                                                                                   | option or arguments                                                   |
 | ---                   | ---                                                                                                           | ---                                                                   |
 | [pull](#dot_pull)     | Pull from dotfile repository (by git)                                                                         | `[--self]`                                                            |
-| [update](#dot_pull)   | Alias command for 'pull' command                                                                              | `[--self]`                                                            |
 | [list](#dot_list)     | Show the list which files will be managed by dot.                                                             |                                                                       |
 | [check](#dot_check)   | Check the files are correctly linked to the right places.                                                     |                                                                       |
 | [cd](#dot_cd)         | Change directory to 'dotdir'.                                                                                 |                                                                       |
-| [set](#dot_set)       | Set symbolic links configured in `dotlink`.                                                                   | `[-i][-v]`                                                            |
+| [set](#dot_set)       | Set symbolic links configured in `dotlink`.                                                                   | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
+| [update](#dot_update) | Combined command of 'pull' and 'set' commands.                                                                | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
 | [add](#dot_add)       | Move the new file to the dotfile dir, make the link, and add the link information to `dotlink` automatically. | `some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 link3 ... ]` |
 | [edit](#dot_edit)     | Edit `dotlink`                                                                                                |                                                                       |
 | [config](#dot_config) | Edit configuration file 'dotrc'                                                                               |                                                                       |
@@ -41,7 +41,7 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 | -h, --help  |Show help message.                     |         |
 | -c, --config|Specify the configuration file to load.| `dotrc` |
 
-### <a name="dot_pull">dot pull (or dot update)</a>
+### <a name="dot_pull">dot pull</a>
 
 Pull from remote dotfile repository (by git)
 
@@ -79,12 +79,24 @@ If you have your file already, you can choose the operation interactively:
 * show diff
 * edit file
 * replace
-* replace and make backu
+* replace and make backup
 * do nothing
 
-With option "-i", this script runs without interaction mode and with "-v", this script shows verbose messages.
+With option `-i` or `--ignore`, this script ignores conflict files and links.
+
+With option `-f` or `--force`, this script ignores all conflicts and force make symbolic links.
+
+With option `-b` or `--backup`, this script ignores all conflicts and force make symbolic links but make it original backup named `file.bak`.
+
+With `-v` or `--verbose`, this script shows verbose messages.
 
 ![dot set](./img/dot_set.png)
+
+### <a name="dot_update">dot update</a>
+
+Combined command of 'pull' and 'set' commands.
+
+Same option of `set` command.
 
 ### <a name="dot_add">dot add</a>
 

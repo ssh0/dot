@@ -20,11 +20,11 @@
 | サブコマンド名        | 説明                                                                                | オプション or 引数                                                    |
 | ---                   | ---                                                                                 | ---                                                                   |
 | [pull](#dot_pull)     | dotfiesをpullしてくる(by git).                                                      | `[--self]`                                                            |
-| [update](#dot_pull)   | 'pull'コマンドの別名                                                                | `[--self]`                                                            |
 | [list](#dot_list)     | `dot`で管理するファイルを一覧を表示                                                 |                                                                       |
 | [check](#dot_check)   | ファイルにリンクが張られているかどうかチェックする                                  |                                                                       |
 | [cd](#dot_cd)         | ディレクトリ`dotdir`に移動                                                          |                                                                       |
-| [set](#dot_set)       | `dotlink`に書かれたシンボリックリンクを貼る                                         | `[-i][-v]`                                                            |
+| [set](#dot_set)       | `dotlink`に書かれたシンボリックリンクを貼る                                         | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
+| [update](#dot_update) | 'pull'コマンドと'set'コマンドの組み合わせ                                           | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
 | [add](#dot_add)       | 新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記 | `some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 link3 ... ]` |
 | [edit](#dot_edit)     | `dotlink`を手動で編集                                                               |                                                                       |
 | [config](#dot_config) | 設定ファイル`dotrc`を編集                                                           |                                                                       |
@@ -39,7 +39,7 @@
 | -h, --help  |ヘルプを表示              |         |
 | -c, --config|読み込む設定ファイルを指定| `dotrc` |
 
-### <a name="dot_pull">dot pull (or dot update)</a>
+### <a name="dot_pull">dot pull</a>
 
 dotfiesをpullしてくる(by git)。
 
@@ -82,9 +82,20 @@ dot pull --self
 
 の操作を選ぶことができます。
 
-オプション`-i`をつけると非対話的になり，もし競合が起こった際は何もしません。 `-v`オプションをつけると，より冗長なメッセージを表示します。
+オプション`-i`または`--ignore`をつけると、競合するファイルが存在する場合に対話メニューを開かず、何も操作しません。
+
+オプション`-f`または`--force`をつけた場合は、競合するファイルがある場合に対話メニューを開くことなく、すべて新たなシンボリックリンクに置き換えます。
+
+オプション`-b`または`--backup`をつけると、競合するファイルが存在する場合に対話メニューを開かず、新たなシンボリックを張りますが、オリジナルのファイルは`file.bak`のようにしてバックアップファイルとして残されます。
+
+`-v`または`--verbose`オプションをつけると、すでにリンクが張られているものについて等、より冗長なメッセージを表示します。
 
 ![dot set](./img/dot_set.png)
+
+### <a name="dot_update">dot update</a>
+
+'pull'コマンドと'set'コマンドを組み合わせた機能を提供します。
+オプションは`set`コマンドと同じものを受け取ることができます。
 
 ### <a name="dot_add">dot add</a>
 
