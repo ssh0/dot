@@ -19,19 +19,20 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 
 **subcommand**
 
-|subcommand           |description                                                                                                  |option or arguments                                                       |
-|---                  |---                                                                                                          |---                                                                       |
-|[pull](#dot_pull)    |Pull from dotfile repository (by git)                                                                        |`[--self]`                                                                |
-|[update](#dot_pull)  |Alias command for 'pull' command                                                                             |`[--self]`                                                                |
-|[list](#dot_list)    |Show the list which files will be managed by dot.                                                            |                                                                          |
-|[cd](#dot_cd)        |Change directory to 'dotdir'.                                                                                |                                                                          |
-|[set](#dot_set)      |Set symbolic links configured in `dotlink`.                                                                  |`[-i][-v]`                                                                |
-|[add](#dot_add)      |Move the new file to the dotfile dir, make the link, and add the link information to `dotlink` automatically.|`some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 [link3 [...] ] ]`|
-|[edit](#dot_edit)    |Edit `dotlink`                                                                                               |                                                                          |
-|[config](#dot_config)|Edit configuration file 'dotrc'                                                                              |                                                                          |
-|[unlink](#dot_unlink)|Unlink the selected symbolic links and copy its original files from the dotfile directory.                   |`link1 [link2 [link3 [...] ] ]`                                           |
-|[clear](#dot_clear)  |Remove the *all* symbolic link written in the dotlink file `dotlink`.                                       |                                                                          |
-|[clone](#dot_clone)  |Clone dotfile repository on your computer with git.                                                          |`[/directory/to/clone/]`                                                  |
+| subcommand            | description                                                                                                   | option or arguments                                                   |
+| ---                   | ---                                                                                                           | ---                                                                   |
+| [pull](#dot_pull)     | Pull from dotfile repository (by git)                                                                         | `[--self]`                                                            |
+| [update](#dot_pull)   | Alias command for 'pull' command                                                                              | `[--self]`                                                            |
+| [list](#dot_list)     | Show the list which files will be managed by dot.                                                             |                                                                       |
+| [check](#dot_check)   | Check the files are correctly linked to the right places.                                                     |                                                                       |
+| [cd](#dot_cd)         | Change directory to 'dotdir'.                                                                                 |                                                                       |
+| [set](#dot_set)       | Set symbolic links configured in `dotlink`.                                                                   | `[-i][-v]`                                                            |
+| [add](#dot_add)       | Move the new file to the dotfile dir, make the link, and add the link information to `dotlink` automatically. | `some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 link3 ... ]` |
+| [edit](#dot_edit)     | Edit `dotlink`                                                                                                |                                                                       |
+| [config](#dot_config) | Edit configuration file 'dotrc'                                                                               |                                                                       |
+| [unlink](#dot_unlink) | Unlink the selected symbolic links and copy its original files from the dotfile directory.                    | `link1 [link2 link3 ... ]`                                            |
+| [clear](#dot_clear)   | Remove the *all* symbolic link written in the dotlink file `dotlink`.                                         |                                                                       |
+| [clone](#dot_clone)   | Clone dotfile repository on your computer with git.                                                           | `[/directory/to/clone/]`                                              |
 
 **option**
 
@@ -56,7 +57,11 @@ dot pull --self
 
 Show the list which files be managed by dot.
 
-![dot list](./img/dot_list.png)
+### <a name="dot_check">dot check</a>
+
+Check the files are correctly linked to the right places.
+
+![dot check](./img/dot_check.png)
 
 * "✘" means this file is not managed by dot now but is written in `dotlink`.
 * "✔" means this file is managed by dot now.

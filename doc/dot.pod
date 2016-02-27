@@ -45,6 +45,10 @@ Change directory to F<dotdir>.
 
 Show the list which files will be managed by dot.
 
+=item B<check>
+
+Check the files are correctly linked to the right places.
+
 =item B<set>
 
 Set the symbolic links interactively. This command sets symbolic links configured in F<dotlink>.

@@ -25,6 +25,7 @@ COMMANDS:
       update     Alias command for 'pull' command.
       cd         Change directory to 'dotdir'.
       list       Show the list which files will be managed by dot.
+      check      Check the files are correctly linked to the right places.
       set        Set the symbolic links interactively.
       add        Move the file to the dotfiles directory and make its symbolic link to that place.
       edit       Edit dotlink file.
@@ -107,6 +108,11 @@ EOF
       shift 1
       source "$DOT_SCRIPT_ROOTDIR/lib/dot_list.sh"
       dot_list
+      ;;
+    "check")
+      shift 1
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_check.sh"
+      dot_check
       ;;
     "set")
       shift 1

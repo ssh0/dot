@@ -150,9 +150,9 @@ dot_set() {
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "Loading ${linkfile} ...")"
-    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
+    while read l; do
       _dot_set $(echo $l | tr ',' ' ')
-    done
+    done < <(grep -Ev '^\s*#|^\s*$' "${linkfile}")
   done
 
   unset -f check_dir if_islink if_exist _dot_set $0

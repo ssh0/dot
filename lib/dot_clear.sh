@@ -19,9 +19,9 @@ dot_clear() {
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "Loading ${linkfile} ...")"
-    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
+    while read l; do
       _dot_clear $(echo $l | tr ',' ' ')
-    done
+    done < <(grep -Ev '^\s*#|^\s*$' "${linkfile}")
   done
 
   unset -f _dot_clear $0
