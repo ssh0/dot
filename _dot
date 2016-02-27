@@ -45,8 +45,10 @@ _dot() {
           ;;
         "set")
           _values "options"\
-            '-i[No interaction mode(skip all conflicts).]' \
-            '-v[Print verbose messages.]' \
+            {-i,--ignore}'[No interaction mode(skip all conflicts).]' \
+            {-f,--force}'[Ignore conflicts and force make symbolic links.]' \
+            {-b,--backup}'[Ignore conflicts, make symbolic links and create its original backup.]' \
+            {-v,--verbose}'[Print verbose messages.]' \
             && ret=0
           ;;
       esac

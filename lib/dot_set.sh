@@ -1,12 +1,30 @@
 # vim: ft=sh
-dot_set() { 
+dot_set() {
   # option handling
-  local linkfile l
+  local linkfile l arg
+  local dotset_ignore=false
+  local dotset_force=false
+  local dotset_backup=false
+  local dotset_verbose=false
 
-  while getopts iv OPT
-  do
+  for arg in "$@"; do
+    shift
+    case "$arg" in
+      "--ignore" ) set -- "$@" "-i" ;;
+      "--force"  ) set -- "$@" "-f" ;;
+      "--backup" ) set -- "$@" "-b" ;;
+      "--verbose") set -- "$@" "-v" ;;
+                *) set -- "$@" "$arg" ;;
+    esac
+  done
+
+  OPTIND=1
+
+  while getopts ifbv OPT; do
     case $OPT in
-      "i" ) dotset_interactive=false ;;
+      "i" ) dotset_ignore=true ;;
+      "f" ) dotset_force=true ;;
+      "b" ) dotset_backup=true ;;
       "v" ) dotset_verbose=true ;;
     esac
   done
@@ -20,14 +38,31 @@ dot_set() {
 
     echo "$(prmpt 1 error)$(bd_ ${origdir}) doesn't exist."
 
-    ${dotset_interactive} || return 1
+    ${dotset_ignore} && return 1
 
-    echo -n "make directory $(bd_ ${origdir})?"
-    if __confirm y; then
-      mkdir -p "${origdir}" && return 0
-    else
-      echo "Aborted."; return 1
+    if ! ${dotset_force}; then
+      echo -n "make directory $(bd_ ${origdir}) ? "
+      __confirm y || return 1
     fi
+    mkdir -p "${origdir}" && return 0
+  } #}}}
+
+  replace() { #{{{
+    # replace "${orig}" "${dotfile}"
+    if [ -d "$1" ]; then
+      rm -rf -- "$1"
+    else
+      rm -f -- "$1"
+    fi
+    ln -s "$2" "$1"
+    echo "$(prmpt 2 done)$1"
+  } #}}}
+
+  replace_and_backup() { #{{{
+    # replace_and_backup "${orig}" "${dotfile}"
+    ln -sb --suffix '.bak' "$2" "$1"
+    echo "$(prmpt 2 done)$1"
+    echo "$(prmpt 2 "make backup")$1.bak"
   } #}}}
 
   if_islink() { #{{{
@@ -44,29 +79,40 @@ dot_set() {
 
     echo "$(prmpt 1 conflict)Other link already exists at $(bd_ ${orig})"
 
-    ${dotset_interactive} || return 0
+    ${dotset_ignore} && return 0
 
-    echo -n "  $(prmpt 2 now)"
-    echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
-    echo -n "  $(prmpt 3 try)"
-    echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
-    echo "Unlink and re-link for $(bd_ ${orig}) ? "
-    if __confirm n; then
-      unlink "${orig}"
-      ln -s "${dotfile}" "${orig}"
-      echo "$(prmpt 2 done)${orig}"
+    if ! ${dotset_force}; then
+      echo -n "  $(prmpt 2 now)"
+      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
+      echo -n "  $(prmpt 3 try)"
+      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
+      echo "Unlink and re-link for $(bd_ ${orig}) ? "
+      __confirm n || return 0
     fi
+    unlink "${orig}"
+    ln -s "${dotfile}" "${orig}"
+    echo "$(prmpt 2 done)${orig}"
 
     return 0
   } #}}}
 
   if_exist() { #{{{
-    local line
+    # local line
     local orig="$1"
     local dotfile="$2"
 
-    if ! ${dotset_interactive}; then
+    if ${dotset_ignore}; then
       echo "$(prmpt 1 conflict)File already exists at $(bd_ ${orig})."
+      return 0
+    fi
+
+    if ${dotset_force}; then
+      replace "${orig}" "${dotfile}"
+      return 0
+    fi
+
+    if ${dotset_backup}; then
+      replace_and_backup "${orig}" "${dotfile}"
       return 0
     fi
 
@@ -88,19 +134,11 @@ dot_set() {
           eval "${edit2filecmd}" "${dotfile}" "${orig}"
           ;;
         [Ff] )
-          if [ -d "${orig}" ]; then
-            rm -rf -- "${orig}"
-          else
-            rm -f -- "${orig}"
-          fi
-          ln -s "${dotfile}" "${orig}"
-          echo "$(prmpt 2 done)${orig}"
+          replace "${orig}" "${dotfile}"
           break
           ;;
         [Bb] )
-          ln -sb --suffix '.bak' "${dotfile}" "${orig}"
-          echo "$(prmpt 2 done)${orig}"
-          echo "$(prmpt 2 "make backup")${orig}.bak"
+          replace_and_backup "${orig}" "${dotfile}"
           break
           ;;
         [Nn] )
@@ -150,11 +188,11 @@ dot_set() {
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "Loading ${linkfile} ...")"
-    while read l; do
+    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
       _dot_set $(echo $l | tr ',' ' ')
-    done < <(grep -Ev '^\s*#|^\s*$' "${linkfile}")
+    done
   done
 
-  unset -f check_dir if_islink if_exist _dot_set $0
+  unset -f check_dir if_islink if_exist _dot_set replace replace_and_backup $0
 
 } 

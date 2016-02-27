@@ -111,11 +111,19 @@ With --self option, update B<dot> itself.
 
 =over 6
 
-=item B<-i>
+=item B<-i>, B<--ignore>
 
 No interaction mode (skip all conflicts and do nothing).
 
-=item B<-v>
+=item B<-f>, B<--force>
+
+Ignore conflicts and force make symbolic links.
+
+=item B<-b>, B<--backup>
+
+Ignore conflicts, make symbolic links and create its original backup.
+
+=item B<-v>, B<--verbose>
 
 Print verbose messages.
 
