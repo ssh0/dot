@@ -22,11 +22,11 @@ USAGE:  dot [OPTIONS] <COMMANDS> [<args>]
 COMMANDS:
       clone      Clone dotfile repository on your computer with git.
       pull       Pull the directory from the remote dotfiles repository.
-      update     Alias command for 'pull' command.
       cd         Change directory to 'dotdir'.
       list       Show the list which files will be managed by dot.
       check      Check the files are correctly linked to the right places.
       set        Set the symbolic links interactively.
+      update     Combined command of 'pull' and 'set' commands.
       add        Move the file to the dotfiles directory and make its symbolic link to that place.
       edit       Edit dotlink file.
       unlink     Unlink the selected symbolic links and copy from its original.
@@ -94,59 +94,11 @@ EOF
 
   # main command handling {{{
   case "$1" in
-    "clone")
+    clone|pull|update|list|check|set|add|edit|unlink|clear|config|cd)
+      subcommand="$1"
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_${subcommand}.sh"
       shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clone.sh"
-      dot_clone "$@"
-      ;;
-    "pull"|"update")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_pull.sh"
-      dot_pull "$@"
-      ;;
-    "list")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_list.sh"
-      dot_list
-      ;;
-    "check")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_check.sh"
-      dot_check
-      ;;
-    "set")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_set.sh"
-      dot_set "$@"
-      ;;
-    "add")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_add.sh"
-      dot_add "$@"
-      ;;
-    "edit")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_edit.sh"
-      dot_edit
-      ;;
-    "unlink")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_unlink.sh"
-      dot_unlink "$@"
-      ;;
-    "clear")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_clear.sh"
-      dot_clear
-      ;;
-    "config")
-      shift 1
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_config.sh"
-      dot_config
-      ;;
-    "cd")
-      source "$DOT_SCRIPT_ROOTDIR/lib/dot_cd.sh"
-      dot_cd
+      dot_${subcommand} "$@"
       ;;
     *)
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "

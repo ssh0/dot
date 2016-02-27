@@ -158,13 +158,13 @@ Clone dotfile repository on your computer with git.
 Pull the repository from the remote dotfiles repository.
 .IP "\fBupdate\fR" 10
 .IX Item "update"
-Alias command for \*(L"pull\*(R" command.
+Combined command of \fBpull\fR and \fBset\fR commands.
 .IP "\fBcd\fR" 10
 .IX Item "cd"
 Change directory to \fIdotdir\fR.
 .IP "\fBlist\fR" 10
 .IX Item "list"
-Show the list which files will be managed by dot.
+Show the list which files will be managed by \fBdot\fR.
 .IP "\fBcheck\fR" 10
 .IX Item "check"
 Check the files are correctly linked to the right places.
@@ -225,6 +225,9 @@ Print verbose messages.
 .RE
 .RS 4
 .RE
+.IP "\fBupdate\fR" 4
+.IX Item "update"
+Combined command of \fBpull\fR and \fBset\fR commands. Options are same as \fBset\fR commnad ones.
 .IP "\fBadd\fR [\fB\-m\fR \fImessage\fR] \fIoriginal_file\fR [\fIdotfile_direction\fR]" 4
 .IX Item "add [-m message] original_file [dotfile_direction]"
 .RS 4

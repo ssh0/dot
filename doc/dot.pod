@@ -35,7 +35,7 @@ Pull the repository from the remote dotfiles repository.
 
 =item B<update>
 
-Alias command for "pull" command.
+Combined command of B<pull> and B<set> commands.
 
 =item B<cd>
 
@@ -43,7 +43,7 @@ Change directory to F<dotdir>.
 
 =item B<list>
 
-Show the list which files will be managed by dot.
+Show the list which files will be managed by B<dot>.
 
 =item B<check>
 
@@ -128,6 +128,10 @@ Ignore conflicts, make symbolic links and create its original backup.
 Print verbose messages.
 
 =back
+
+=item B<update>
+
+Combined command of B<pull> and B<set> commands. Options are same as B<set> commnad ones.
 
 =item B<add> [B<-m> I<message>] I<original_file> [I<dotfile_direction>]
 

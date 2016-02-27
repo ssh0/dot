@@ -15,7 +15,7 @@ _dot() {
       _values "dot commands"\
         "clone[Clone dotfile repository on your computer with git.]" \
         "pull[Pull the directory from the remote dotfiles repository.]" \
-        "update[Alias command for 'pull' command.]" \
+        "update[Combined command of 'pull' and 'set' commands.]" \
         "cd[Change directory to \$dotdir.]" \
         "list[Show the list which files will be managed by dot.]" \
         "check[Check the files are correctly linked to the right places.]" \
@@ -33,7 +33,7 @@ _dot() {
         "clone"|"unlink")
           _path_files && ret=0
           ;;
-        "pull"|"update")
+        "pull")
           _values "options"\
             '--self[Update dot framework from repository.]'\
             && ret=0
@@ -43,7 +43,7 @@ _dot() {
             '*: :_path_files' \
             && ret=0
           ;;
-        "set")
+        "set"|"update")
           _values "options"\
             {-i,--ignore}'[No interaction mode(skip all conflicts).]' \
             {-f,--force}'[Ignore conflicts and force make symbolic links.]' \
