@@ -10,6 +10,59 @@
 
 日常的に複数マシンを使う人，新しいPCのセットアップするとき，毎日dotfilesでcontributionに草を生やし続けている人におすすめです。
 
+## インストール
+
+### 必要なもの
+
+* bash (or zsh)
+* git
+
+### 手動でインストール
+
+このリポジトリを自分のPCにforkかcloneし,`bashrc`や`zshrc`から`source`コマンドでファイルを読み込んでください。
+
+
+**COMMAND LINE**
+
+```
+git clone https://github.com/ssh0/dot $HOME/.zsh/dot
+```
+
+**in {bash,zsh}rc**
+
+```
+export DOT_REPO="https://github.com/your_username/dotfiles.git"
+export DOT_DIR="$HOME/.dotfiles"
+fpath=($HOME/.zsh/dot $fpath)  # <- for completion
+source $HOME/.zsh/dot/dot.sh
+```
+
+これでインストールは完了です。
+
+shellrcを読み込みなおして、
+
+```
+dot --help-all
+```
+
+と打ち込んでみてください。
+
+### プラグインマネージャを利用する場合
+
+zshを利用していて,プラグインマネージャを利用している場合(ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), [antigen](https://github.com/zsh-users/antigen), etc.)には,`zshrc`でプラグインとして読み込んでください。
+
+```
+zplug "ssh0/dot"
+```
+
+```
+zgen load ssh0/dot
+```
+
+```
+antigen bundle ssh0/dot
+```
+
 ## 使い方
 
 ユーザーの設定ファイルは'[dotrc](./examples/dotrc)'。
@@ -199,48 +252,6 @@ dot add <link1> <link2> <link2> <link3> ...
 
 とするだけで良いです。
 
-
-## インストール
-
-### 必要なもの
-
-* bash(or zsh)
-* git
-
-### マニュアルインストール
-
-このリポジトリを自分のPCにforkかcloneし,`bashrc`や`zshrc`から`source`してください。
-
-
-**COMMAND LINE**
-
-```
-git clone https://github.com/ssh0/dot $HOME/.zsh/dot
-```
-
-**in {bash,zsh}rc**
-
-```
-export DOT_REPO="https://github.com/username/dotfiles.git"
-export DOT_DIR="$HOME/.dotfiles"
-source $HOME/.zsh/dot/dot.sh
-```
-
-### プラグインマネージャを利用する場合
-
-zshを利用していて,プラグインマネージャを利用している場合(ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), [antigen](https://github.com/zsh-users/antigen), etc.)には,`zshrc`でプラグインとして読み込んでください。
-
-```
-zplug "ssh0/dot"
-```
-
-```
-zgen load ssh0/dot
-```
-
-```
-antigen bundle ssh0/dot
-```
 
 ## 設定
 

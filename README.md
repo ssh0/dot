@@ -12,6 +12,58 @@ Script is written in shell script, and very configurable.
 
 You can use it for multi-machines usage, setup for new machine, daily watering to your dotfiles repository, etc...
 
+## Installation
+
+### Requirements
+
+* bash (or zsh)
+* git
+
+### Install manually
+
+Clone this repository on your computer and source from your `bashrc` or `zshrc`.
+
+**COMMAND LINE**
+
+```
+git clone https://github.com/ssh0/dot $HOME/.zsh/dot
+```
+
+**in {bash,zsh}rc**
+
+```
+export DOT_REPO="https://github.com/your_username/dotfiles.git"
+export DOT_DIR="$HOME/.dotfiles"
+fpath=($HOME/.zsh/dot $fpath)  # <- for completion
+source $HOME/.zsh/dot/dot.sh
+```
+
+Done.
+
+Reload shellrc and type:
+
+```
+dot --help-all
+```
+
+### With plugin manager
+
+If you use some zsh plugin manager (ex. [zplug](https://github.com/b4b4r07/zplug),
+[zgen](https://github.com/tarjoilija/zgen),
+[antigen](https://github.com/zsh-users/antigen), etc.), load from `zshrc` like:
+
+```
+zplug "ssh0/dot"
+```
+
+```
+zgen load ssh0/dot
+```
+
+```
+antigen bundle ssh0/dot
+```
+
 ## Usage
 
 Configuration file is in '[dotrc](./examples/dotrc)'.
@@ -150,7 +202,7 @@ You can add `dotrc.local` and `dotlink.local` on each computers and don't have t
 
 Share or don't share the configuration what you want.
 
-`dot pull` provides you fresh dotfiles anywhere.
+`dot update` provides you fresh dotfiles anywhere.
 
 ### New machine setup
 
@@ -193,49 +245,6 @@ In order to add link-relation-table already exists, just
 
 ```
 dot add <link1> <link2> <link2> <link3> ...
-```
-
-## Install
-
-### Requirements
-
-* bash
-* git
-
-### Install manually
-
-Clone this repository on your computer and source from your `bashrc` or `zshrc`.
-
-**COMMAND LINE**
-
-```
-git clone https://github.com/ssh0/dot $HOME/.zsh/dot
-```
-
-**in {bash,zsh}rc**
-
-```
-export DOT_REPO="https://github.com/username/dotfiles.git"
-export DOT_DIR="$HOME/.dotfiles"
-source $HOME/.zsh/dot/dot.sh
-```
-
-### With plugin manager
-
-If you use some zsh plugin manager (ex. [zplug](https://github.com/b4b4r07/zplug),
-[zgen](https://github.com/tarjoilija/zgen),
-[antigen](https://github.com/zsh-users/antigen), etc.), load from `zshrc` like:
-
-```
-zplug "ssh0/dot"
-```
-
-```
-zgen load ssh0/dot
-```
-
-```
-antigen bundle ssh0/dot
 ```
 
 ## Configuration
