@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
-local dotset_interactive dotset_verbose diffcmd edit2filecmd
+local dotclone_shallow dotset_interactive dotset_verbose diffcmd edit2filecmd
 local dot_edit_default_editor columns hrule tp_bold tp_reset
 
 # --------------------------------------------------------------------------}}}
@@ -19,6 +19,7 @@ linkfiles=("${dotlink}")
 home_pattern="s@$HOME/@@p"
 dotdir_pattern="s@${dotdir}/@@p"
 
+dotclone_shallow=true
 dotset_interactive=true
 dotset_verbose=false
 
@@ -34,12 +35,9 @@ else
   edit2filecmd="${diffcmd}"
 fi
 
-dot_edit_default_editor=''
-
 # --------------------------------------------------------------------------}}}
 # Load user configuration                                                   {{{
 # -----------------------------------------------------------------------------
-
 
 dotbundle() {
   if [ -e "$1" ]; then

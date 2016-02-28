@@ -10,7 +10,6 @@ DOT_SCRIPT_ROOTDIR="$(builtin cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")" && pw
 readonly DOT_SCRIPT_ROOTDIR
 export DOT_SCRIPT_ROOTDIR
 
-
 dot_main() {
 
   dot_usage() { #{{{
@@ -61,6 +60,7 @@ EOF
   done
 
   OPTIND=1
+  local dotrc
   while getopts "c:hH" OPT
   do
     case $OPT in
@@ -85,11 +85,12 @@ EOF
     esac
   done
 
+  shift $((OPTIND-1))
+  # }}}
+
+  # Load common.sh {{{
   source "$DOT_SCRIPT_ROOTDIR/lib/common.sh"
   trap cleanup_namespace EXIT
-
-  shift $((OPTIND-1))
-
   # }}}
 
   # main command handling {{{
@@ -111,7 +112,6 @@ EOF
   # }}}
 
 }
-
 
 eval "alias ${DOT_COMMAND:="dot"}=dot_main"
 export DOT_COMMAND

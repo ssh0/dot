@@ -20,6 +20,10 @@ clone_repository='https://github.com/username/dotfiles.git'
 
 # Options
 
+# "dot" uses "shollow clone".
+# You can clone the whole project (history of the repository).
+#dotclone_shallow=true
+
 # You can choose the action interactively if the file to link is already exist.
 # If you set it false, just show message but do nothing (provided option -i).
 #dotset_interactive=true
