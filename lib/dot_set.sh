@@ -41,8 +41,7 @@ dot_set() {
     ${dotset_ignore} && return 1
 
     if ! ${dotset_force}; then
-      echo -n "make directory $(bd_ ${origdir}) ? "
-      __confirm y || return 1
+      __confirm y "make directory $(bd_ ${origdir}) ? " || return 1
     fi
     mkdir -p "${origdir}" && return 0
   } #}}}
@@ -86,8 +85,7 @@ dot_set() {
       echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
       echo -n "  $(prmpt 3 try)"
       echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
-      echo "Unlink and re-link for $(bd_ ${orig}) ? "
-      __confirm n || return 0
+      __confirm n "Unlink and re-link for $(bd_ ${orig}) ? " || return 0
     fi
     unlink "${orig}"
     ln -s "${dotfile}" "${orig}"

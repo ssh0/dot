@@ -11,8 +11,7 @@ dot_clone() {
   fi
 
   echo "$(prmpt 3 try): ${clonecmd}"
-  echo -n "Continue? "
-  if ! __confirm y; then
+  if ! __confirm y "Continue? "; then
     echo "Aborted."
     echo ""
     echo "If you want to clone other repository, change environment variable DOT_REPO."

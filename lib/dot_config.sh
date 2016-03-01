@@ -3,8 +3,7 @@ dot_config() {
   # init
   if [ ! -e "${dotrc}" ]; then
     echo "$(prmpt 1 error)$(bd_ ${dotrc}) doesn't exist."
-    echo -n "make configuration file ? "
-    if __confirm y; then
+    if __confirm y "make configuration file ? "; then
       echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotrc ${dotrc}"
       cp "${DOT_SCRIPT_ROOTDIR}/examples/dotrc" "${dotrc}"
     else
