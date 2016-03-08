@@ -71,8 +71,7 @@ dot_set() {
 
     # if the link has already be set: do nothing
     if [ "${linkto}" = "${dotfile}" ]; then
-      ${dotset_verbose} &&
-        echo "$(prmpt 2 done)${orig}"
+      ${dotset_verbose} && echo "$(prmpt 2 exists)${orig}"
       return 0
     fi
 
@@ -82,9 +81,9 @@ dot_set() {
 
     if ! ${dotset_force}; then
       echo -n "  $(prmpt 2 now)"
-      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${linkto}"
+      echo "${orig} $(tput setaf 5)<--$(tput sgr0) ${linkto}"
       echo -n "  $(prmpt 3 try)"
-      echo "${orig} $(tput bold)$(tput setaf 5)<--$(tput sgr0) ${dotfile}"
+      echo "${orig} $(tput setaf 5)<--$(tput sgr0) ${dotfile}"
       __confirm n "Unlink and re-link for $(bd_ ${orig}) ? " || return 0
     fi
     unlink "${orig}"
