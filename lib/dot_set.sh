@@ -171,15 +171,16 @@ dot_set() {
     # ask whether make directory or not.
     check_dir "${orig}" || return 1
 
-    if [ -e "${orig}" ]; then                 # if the file already exists:
-      if [ -L "${orig}" ]; then               #   if it is a symbolic-link:
-        if_islink "${orig}" "${dotfile}"      #      do nothing or relink
-      else                                    #   if it is a file or a dir:
-        if_exist "${orig}" "${dotfile}"       #      ask user what to do
-      fi                                      #
-    else                                      # else:
-      ln -s "${dotfile}" "${orig}"            #   make symbolic link
-      echo "$(prmpt 2 done)${orig}"
+    if [ -e "${orig}" ]; then                    # if the file already exists:
+      if [ -L "${orig}" ]; then                  #   if it is a symbolic-link:
+        if_islink "${orig}" "${dotfile}"         #      do nothing or relink
+      else                                       #   if it is a file or a dir:
+        if_exist "${orig}" "${dotfile}"          #      ask user what to do
+      fi                                         #
+    else                                         # else:
+      readlink "${orig}" 1>/dev/null && unlink "${orig}"
+      ln -s "${dotfile}" "${orig}"               #   make symbolic link
+      test $? && echo "$(prmpt 2 done)${orig}"
     fi
 
   } #}}}
