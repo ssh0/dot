@@ -52,7 +52,7 @@ dot --help-all
 zshを利用していて,プラグインマネージャを利用している場合(ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), [antigen](https://github.com/zsh-users/antigen), etc.)には,`zshrc`でプラグインとして読み込んでください。
 
 ```
-zplug "ssh0/dot"
+zplug "ssh0/dot", of:"*.sh"
 ```
 
 ```
