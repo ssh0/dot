@@ -53,7 +53,7 @@ If you use some zsh plugin manager (ex. [zplug](https://github.com/b4b4r07/zplug
 [antigen](https://github.com/zsh-users/antigen), etc.), load from `zshrc` like:
 
 ```
-zplug "ssh0/dot", of:"*.sh"
+zplug "ssh0/dot", use:"*.sh"
 ```
 
 ```
