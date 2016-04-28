@@ -107,6 +107,8 @@ dot pull --self
 
 ### <a name="dot_list">dot list</a>
 
+![dot list](./img/dot_list.png)
+
 Show the list which files be managed by dot.
 
 ### <a name="dot_check">dot check</a>
@@ -119,6 +121,8 @@ Check the files are correctly linked to the right places.
 * "✔" means this file is managed by dot now.
 
 ### <a name="dot_cd">dot cd</a>
+
+![dot cd](./img/dot_cd.png)
 
 Change directory to `dotdir`.
 

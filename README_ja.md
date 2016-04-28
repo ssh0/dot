@@ -106,6 +106,8 @@ dot pull --self
 
 ### <a name="dot_list">dot list</a>
 
+![dot list](./img/dot_list.png)
+
 `dot`で管理するファイルを一覧表示する。
 
 ### <a name="dot_check">dot check</a>
@@ -118,6 +120,8 @@ dot pull --self
 * "✔" はdotで管理されているものを表す。
 
 ### <a name="dot_cd">dot cd</a>
+
+![dot cd](./img/dot_cd.png)
 
 ディレクトリ`dotdir`に移動します。
 
