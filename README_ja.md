@@ -83,7 +83,7 @@ antigen bundle ssh0/dot
 | [config](#dot_config) | 設定ファイル`dotrc`を編集                                                           |                                                                       |
 | [unlink](#dot_unlink) | 選択したシンボリックリンクをunlinkし，dotfilesから元ファイルをコピー                | `link1 [link2 link3 ... ]`                                            |
 | [clear](#dot_clear)   | `dotlink`ファイルに記載された**すべての**シンボリックリンクをunlink                 |                                                                       |
-| [clone](#dot_clone)   | gitコマンドを使ってdotfilesを自分のPCにクローン                                     | `[/directory/to/clone/]`                                              |
+| [clone](#dot_clone)   | gitコマンドを使ってdotfilesを自分のPCにクローン                                     | `[-f|--force] [/directory/to/clone/]`                                 |
 
 **オプション**
 
@@ -190,8 +190,10 @@ dot clear
 
 gitコマンドを使ってdotfilesを自分のPCにクローンする
 
+`-f`または`--force`オプションをつけると確認プロンプトを表示しません。
+
 ```
-dot clone [<dir_to_clone>]
+dot clone [-f|--force] [<dir_to_clone>]
 ```
 
 ## ユースケース

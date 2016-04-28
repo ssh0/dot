@@ -84,7 +84,7 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 | [config](#dot_config) | Edit configuration file 'dotrc'                                                                               |                                                                       |
 | [unlink](#dot_unlink) | Unlink the selected symbolic links and copy its original files from the dotfile directory.                    | `link1 [link2 link3 ... ]`                                            |
 | [clear](#dot_clear)   | Remove the *all* symbolic link written in the dotlink file `dotlink`.                                         |                                                                       |
-| [clone](#dot_clone)   | Clone dotfile repository on your computer with git.                                                           | `[-f|--force] [/directory/to/clone/]`                                  |
+| [clone](#dot_clone)   | Clone dotfile repository on your computer with git.                                                           | `[-f|--force] [/directory/to/clone/]`                                 |
 
 **option**
 
@@ -193,7 +193,7 @@ Clone dotfile repository on your computer with git.
 With option `-f` or `--force`, never prompt.
 
 ```
-dot clone [<dir_to_clone>]
+dot clone [-f|--force] [<dir_to_clone>]
 ```
 
 ## Use case
