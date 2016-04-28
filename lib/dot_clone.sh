@@ -2,6 +2,18 @@
 
 dot_clone() { 
   local cloneto clonecmd
+  local arg
+  local dotclone_force=false
+
+  for arg in "$@"; do
+    shift
+    case "$arg" in
+      "--force"  ) dotclone_force=true ;;
+      "-f"       ) dotclone_force=true ;;
+      *          ) set -- "$@" "$arg" ;;
+    esac
+  done
+
   cloneto="${1:-"${dotdir}"}"
 
   if ${dot_clone_shallow}; then
@@ -11,15 +23,17 @@ dot_clone() {
   fi
 
   echo "$(prmpt 3 try): ${clonecmd}"
-  if ! __confirm y "Continue? "; then
-    echo "Aborted."
-    echo ""
-    echo "If you want to clone other repository, change environment variable DOT_REPO."
-    echo "    export DOT_REPO=https://github.com/Your_Username/dotfiles.git"
-    echo "Set the directory to clone by:"
-    echo "    dot clone ~/dotfiles"
-    echo "    export DOT_DIR=\$HOME/dotfiles"
-    return 1
+  if ! ${dotclone_force}; then
+    if ! __confirm y "Continue? "; then
+      echo "Aborted."
+      echo ""
+      echo "If you want to clone other repository, change environment variable DOT_REPO."
+      echo "    export DOT_REPO=https://github.com/Your_Username/dotfiles.git"
+      echo "Set the directory to clone by:"
+      echo "    dot clone ~/dotfiles"
+      echo "    export DOT_DIR=\$HOME/dotfiles"
+      return 1
+    fi
   fi
 
   eval "${clonecmd}"

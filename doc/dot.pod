@@ -103,6 +103,14 @@ Specify configuration file to overload. (default: I<~/.config/dot/dotrc>)
 
 Clone I<clone_repository> onto the specified direction. (default: I<~/.dotfiles>)
 
+=over 6
+
+=item B<-f>, B<--force>
+
+Never prompt.
+
+=back
+
 =item B<pull> [B<--self>]
 
 With --self option, update B<dot> itself.

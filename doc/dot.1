@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "DOT 1"
-.TH DOT 1 "dot-1.2.2" "02/27/2016" "dot manual"
+.TH DOT 1 "dot-1.2.2" "04/28/2016" "dot manual"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -202,6 +202,13 @@ Specify configuration file to overload. (default: \fI~/.config/dot/dotrc\fR)
 .IP "\fBclone\fR [\fIdir\fR]" 4
 .IX Item "clone [dir]"
 Clone \fIclone_repository\fR onto the specified direction. (default: \fI~/.dotfiles\fR)
+.RS 4
+.IP "\fB\-f\fR, \fB\-\-force\fR" 6
+.IX Item "-f, --force"
+Never prompt.
+.RE
+.RS 4
+.RE
 .IP "\fBpull\fR [\fB\-\-self\fR]" 4
 .IX Item "pull [--self]"
 With \-\-self option, update \fBdot\fR itself.
