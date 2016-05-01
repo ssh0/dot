@@ -38,19 +38,18 @@ fpath=($HOME/.zsh/dot $fpath)  # <- for completion
 source $HOME/.zsh/dot/dot.sh
 ```
 
-Done.
-
-Reload shellrc and type:
+Reload shellrc and try:
 
 ```
 dot --help-all
 ```
 
+then, man page will open.
+
 ### With plugin manager
 
 If you use some zsh plugin manager (ex. [zplug](https://github.com/b4b4r07/zplug),
-[zgen](https://github.com/tarjoilija/zgen),
-[antigen](https://github.com/zsh-users/antigen), etc.), load from `zshrc` like:
+[zgen](https://github.com/tarjoilija/zgen), etc.), load from `zshrc` like:
 
 ```
 zplug "ssh0/dot", use:"*.sh"
@@ -60,8 +59,11 @@ zplug "ssh0/dot", use:"*.sh"
 zgen load ssh0/dot
 ```
 
+And write below line in {bash,zsh}rc
+
 ```
-antigen bundle ssh0/dot
+export DOT_REPO="https://github.com/your_username/dotfiles.git"
+export DOT_DIR="$HOME/.dotfiles"
 ```
 
 ## Usage

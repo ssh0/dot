@@ -45,11 +45,11 @@ shellrcを読み込みなおして、
 dot --help-all
 ```
 
-と打ち込んでみてください。
+と打ち込んでみてください。manページが表示されます。
 
 ### プラグインマネージャを利用する場合
 
-zshを利用していて,プラグインマネージャを利用している場合(ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), [antigen](https://github.com/zsh-users/antigen), etc.)には,`zshrc`でプラグインとして読み込んでください。
+zshを利用していて,プラグインマネージャを利用している場合(ex. [zplug](https://github.com/b4b4r07/zplug), [zgen](https://github.com/tarjoilija/zgen), etc.)には,`zshrc`でプラグインとして読み込んでください。
 
 ```
 zplug "ssh0/dot", use:"*.sh"
@@ -59,8 +59,11 @@ zplug "ssh0/dot", use:"*.sh"
 zgen load ssh0/dot
 ```
 
+{bash,zsh}rcに以下を書きます。
+
 ```
-antigen bundle ssh0/dot
+export DOT_REPO="https://github.com/your_username/dotfiles.git"
+export DOT_DIR="$HOME/.dotfiles"
 ```
 
 ## 使い方
