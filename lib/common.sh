@@ -79,19 +79,23 @@ path_without_dotdir() { #{{{
 
 __confirm() { #{{{
   # __confirm [ y | n ] [<message>]
-  local yn confirm ret
+  local yn YN confirm ret
   if [ "$1" = "y" ]; then
-    yn="Y/n"
+    yn="y"
+    YN="Y/n"
     ret=0
+    shift
   elif [ "$1" = "n" ]; then
-    yn="y/N"
+    yn="n"
+    YN="y/N"
     ret=1
+    shift
   else
-    yn="y/n"
+    YN="y/n"
     ret=-1
   fi
 
-  echo -n "$2($yn)> "
+  echo -n "$@($YN)> "
   read confirm
   confirm=$(echo $confirm | tr '[:upper:]' '[:lower:]')
   case $confirm in
@@ -99,13 +103,13 @@ __confirm() { #{{{
      n|no) return 1 ;;
        "") if [ $ret -eq -1 ]; then
              echo "Please answer with 'y' or 'n'."
-             __confirm "dummy" "$@"
+             __confirm $@
            else
              return $ret
            fi
            ;;
         *) echo "Please answer with 'y' or 'n'."
-           __confirm $@;;
+           __confirm $yn $@;;
   esac
 
 } #}}}

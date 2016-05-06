@@ -1,5 +1,5 @@
 # vim: ft=sh
-dot_edit() { 
+dot_edit() {
   # init
   if [ ! -e "${dotlink}" ]; then
     echo "$(prmpt 1 empty)$(bd_ ${dotlink})"
@@ -21,4 +21,4 @@ dot_edit() {
   fi
 
   unset -f $0
-} 
+}

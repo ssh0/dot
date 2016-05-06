@@ -1,6 +1,5 @@
 # vim: ft=sh
-
-dot_clone() { 
+dot_clone() {
   local cloneto clonecmd
   local arg
   local dotclone_force=false
@@ -39,4 +38,4 @@ dot_clone() {
   eval "${clonecmd}"
 
   unset -f $0
-} 
+}

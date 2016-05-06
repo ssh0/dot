@@ -6,5 +6,4 @@ dot_update() {
   dot_set $@
 
   unset -f $0
-} 
-
+}

@@ -193,4 +193,4 @@ dot_set() {
 
   unset -f check_dir if_islink if_exist _dot_set replace replace_and_backup $0
 
-} 
+}

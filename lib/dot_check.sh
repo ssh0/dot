@@ -17,9 +17,7 @@ dot_check() {
     message="${dotfile}${delimiter}${orig}"
 
     # if dotfile doesn't exist
-    if [[ -e "${dotfile}" || -e "${orig}" || -L "${orig}" ]]; then
-      :
-    else
+    if ! [[ -e "${dotfile}" || -e "${orig}" || -L "${orig}" ]]; then
       echo "$(prmpt 1 ✘)${message}"
       return 1
     fi

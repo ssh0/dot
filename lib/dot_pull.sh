@@ -1,5 +1,5 @@
 # vim: ft=sh
-dot_pull() { 
+dot_pull() {
   local cwd="$(pwd)"
 
   if [ "$1" = "--self" ]; then
@@ -13,4 +13,4 @@ dot_pull() {
   builtin cd "$cwd"
 
   unset -f $0
-} 
+}

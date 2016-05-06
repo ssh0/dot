@@ -1,5 +1,5 @@
 # vim: ft=sh
-dot_list() { 
+dot_list() {
   local linkfile l
 
   for linkfile in "${linkfiles[@]}"; do

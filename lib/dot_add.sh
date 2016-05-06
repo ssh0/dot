@@ -92,9 +92,9 @@ dot_add() {
     if __confirm y "make directory $(bd_ ${1%/*}) ? "; then
       mkdir -p "${1%/*}"
       return 0
-    else
-      return 1
     fi
+
+    return 1
 
   } #}}}
 
