@@ -9,6 +9,10 @@ dot_pull() {
     # git pull
     echo "$(prmpt 4 "Update dotfiles")cd "${dotdir}" && git pull"
     builtin cd "${dotdir}" && git pull
+    if ${dotpull_update_submodule} && test -s "${dotdir}/.gitmodules"; then
+      echo "$(prmpt 4 "Update the submodules ...")"
+      git submodule update
+    fi
   fi
   builtin cd "$cwd"
 

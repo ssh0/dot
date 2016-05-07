@@ -31,6 +31,9 @@ clone_repository='https://github.com/username/dotfiles.git'
 # Toggle the verbosity for output of `dot set` (option -v).
 #dotset_verbose=false
 
+# You can update submodule in your repository if you set the option below true.
+#dotpull_update_submodule=false
+
 # You can choose diff command as you want.
 #diffcmd="colordiff -u"
 

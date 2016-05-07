@@ -5,6 +5,7 @@
 local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
 local dotclone_shallow dotset_interactive dotset_verbose diffcmd edit2filecmd
 local dot_edit_default_editor columns hrule tp_bold tp_reset
+local dotpull_update_submodule
 
 # --------------------------------------------------------------------------}}}
 # Default settings                                                          {{{
@@ -22,6 +23,7 @@ dotdir_pattern="s@${dotdir}/@@p"
 dotclone_shallow=true
 dotset_interactive=true
 dotset_verbose=false
+dotpull_update_submodule=false
 
 if hash colordiff 2>/dev/null; then
   diffcmd='colordiff -u'
