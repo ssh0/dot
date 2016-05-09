@@ -11,6 +11,7 @@ dot_pull() {
     builtin cd "${dotdir}" && git pull
     if ${dotpull_update_submodule} && test -s "${dotdir}/.gitmodules"; then
       echo "$(prmpt 4 "Update the submodules ...")"
+      git submodule init
       git submodule update
     fi
   fi
