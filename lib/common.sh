@@ -126,6 +126,31 @@ bd_() { #{{{
 
 cleanup_namespace() { #{{{
   unset -f dotbundle get_fullpath path_without_home path_without_dotdir
-  unset -f __confirm prmpt bd_ dot_usage $0
+  unset -f __confirm prmpt bd_ dot_usage parse_linkfiles $0
 } #}}}
 
+parse_linkfiles() { # {{{
+  local linkfile l
+  local command
+  
+  command="$1"
+
+  for linkfile in "${linkfiles[@]}"; do
+    echo "$(prmpt 4 "Loading ${linkfile} ...")"
+
+    grep -Ev '^\s*#|^\s*$' "${linkfile}" | while read l; do
+      # extract environment variables
+      dotfile="$(echo $l | cut -d, -f1)"
+      dotfile="$(eval echo ${dotfile})"
+      orig="$(echo $l | cut -d, -f2)"
+      orig="$(eval echo ${orig})"
+      
+      # path completion
+      [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
+      [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"
+
+      eval $command \"$dotfile\" \"$orig\"
+    done
+  done
+
+} # }}}

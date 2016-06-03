@@ -1,11 +1,8 @@
 # vim: ft=sh
 dot_list() {
-  local linkfile l
+  _dot_list() { echo $1,$2 }
 
-  for linkfile in "${linkfiles[@]}"; do
-    echo "$(prmpt 4 "From ${linkfile}")"
-    grep -Ev '^\s*#|^\s*$' "${linkfile}"
-  done
+  parse_linkfiles _dot_list
 
-  unset -f $0
+  unset -f _dot_list $0
 }
