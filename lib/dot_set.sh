@@ -153,8 +153,10 @@ dot_set() {
   _dot_set() { #{{{
     local dotfile orig
     # extract environment variables
-    dotfile="$(eval echo $1)"
-    orig="$(eval echo $2)"
+    dotfile="$(echo $1 | cut -d, -f1)"
+    dotfile="$(eval echo ${dotfile})"
+    orig="$(echo $1 | cut -d, -f2)"
+    orig="$(eval echo ${orig})"
 
     # path completion
     [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
@@ -186,9 +188,9 @@ dot_set() {
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "Loading ${linkfile} ...")"
-    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
-      _dot_set $(echo $l | tr ',' ' ')
-    done
+    while read l; do
+      _dot_set "$l"
+    done < <(grep -Ev '^\s*#|^\s*$' "${linkfile}")
   done
 
   unset -f check_dir if_islink if_exist _dot_set replace replace_and_backup $0
