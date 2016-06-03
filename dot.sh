@@ -101,6 +101,10 @@ EOF
       shift 1
       dot_${subcommand} "$@"
       ;;
+    "")
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_dialog.sh"
+      dot_dialog "$@"
+      ;;
     *)
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
       echo "command $(tput bold)$1$(tput sgr0) not found."
