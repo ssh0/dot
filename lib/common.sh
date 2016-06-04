@@ -4,7 +4,7 @@
 
 local clone_repository dotdir dotlink linkfiles home_pattern dotdir_pattern
 local dotclone_shallow dotset_interactive dotset_verbose diffcmd edit2filecmd
-local dot_edit_default_editor columns hrule tp_bold tp_reset
+local dot_edit_default_editor use_dialog columns hrule tp_bold tp_reset
 local dotpull_update_submodule
 
 # --------------------------------------------------------------------------}}}
@@ -126,7 +126,7 @@ bd_() { #{{{
 
 cleanup_namespace() { #{{{
   unset -f dotbundle get_fullpath path_without_home path_without_dotdir
-  unset -f __confirm prmpt bd_ dot_usage parse_linkfiles $0
+  unset -f __confirm prmpt bd_ dot_usage parse_linkfiles get_height $0
 } #}}}
 
 parse_linkfiles() { # {{{
@@ -154,3 +154,20 @@ parse_linkfiles() { # {{{
   done
 
 } # }}}
+
+get_height() {
+  local minheight=5
+  local maxheight="$(tput lines)"
+  local _height
+  if [ $# -gt 0 ]; then
+    if [ $1 -gt $maxheight ]; then
+      _height=$maxheight
+    elif [ $1 -lt $minheight ]; then
+      _height=$minheight
+    else
+      _height=$1
+    fi
+  else
+    _height=$(($maxheight - ))
+  fi
+}
