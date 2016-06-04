@@ -39,11 +39,8 @@ dot_clone() {
 
   if [ -s "${cloneto}/.gitmodules" ]; then
     echo "$(prmpt 4 "Initialize the submodules")"
-    local cwd="$(pwd)"
-    builtin cd "${cloneto}"
-    git submodule init
-    git submodule update
-    builtin cd "$cwd"
+    git -C "${cloneto}" submodule init
+    git -C "${cloneto}" submodule update
   fi
 
   unset -f $0
