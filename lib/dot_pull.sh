@@ -8,11 +8,11 @@ dot_pull() {
   else
     # git pull
     echo "$(prmpt 4 "Update dotfiles")cd "${dotdir}" && git pull"
-    builtin cd "${dotdir}" && git pull
+    git -C "${dotdir}" pull
     if ${dotpull_update_submodule} && test -s "${dotdir}/.gitmodules"; then
       echo "$(prmpt 4 "Update the submodules ...")"
-      git submodule init
-      git submodule update
+      git -C "${dotdir}" submodule init
+      git -C "${dotdie}" submodule update
     fi
   fi
   builtin cd "$cwd"
