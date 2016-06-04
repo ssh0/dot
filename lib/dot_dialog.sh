@@ -2,6 +2,9 @@
 dot_dialog() {
   # * use "dialog" command
   # * choose operation interactively
+  local tmpfifo
+  tempfifo="/tmp/dot_dialog.fifo"
+  mkfifo "$tempfifo"
 
   dialog --backtitle "dot 1.3.0 - Your dotfiles manager" --hfile testing \
     --no-shadow --scrollbar --colors \
@@ -17,5 +20,20 @@ dot_dialog() {
     "set" "Set the symbolic links interactively." \
     "unlink" "Unlink the selected symbolic links and copy from its original." \
     "update" "Combined command of 'pull' and 'set' commands." \
-    && clear
+    2> "$tempfifo" &
+  cmd="$(cat ${tempfifo})"
+
+  case "${cmd}" in
+    clone|pull|update|list|check|set|add|edit|unlink|clear|config|cd)
+      source "$DOT_SCRIPT_ROOTDIR/lib/dot_${cmd}.sh"
+      shift 1
+      dot_${cmd} "$@"
+      ;;
+    *)
+      echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
+      echo "command $(tput bold)$1$(tput sgr0) not found."
+      dot_usage
+      return 1
+      ;;
+  esac
 }
