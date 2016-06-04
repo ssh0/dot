@@ -1,7 +1,7 @@
 # vim: ft=sh
 dot_set() {
   # option handling
-  local linkfile l arg
+  local arg
   local dotset_ignore=false
   local dotset_force=false
   local dotset_backup=false
@@ -152,13 +152,8 @@ dot_set() {
 
   _dot_set() { #{{{
     local dotfile orig
-    # extract environment variables
-    dotfile="$(eval echo $1)"
-    orig="$(eval echo $2)"
-
-    # path completion
-    [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
-    [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"
+    dotfile="$1"
+    orig="$2"
 
     # if dotfile doesn't exist, print error message and pass
     if [ ! -e "${dotfile}" ]; then
@@ -184,13 +179,7 @@ dot_set() {
 
   } #}}}
 
-  for linkfile in "${linkfiles[@]}"; do
-    echo "$(prmpt 4 "Loading ${linkfile} ...")"
-    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
-      _dot_set $(echo $l | tr ',' ' ')
-    done
-  done
+  parse_linkfiles _dot_set
 
   unset -f check_dir if_islink if_exist _dot_set replace replace_and_backup $0
-
 }
