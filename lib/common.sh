@@ -132,7 +132,7 @@ cleanup_namespace() { #{{{
 parse_linkfiles() { # {{{
   local linkfile l
   local command
-  
+
   command="$1"
 
   for linkfile in "${linkfiles[@]}"; do
@@ -144,7 +144,7 @@ parse_linkfiles() { # {{{
       dotfile="$(eval echo ${dotfile})"
       orig="$(echo $l | cut -d, -f2)"
       orig="$(eval echo ${orig})"
-      
+
       # path completion
       [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
       [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"

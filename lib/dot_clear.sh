@@ -12,7 +12,7 @@ dot_clear() {
     fi
   } #}}}
 
-  parse_linkfile _dot_clear
+  parse_linkfiles _dot_clear
 
   unset -f _dot_clear $0
 }
