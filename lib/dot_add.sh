@@ -8,6 +8,7 @@ dot_add() {
   do
     case $OPT in
       "m" ) message="${OPTARG}";;
+      "d" ) use_dialog="${OPTARG}";;
     esac
   done
 
@@ -119,7 +120,7 @@ dot_add() {
     fi
 
     # if the second arugument isn't provided, provide suggestion
-    if [ $# = 1 ];then
+    if [ $# = 1 ]; then
       suggest "$1" && return 0 || return 1
     fi
 
@@ -131,7 +132,20 @@ dot_add() {
     return 1
   } #}}}
 
-  dot_add_main "$@"
+
+
+  if ${use_dialog} -a [ $# = 0 ]; then
+    local tmpfifo _from _to
+    tempfifo="/tmp/dot_dialog.fifo"
+    mkfifo "$tempfifo"
+
+    dialog \
+      --fselect "$(pwd)/" $(get_height 18) $(get_width 80) \
+      2> "$tempfifo" &
+    _from="$(cat ${tempfifo})"
+  else
+    dot_add_main "$@"
+  fi
 
   unset -f orig_to_dot add_to_dotlink if_islink suggest check_dir
   unset -f $0
