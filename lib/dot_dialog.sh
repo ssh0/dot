@@ -27,12 +27,12 @@ dot_dialog() {
     clone|pull|update|list|check|set|add|edit|unlink|clear|config|cd)
       source "$DOT_SCRIPT_ROOTDIR/lib/dot_${cmd}.sh"
       shift 1
-      dot_${cmd} "$@"
+      dot_${cmd} -d "$@"
       ;;
     *)
       echo -n "[$(tput bold)$(tput setaf 1)error$(tput sgr0)] "
       echo "command $(tput bold)$1$(tput sgr0) not found."
-      dot_usage
+      dot_usage -d
       return 1
       ;;
   esac
