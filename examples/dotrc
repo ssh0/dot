@@ -44,6 +44,9 @@ clone_repository='https://github.com/username/dotfiles.git'
 # (setting priority: this option > $EDITOR (default) > xdg-open)
 #dot_edit_default_editor='vim +'
 
+# Use dialog mode for each command.
+#use_dialog=false
+
 # If you want load a machine specific configuration, source that file here.
 # `dotbundle file` source the file if it exists.
 #dotbundle "$HOME/.config/dot/dotrc.local"
