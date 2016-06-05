@@ -12,12 +12,12 @@ _dot() {
 
   case $state in
     cmds)
-      _values "dot <commands> [<args>]"\
+      _values "$DOT_COMMAND <commands> [<args>]"\
         "clone[Clone dotfile repository on your computer with git.]" \
         "pull[Pull the directory from the remote dotfiles repository.]" \
         "update[Combined command of 'pull' and 'set' commands.]" \
         "cd[Change directory to \$dotdir.]" \
-        "list[Show the list which files will be managed by dot.]" \
+        "list[Show the list which files will be managed by $DOT_COMMAND.]" \
         "check[Check the files are correctly linked to the right places.]" \
         "set[Set the symbolic links interactively.]" \
         "add[Move the file to the dotfiles directory and make its symbolic link to that place.]" \
@@ -34,20 +34,20 @@ _dot() {
           _path_files && ret=0
           ;;
         "pull")
-          _values "dot pull [--self]" \
-            '--self[Update dot framework from repository.]' \
+          _values "$DOT_COMMAND pull [--self]" \
+            '--self[Update $DOT_COMMAND framework from repository.]' \
             '[Update the dotfiles directory by `git pull`.]' \
             && ret=0
           ;;
         "add")
           _arguments \
-            '*: :_path_files -X "dot add <file> [</path/to/the/file>]
+            '*: :_path_files -X "$DOT_COMMAND add <file> [</path/to/the/file>]
   Select the file to move to DOT_DIR (or an arbitrary path).
   (And this command makes its symbolic link.)"' \
             && ret=0
           ;;
         "set"|"update")
-          _values "dot (set | update) [options]"\
+          _values "$DOT_COMMAND (set | update) [options]"\
             {-i,--ignore}'[No interaction mode(skip all conflicts).]' \
             {-f,--force}'[Ignore conflicts and force make symbolic links.]' \
             {-b,--backup}'[Ignore conflicts, make symbolic links and create its original backup.]' \

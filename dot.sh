@@ -14,22 +14,22 @@ dot_main() {
 
   dot_usage() { #{{{
     cat << EOF
-dot - Simplest dotfiles manager
+$DOT_COMMAND - Simplest dotfiles manager
 
-Usage: dot [options] <commands> [<args>]
-  dot pull [--self]
-  dot (set | update) [-i | --ignore] [-f | --force] [-b | --backup] [-v | --verbose]
-  dot add (<file> [$DOT_DIR/path/to/the/file]) | <symboliclinks>...
-  dot unlink <symboliclinks>...
-  dot clear
-  dot clone [-f | --force] [/dir/to/clone]
-  dot (-h | --help)
+Usage: $DOT_COMMAND [options] <commands> [<args>]
+  $DOT_COMMAND pull [--self]
+  $DOT_COMMAND (set | update) [-i | --ignore] [-f | --force] [-b | --backup] [-v | --verbose]
+  $DOT_COMMAND add (<file> [$DOT_DIR/path/to/the/file]) | <symboliclinks>...
+  $DOT_COMMAND unlink <symboliclinks>...
+  $DOT_COMMAND clear
+  $DOT_COMMAND clone [-f | --force] [/dir/to/clone]
+  $DOT_COMMAND (-h | --help)
 
 Commands:
   clone   Clone dotfile repository on your computer with git.
   pull    Pull the directory from the remote dotfiles repository.
   cd      Change directory to 'dotdir'.
-  list    Show the list which files will be managed by dot.
+  list    Show the list which files will be managed by $DOT_COMMAND.
   check   Check the files are correctly linked to the right places.
   set     Set the symbolic links interactively.
   update  Combined command of 'pull' and 'set' commands.
