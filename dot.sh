@@ -1,7 +1,7 @@
 # vim: ft=zsh
 # dot - dotfiles management framework
 
-# Version:    1.2.1
+# Version:    1.2.2
 # Repository: https://github.com/ssh0/dot
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
@@ -14,34 +14,37 @@ dot_main() {
 
   dot_usage() { #{{{
     cat << EOF
-dot - manages symbolic links for dotfiles.
+$DOT_COMMAND - Simplest dotfiles manager
 
-USAGE:  dot [OPTIONS] <COMMANDS> [<args>]
+Usage: $DOT_COMMAND [options] <commands> [<args>]
+  $DOT_COMMAND pull [--self]
+  $DOT_COMMAND (set | update) [-i | --ignore] [-f | --force] [-b | --backup] [-v | --verbose]
+  $DOT_COMMAND add (<file> [$DOT_DIR/path/to/the/file]) | <symboliclinks>...
+  $DOT_COMMAND unlink <symboliclinks>...
+  $DOT_COMMAND clear
+  $DOT_COMMAND clone [-f | --force] [/dir/to/clone]
+  $DOT_COMMAND (-h | --help)
 
-COMMANDS:
-      clone      Clone dotfile repository on your computer with git.
-      pull       Pull the directory from the remote dotfiles repository.
-      cd         Change directory to 'dotdir'.
-      list       Show the list which files will be managed by dot.
-      check      Check the files are correctly linked to the right places.
-      set        Set the symbolic links interactively.
-      update     Combined command of 'pull' and 'set' commands.
-      add        Move the file to the dotfiles directory and make its symbolic link to that place.
-      edit       Edit dotlink file.
-      unlink     Unlink the selected symbolic links and copy from its original.
-      clear      Remove the all symbolic links in 'dotlink'.
-      config     Edit (or create if it does not exist) rcfile 'dotrc'.
+Commands:
+  clone   Clone dotfile repository on your computer with git.
+  pull    Pull the directory from the remote dotfiles repository.
+  cd      Change directory to 'dotdir'.
+  list    Show the list which files will be managed by $DOT_COMMAND.
+  check   Check the files are correctly linked to the right places.
+  set     Set the symbolic links interactively.
+  update  Combined command of 'pull' and 'set' commands.
+  add     Move the file to the dotfiles directory and make its symbolic link to that place.
+  edit    Edit dotlink file.
+  unlink  Unlink the selected symbolic links and copy from its original.
+  clear   Remove the all symbolic links in 'dotlink'.
+  config  Edit (or create if it does not exist) rcfile 'dotrc'.
 
-OPTIONS:
-      -h,--help  Show this help message.
-      -H,--help-all
-                 Show man page.
-      -c,--config <configfile>
-                 Specify the configuration file to load.
-                 default: '\$HOME/.config/dotrc'
-
-If you want to know more about dot,
-    dot --help-all
+Options:
+  -h, --help      Show this help message.
+  -H, --help-all  Show man page.
+  -c <file>, --config <file>
+                  Specify the configuration file to load.
+                  default: \$HOME/.config/dotrc
 
 EOF
 
