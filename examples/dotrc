@@ -1,6 +1,9 @@
 #!/bin/bash
 # This is config file for dot.
 # If you want to know all the description, see README.
+#==============================================================================
+# General Settings                                                          {{{
+#==============================================================================
 
 # You can change the dotfiles to clone
 clone_repository='https://github.com/username/dotfiles.git'
@@ -18,11 +21,41 @@ clone_repository='https://github.com/username/dotfiles.git'
 #dotlinklocal="$HOME/.config/dot/dotlink.local"
 #linkfiles=("${dotlink}" "${dotlinklocal}")
 
-# Options
+# You can switch the dotlinklocal by its OS type like below:
 
-# "dot" uses "shollow clone".
-# You can clone the whole project (history of the repository).
-#dotclone_shallow=true
+# (In zsh)
+
+#case ${OSTYPE} in
+#    *linux*)
+#        dotlinklocal="${dotdir}/dotlink.linux"
+#        ;;
+#    *darwin*)
+#        dotlinklocal="${dotdir}/dotlink.mac"
+#        ;;
+#    *cygwin*|*msys*)
+#        dotlinklocal="${dotdir}/dotlink.windows"
+#        ;;
+#esac
+#linkfiles=("${dotlink}" "${dotlinklocal}")
+
+# (In bash)
+
+#if [ "$(uname)" == 'Darwin' ]; then
+#  dotlinklocal="${dotdir}/dotlink.linux"
+#elif [ "$(expr substr $(uname -s) 1 5)" == 'Linux' ]; then
+#  dotlinklocal="${dotdir}/dotlink.mac"
+#elif [ "$(expr substr $(uname -s) 1 10)" == 'MINGW32_NT' ]; then
+#  dotlinklocal="${dotdir}/dotlink.windows"
+#fi
+#linkfiles=("${dotlink}" "${dotlinklocal}")
+
+#===========================================================================}}}
+# Options                                                                   {{{
+#==============================================================================
+
+# "dot" uses "shallow clone".
+# You can clone the only latest commit of the project if set to true.
+#dotclone_shallow=false
 
 # You can choose the action interactively if the file to link is already exist.
 # If you set it false, just show message but do nothing (provided option -i).
@@ -32,7 +65,7 @@ clone_repository='https://github.com/username/dotfiles.git'
 #dotset_verbose=false
 
 # You can update submodule in your repository if you set the option below true.
-#dotpull_update_submodule=false
+#dotpull_update_submodule=true
 
 # You can choose diff command as you want.
 #diffcmd="colordiff -u"
@@ -44,6 +77,12 @@ clone_repository='https://github.com/username/dotfiles.git'
 # (setting priority: this option > $EDITOR (default) > xdg-open)
 #dot_edit_default_editor='vim +'
 
-# If you want load a machine specific configuration, source that file here.
+#===========================================================================}}}
+# Load other config file                                                    {{{
+#==============================================================================
+# If you want to load a machine specific configuration, source that file here.
 # `dotbundle file` source the file if it exists.
+
 #dotbundle "$HOME/.config/dot/dotrc.local"
+
+#===========================================================================}}}
