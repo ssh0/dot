@@ -2,11 +2,11 @@
 dot_dialog() {
   # * use "dialog" command
   # * choose operation interactively
-  local tmpfifo
-  tempfifo="/tmp/dot_dialog.fifo"
-  mkfifo "$tempfifo"
+  local tmpfile
+  tempfile=$(tempfile 2>/dev/null) || tempfile=/tmp/dot_dialog
+  trap "rm -f ${tempfile}" 0 1 2 5 15
 
-  dialog --backtitle "dot 1.3.0 - Your dotfiles manager" --hfile testing \
+  dialog --backtitle "dot 1.3.0 - Your dotfiles manager" \
     --no-shadow --scrollbar --colors \
     --menu "\ZbChoose the operation\ZB" 18 80 11 \
     "add" "Move the file to the dotfiles directory and make its symbolic link to that place." \
@@ -20,8 +20,9 @@ dot_dialog() {
     "set" "Set the symbolic links interactively." \
     "unlink" "Unlink the selected symbolic links and copy from its original." \
     "update" "Combined command of 'pull' and 'set' commands." \
-    2> "$tempfifo" &
-  cmd="$(cat ${tempfifo})"
+    2> "$tempfile"
+  cmd="$(cat ${tempfile})"
+  echo $cmd
 
   case "${cmd}" in
     clone|pull|update|list|check|set|add|edit|unlink|clear|config|cd)
