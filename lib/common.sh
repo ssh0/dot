@@ -20,10 +20,10 @@ linkfiles=("${dotlink}")
 home_pattern="s@$HOME/@@p"
 dotdir_pattern="s@${dotdir}/@@p"
 
-dotclone_shallow=true
+dotclone_shallow=false
 dotset_interactive=true
 dotset_verbose=false
-dotpull_update_submodule=false
+dotpull_update_submodule=true
 
 if hash colordiff 2>/dev/null; then
   diffcmd='colordiff -u'
