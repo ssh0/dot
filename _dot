@@ -1,7 +1,13 @@
 #compdef dot_main
 
 _dot() {
-  local context curcontext="$curcontext" state line
+  local context curcontext="$curcontext" state line cmds
+  cmds=(${(f)"$(dot_main -h |
+                sed -n '/^Commands:/,/^$/p' |
+                sed -e '1d;$d' |
+                cut -b3- |
+                sed -e 's/  */\:/'
+                )"})
   _arguments -C \
     '1: :->cmds' \
     {-h,--help}'[Show help message.]: :' \
@@ -12,19 +18,7 @@ _dot() {
 
   case $state in
     cmds)
-      _values "$DOT_COMMAND <commands> [<args>]"\
-        "clone[Clone dotfile repository on your computer with git.]" \
-        "pull[Pull the directory from the remote dotfiles repository.]" \
-        "update[Combined command of 'pull' and 'set' commands.]" \
-        "cd[Change directory to \$dotdir.]" \
-        "list[Show the list which files will be managed by $DOT_COMMAND.]" \
-        "check[Check the files are correctly linked to the right places.]" \
-        "set[Set the symbolic links interactively.]" \
-        "add[Move the file to the dotfiles directory and make its symbolic link to that place.]" \
-        "edit[Edit \$dotlink file.]" \
-        "unlink[Unlink the selected symbolic links and copy from its original.]" \
-        "clear[Remove the all symbolic links in \$dotlink.]" \
-        "config[Edit (or create if it doesn't exist) rcfile \$dotrc.]" \
+      _describe -t cmds "$DOT_COMMAND <commands> [<args>]" cmds \
         && ret=0
       ;;
     args)
