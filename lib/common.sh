@@ -133,7 +133,7 @@ parse_linkfiles() { # {{{
   local linkfile l
   local command
   local IFS_BACKUP=$IFS
-  IFS=$'\n' 
+  IFS=$'\n'
 
   command="$1"
 
