@@ -132,13 +132,14 @@ cleanup_namespace() { #{{{
 parse_linkfiles() { # {{{
   local linkfile l
   local command
+  local IFS_BACKUP=$IFS
+  IFS=$'\n' 
 
   command="$1"
 
   for linkfile in "${linkfiles[@]}"; do
     echo "$(prmpt 4 "Loading ${linkfile} ...")"
-
-    grep -Ev '^\s*#|^\s*$' "${linkfile}" | while read l; do
+    for l in $(grep -Ev '^\s*#|^\s*$' "${linkfile}"); do
       # extract environment variables
       dotfile="$(echo $l | cut -d, -f1)"
       dotfile="$(eval echo ${dotfile})"
@@ -149,8 +150,10 @@ parse_linkfiles() { # {{{
       [ "${dotfile:0:1}" = "/" ] || dotfile="${dotdir}/$dotfile"
       [ "${orig:0:1}" = "/" ] || orig="$HOME/$orig"
 
-      eval $command \"$dotfile\" \"$orig\"
+      $command "$dotfile" "$orig"
     done
   done
+
+  IFS=$IFS_BACKUP
 
 } # }}}
