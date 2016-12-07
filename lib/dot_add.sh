@@ -50,6 +50,11 @@ dot_add() {
     linkto="${linkto:="$(get_fullpath "$1")"}"
 
     echo "${dotfile},${linkto}" >> "${dotlink}"
+
+    if [ $? = 0 ]; then
+      echo "Successfully added the new file to dotfiles"
+      echo "To edit the links manually, execute \`${DOT_COMMAND} edit\`"
+    fi
   } #}}}
 
   if_islink() { #{{{
