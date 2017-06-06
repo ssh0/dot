@@ -59,9 +59,11 @@ dot_set() {
 
   replace_and_backup() { #{{{
     # replace_and_backup "${orig}" "${dotfile}"
-    ln -sb --suffix '.bak' "$2" "$1"
+    backuped="$1$(date +'_%Y%m%d_%H%M%S')"
+    mv -i "$1" "${backuped}"
+    ln -s "$2" "$1"
     echo "$(prmpt 2 done)$1"
-    echo "$(prmpt 2 "make backup")$1.bak"
+    echo "$(prmpt 2 "make backup")${backuped}"
   } #}}}
 
   if_islink() { #{{{
