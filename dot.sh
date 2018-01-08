@@ -44,7 +44,7 @@ Options:
   -H, --help-all  Show man page.
   -c <file>, --config <file>
                   Specify the configuration file to load.
-                  default: \$HOME/.config/dotrc
+                  default: \$HOME/.config/dot/dotrc
 
 EOF
 
