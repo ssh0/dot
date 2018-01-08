@@ -88,7 +88,7 @@ Show the help message.
 
 Show man page.
 
-=item B<-c> I<configfile>
+=item B<-c> I<configfile>, B<--config> I<configfile>
 
 Specify configuration file to overload. (default: I<~/.config/dot/dotrc>)
 
