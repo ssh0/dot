@@ -18,7 +18,7 @@ dot_unlink() {
     unlink "$currentpath"
 
     # copy the file
-    cp "$abspath" "$currentpath"
+    cp -r "$abspath" "$currentpath"
 
     echo "$(prmpt 1 unlink)$f"
     echo "$(prmpt 2 copy)$abspath"
