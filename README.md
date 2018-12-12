@@ -79,14 +79,14 @@ Link relation table is in '[dotlink](./examples/dotlink)'.
 | [list](#dot_list)     | Show the list which files will be managed by dot.                                                             |                                                                       |
 | [check](#dot_check)   | Check the files are correctly linked to the right places.                                                     |                                                                       |
 | [cd](#dot_cd)         | Change directory to 'dotdir'.                                                                                 |                                                                       |
-| [set](#dot_set)       | Set symbolic links configured in `dotlink`.                                                                   | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
-| [update](#dot_update) | Combined command of 'pull' and 'set' commands.                                                                | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
+| [set](#dot_set)       | Set symbolic links configured in `dotlink`.                                                                   | `[-i\|--ignore][-f\|--force][-b\|--backup][-v\|--verbose]`            |
+| [update](#dot_update) | Combined command of 'pull' and 'set' commands.                                                                | `[-i\|--ignore][-f\|--force][-b\|--backup][-v\|--verbose]`            |
 | [add](#dot_add)       | Move the new file to the dotfile dir, make the link, and add the link information to `dotlink` automatically. | `some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 link3 ... ]` |
 | [edit](#dot_edit)     | Edit `dotlink`                                                                                                |                                                                       |
 | [config](#dot_config) | Edit configuration file 'dotrc'                                                                               |                                                                       |
 | [unlink](#dot_unlink) | Unlink the selected symbolic links and copy its original files from the dotfile directory.                    | `link1 [link2 link3 ... ]`                                            |
 | [clear](#dot_clear)   | Remove the *all* symbolic link written in the dotlink file `dotlink`.                                         |                                                                       |
-| [clone](#dot_clone)   | Clone dotfile repository on your computer with git.                                                           | `[-f|--force] [/directory/to/clone/]`                                 |
+| [clone](#dot_clone)   | Clone dotfile repository on your computer with git.                                                           | `[-f\|--force] [/directory/to/clone/]`                                |
 
 **option**
 
