@@ -79,14 +79,14 @@ export DOT_DIR="$HOME/.dotfiles"
 | [list](#dot_list)     | `dot`で管理するファイルを一覧を表示                                                 |                                                                       |
 | [check](#dot_check)   | ファイルにリンクが張られているかどうかチェックする                                  |                                                                       |
 | [cd](#dot_cd)         | ディレクトリ`dotdir`に移動                                                          |                                                                       |
-| [set](#dot_set)       | `dotlink`に書かれたシンボリックリンクを貼る                                         | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
-| [update](#dot_update) | 'pull'コマンドと'set'コマンドの組み合わせ                                           | `[-i|--ignore][-f|--force][-b|--backup][-v|--verbose]`                |
+| [set](#dot_set)       | `dotlink`に書かれたシンボリックリンクを貼る                                         | `[-i\|--ignore][-f\|--force][-b\|--backup][-v\|--verbose]`                |
+| [update](#dot_update) | 'pull'コマンドと'set'コマンドの組み合わせ                                           | `[-i\|--ignore][-f\|--force][-b\|--backup][-v\|--verbose]`                |
 | [add](#dot_add)       | 新たなファイルをdotfilesに追加，シンボリックリンクを貼り，対応関係を`dotlink`に追記 | `some_file [$DOT_DIR/path/to/the/file]` or `link1 [link2 link3 ... ]` |
 | [edit](#dot_edit)     | `dotlink`を手動で編集                                                               |                                                                       |
 | [config](#dot_config) | 設定ファイル`dotrc`を編集                                                           |                                                                       |
 | [unlink](#dot_unlink) | 選択したシンボリックリンクをunlinkし，dotfilesから元ファイルをコピー                | `link1 [link2 link3 ... ]`                                            |
 | [clear](#dot_clear)   | `dotlink`ファイルに記載された**すべての**シンボリックリンクをunlink                 |                                                                       |
-| [clone](#dot_clone)   | gitコマンドを使ってdotfilesを自分のPCにクローン                                     | `[-f|--force] [/directory/to/clone/]`                                 |
+| [clone](#dot_clone)   | gitコマンドを使ってdotfilesを自分のPCにクローン                                     | `[-f\|--force] [/directory/to/clone/]`                                 |
 
 **オプション**
 
