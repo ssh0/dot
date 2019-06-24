@@ -6,7 +6,7 @@
 # Author:     ssh0 (Shotaro Fujimoto)
 # License:    MIT
 
-DOT_SCRIPT_ROOTDIR="$(builtin cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")" && pwd)"
+DOT_SCRIPT_ROOTDIR="$(builtin cd "$(dirname "${BASH_SOURCE:-${(%):-%N}}")" && builtin pwd)"
 readonly DOT_SCRIPT_ROOTDIR
 export DOT_SCRIPT_ROOTDIR
 

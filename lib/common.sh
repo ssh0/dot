@@ -68,7 +68,7 @@ tp_reset="$(tput sgr0)"
 #}}}
 
 get_fullpath() { #{{{
-  echo "$(builtin cd "$(dirname "$1")" && pwd)"/"$(basename "$1")"
+  echo "$(builtin cd "$(dirname "$1")" && builtin pwd)"/"$(basename "$1")"
 } #}}}
 
 path_without_home() { #{{{
