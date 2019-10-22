@@ -4,8 +4,12 @@ dot_config() {
   if [ ! -e "${dotrc}" ]; then
     echo "$(prmpt 1 error)$(bd_ ${dotrc}) doesn't exist."
     if __confirm y "make configuration file ? "; then
-      echo "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotrc ${dotrc}"
+      printf "mkdir -p ${dotrc//dotrc} ... "
+      mkdir -p "${dotrc//dotrc}"
+      if [ -d "${dotrc//dotrc}" ]; then echo "$(grn_ Success.)"; else echo "$(rd_ Failure. Aborted.)"; return 1; fi
+      printf "cp ${DOT_SCRIPT_ROOTDIR}/examples/dotrc ${dotrc} ... "
       cp "${DOT_SCRIPT_ROOTDIR}/examples/dotrc" "${dotrc}"
+      if [ -e "${dotrc}" ]; then echo "$(grn_ Success.)"; else echo "$(rd_ Failure. Aborted.)"; return 1; fi
     else
       echo "Aborted."; return 1
     fi

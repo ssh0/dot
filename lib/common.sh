@@ -63,6 +63,8 @@ hrule="$( printf '%*s\n' "$columns" '' | tr ' ' - )"
 # tput {{{
 
 tp_bold="$(tput bold)"
+tp_green=$(tput setaf 2)
+tp_red=$(tput setaf 1)
 tp_reset="$(tput sgr0)"
 
 #}}}
@@ -122,6 +124,14 @@ prmpt() { #{{{
 
 bd_() { #{{{
   echo "${tp_bold}$@${tp_reset}"
+} #}}}
+
+rd_() { #{{{
+  echo "${tp_red}$@${tp_reset}"
+} #}}}
+
+grn_() { #{{{
+  echo "${tp_green}$@${tp_reset}"  
 } #}}}
 
 cleanup_namespace() { #{{{
