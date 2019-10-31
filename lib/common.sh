@@ -136,7 +136,7 @@ grn_() { #{{{
 
 cleanup_namespace() { #{{{
   unset -f dotbundle get_fullpath path_without_home path_without_dotdir
-  unset -f __confirm prmpt bd_ dot_usage parse_linkfiles $0
+  unset -f __confirm prmpt bd_ grn_ rd_ dot_usage parse_linkfiles $0
 } #}}}
 
 parse_linkfiles() { # {{{
