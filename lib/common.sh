@@ -63,6 +63,8 @@ hrule="$( printf '%*s\n' "$columns" '' | tr ' ' - )"
 # tput {{{
 
 tp_bold="$(tput bold)"
+tp_green=$(tput setaf 2)
+tp_red=$(tput setaf 1)
 tp_reset="$(tput sgr0)"
 
 #}}}
@@ -124,9 +126,17 @@ bd_() { #{{{
   echo "${tp_bold}$@${tp_reset}"
 } #}}}
 
+rd_() { #{{{
+  echo "${tp_red}$@${tp_reset}"
+} #}}}
+
+grn_() { #{{{
+  echo "${tp_green}$@${tp_reset}"  
+} #}}}
+
 cleanup_namespace() { #{{{
   unset -f dotbundle get_fullpath path_without_home path_without_dotdir
-  unset -f __confirm prmpt bd_ dot_usage parse_linkfiles $0
+  unset -f __confirm prmpt bd_ grn_ rd_ dot_usage parse_linkfiles $0
 } #}}}
 
 parse_linkfiles() { # {{{
